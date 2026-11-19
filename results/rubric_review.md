@@ -28,3 +28,7 @@ Scores are internal coverage estimates on a 0–100% scale before the final revi
 ## Template-format revision
 
 The previous pagination applied to the compact edition. The revised DOCX follows IS355_Week4_Project_Report_Template with the Part A and Part B headings, A4, Times New Roman 12, 1.15 line spacing and 2 cm margins. The member names, Week 4 tasks and shares are blank. Word reports 33 body pages, above the template's 12–18 page guideline. The full source checker reports 0 FAIL and 0 WARN.
+
+## 16-page body limit revision
+
+The final Word export has 15 A4 body pages (pages 2–16). References start on page 17, followed by the appendices. Detailed method cards, the scenario catalog and scenario cards, and expanded decision criteria move to Appendices B–D. The body retains all required section headings and the primary model and test plan evidence. The member fields remain blank as requested.
