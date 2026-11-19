@@ -3,7 +3,7 @@ Legend: `[ ]` todo · `[x]` done → evidence · `[⚠]` failed/skipped + reason
 Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "planned, not yet run", move on.
 
 ## STATUS (agent updates after every item)
-- Next item: P2.1 (Session 2)
+- Next item: P2.2
 - Last gate: P1 PASS (0 FAIL, 0 WARN)
 - Blockers: —. The local test snapshot ends 2024-05-07; record 2024Q3 as empty in P2.
 
@@ -29,7 +29,7 @@ Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "plann
 - **Gate P1:** `.venv/bin/python tools/check_report.py --only 1.2 --steps 1,2`
 
 ## P2 · Model pilot + Steps 3–5 + 1.4 — 2.5 h
-- [ ] P2.1 `src/step3_train.py --model {B_LR,B_XGB,O_LR,O_XGB} --seed S`: B_* = all features + PCA (95% variance; state as our assumption about [1]); O_* = drift-removed, no PCA. Week 3 fixed params for the pilot (no Optuna yet). Early stopping on inner-val. XGB seeds 11,22,33; LR once (seed-insensitive → variance via 1,000 test bootstrap). Log fit time.
+- [x] P2.1 `src/step3_train.py --model {B_LR,B_XGB,O_LR,O_XGB} --seed S`: B_* = all features + PCA (95% variance; state as our assumption about [1]); O_* = drift-removed, no PCA. Week 3 fixed params for the pilot (no Optuna yet). Early stopping on inner-val. XGB seeds 11,22,33; LR once (seed-insensitive → variance via 1,000 test bootstrap). Log fit time. → results/pilot_model.json (8 fits across 4 model variants)
   verify: `results/pilot_model.json` has AUC (inner-val, val, test) for 4 models and fit_seconds.
 - [ ] P2.2 `src/step4_calibrate.py`: isotonic on val; Brier uncal vs cal on test overall + per quarter (2022Q3…2024Q3); reliability bins CSV; SHAP top-10 (TreeExplainer, 2,000 test rows, seed 11).
   verify: `results/pilot_calib.json` has brier_uncal, brier_cal, per_quarter list.
