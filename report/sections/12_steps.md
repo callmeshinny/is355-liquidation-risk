@@ -200,3 +200,58 @@ The fixed-rule D3a pilot is planned, not yet run because D1 yields overlapping r
 | tiered | 81,295 | 15,050 | 683 | 14,367 | 42,276,266,306.76 |
 
 Table 7. D3a percentile sensitivity and uniform policy on the same test loans.
+
+### Step 6 · Register model and write scores
+
+| Field | Specification |
+| --- | --- |
+| Purpose | Link each wallet tier to a registered fitted model and keep a verifiable score history. |
+| Input | A model SHA-256, monotonic version and wallet-tier pairs. FinSurvival's fixed-rule export is planned, not yet run because of the D1 overlap. |
+| Processing | Owner registers the hash. The approved writer sends rows or batches. Each score write records the current version and block timestamp. Reconcile event counts to submitted wallet counts. |
+| Parameters | Tier codes 1–3, max batch 100, validity through 30 days. Missing, older or revision-mismatched scores return B. |
+| Libraries / tools | Vyper 0.4.3, Ape and Anvil. The planned writer uses keystore account oracle. |
+| Output | Current registered version and ScoreUpdated receipts. Pilot results are in results/pilot_gas.json. |
+| Runs | Anvil pilot 2026-11-19. Ten calls each for 1, 10 and 100 freshly written synthetic wallets per batch. |
+| Correctness check | Confirm version, model hash and tier reads. T3 and T4 exercise role, version, freshness and batch guards. |
+| Errors & edge cases | Confirm receipt state before nonce replacement. Log any failed batch and reconcile its receipt. Fallback B applies until a current score is available. |
+| Est. run time | Use Anvil receipts for functional checks. Sepolia confirmation latency is planned, not yet run. |
+| Improvement | I3 stores compact tiers and model identifiers on-chain. |
+
+```text
+register hash and version with owner account
+validate wallet list and version
+send local batch as the approved writer
+reconcile ScoreUpdated events and recorded score state
+```
+
+### Step 7 · Execute the lending policy
+
+| Field | Specification |
+| --- | --- |
+| Purpose | Enforce collateral and liquidation rules using the registered score tier. |
+| Input | Wallet collateral deposit, requested debt, score oracle tier and current collateral price. |
+| Processing | Check maximum debt before transferring test tokens. Freeze the tier used for maintenance when initial debt opens. Evaluate liquidations at the current price, close at most half the debt per call and transfer collateral with the stated bonus. |
+| Parameters | Tiered A 120% borrowing and 110% maintenance. B 150% and 130%. C ineligible. Uniform 125% and approximately 121.2%. Bonus 5% [4]. |
+| Libraries / tools | Vyper, Ape, Anvil, MockERC20 and Hypothesis. |
+| Output | Position balances, tier snapshot and lending events. |
+| Runs | Local T3 and T4 guards plus 200 generated borrowing-limit cases. |
+| Correctness check | Check position and token balances after valid transitions. Assert guard messages and the borrowing boundary. |
+| Errors & edge cases | Guard zero or oversized amounts, unhealthy withdrawals, healthy liquidation and repayment over the close factor. Bad-debt settlement remains a planned extension. |
+| Est. run time | Record receipt gas for local calls. Measure remote confirmation latency separately when Sepolia is run. |
+| Improvement | I3 tests tiered collateral and compares it with a common uniform constructor configuration. |
+
+### Step 8 · Demonstrate and evaluate
+
+| Field | Specification |
+| --- | --- |
+| Purpose | Make model metrics and chain outcomes visible and verify the off-chain-to-chain path. |
+| Input | Committed metric summaries, tier exports, local price shocks and contract events. |
+| Processing | Start with a fresh deployment, load a validated tier export and compare model hash, wallet count and receipt events. Then simulate a price decrease and show the resulting position and liquidation in the dashboard. |
+| Parameters | Model pilot seed 11. Use fresh deployment per complete run. Batch pilot sizes are 1, 10 and 100. |
+| Libraries / tools | Ape, Anvil, pytest, Streamlit and report scripts. |
+| Output | AUC, Brier, tier rates, gas receipts and a planned end-to-end demonstration. |
+| Runs | Local pilots and contract checks are measured. Three fresh full integration runs and the Streamlit demonstration are planned, not yet run. |
+| Correctness check | Compare model hash and wallet counts across export and events. Confirm that price change, position health and liquidation receipts agree. |
+| Errors & edge cases | The fixed-tier export is presently unavailable. Keep mock data and comparison-percentile results labelled. Log failed transactions and check their status before retry. |
+| Est. run time | Log wall time for each integration run. Measure median and p95 confirmation latency in the later Sepolia test. |
+| Improvement | I3 connects auditable contract activity with the model evaluation and policy comparison. |

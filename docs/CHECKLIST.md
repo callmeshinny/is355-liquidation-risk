@@ -3,8 +3,8 @@ Legend: `[ ]` todo · `[x]` done → evidence · `[⚠]` failed/skipped + reason
 Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "planned, not yet run", move on.
 
 ## STATUS (agent updates after every item)
-- Next item: P3.5
-- Last gate: P2 PASS (0 FAIL, 0 WARN in 1.2 and 1.4; P2.3 and P2.6 marked ⚠)
+- Next item: P4.1 (Session 4)
+- Last gate: P3 PASS (24 tests passed; sections 1.2 and 1.3 each 0 FAIL, 0 WARN)
 - Blockers: D1 validation extrema overlap. Historical open-loan membership unavailable. 2024Q3 has no test rows.
 
 ---
@@ -49,7 +49,7 @@ Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "plann
 - [x] P3.3 `tests/test_t4_security.py` (≥6): unauthorized set_score; version mismatch; stale score → B terms; liquidate healthy loan; repay > 50% in liquidation; zero / max uint amounts; Sybil fresh wallet gets B (documents limitation); Hypothesis ≥200 examples: borrow never exceeds tier limit. → 10 defensive tests passed on Anvil, including 200 Hypothesis examples
   verify: `.venv/bin/ape test tests/test_t4_security.py -q`
 - [x] P3.4 Gas pilot: `ape test --gas` + `scripts/gas_batch.py` (set_scores_batch with 1/10/100 wallets) → `results/pilot_gas.json`; put EVM estimate (CONTEXT §11) next to measured; flag > 2×. → results/pilot_gas.json; 30 Anvil batch receipts and 10 T3 gas-profile tests passed. Reverting view calls verified separately without Ape tracing.
-- [ ] P3.5 Write `13_contract.md` (state vars; function table with role, asserts+messages, state change, event, est. + measured gas; loan state machine figure `figures/state_machine.png` + transition table incl. forbidden; events table with reader; off-chain ↔ on-chain: Ape scripts sign with Ape keystore account `oracle`, never a raw key in code; failed/stuck tx: wait 3 blocks, resend same nonce with +20% fee, max 3 tries, log; blockchain guarantees vs not; oracle trust & key-leak risk) + Steps 6–8 cards.
+- [x] P3.5 Write `13_contract.md` (state vars; function table with role, asserts+messages, state change, event, est. + measured gas; loan state machine figure `figures/state_machine.png` + transition table incl. forbidden; events table with reader; off-chain ↔ on-chain: Ape scripts sign with Ape keystore account `oracle`, never a raw key in code; failed/stuck tx: wait 3 blocks, resend same nonce with +20% fee, max 3 tries, log; blockchain guarantees vs not; oracle trust & key-leak risk) + Steps 6–8 cards. → section 1.3, Steps 6–8 and state machine figure; Gate P3 passed
 - **Gate P3:** `.venv/bin/ape test -q && .venv/bin/python tools/check_report.py --only 1.2 && .venv/bin/python tools/check_report.py --only 1.3`
 
 ## P4 · Test plan sections — 2 h (write from results/*.json)
