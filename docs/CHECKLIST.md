@@ -3,8 +3,8 @@ Legend: `[ ]` todo · `[x]` done → evidence · `[⚠]` failed/skipped + reason
 Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "planned, not yet run", move on.
 
 ## STATUS (agent updates after every item)
-- Next item: P0.6
-- Last gate: —
+- Next item: P1.1
+- Last gate: P0 PASS (0 FAIL, 0 WARN)
 - Blockers: —
 
 ---
@@ -16,7 +16,7 @@ Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "plann
 - [x] P0.4 `tools/env_report.py` → `results/env.json` (OS, CPU, RAM, python, pandas, sklearn, xgboost, shap, optuna, vyper, eth-ape, anvil version). → results/env.json
   verify: `.venv/bin/python -c "import json;d=json.load(open('results/env.json'));assert d['python'].startswith('3.11') and d['vyper'].startswith('0.4')"`
 - [x] P0.5 Write `report/sections/15_env.md` (1.5): hardware, OS, versions table, networks (Anvil: function+gas; Sepolia: latency + E2E, RPC provider = Alchemy, planned), seeds, repo link, end-to-end command (`make all` or script list). → report/sections/15_env.md
-- [ ] P0.6 Inventory `legacy/` (Week 3 code by Khanh): for each notebook list cells/functions reusable for Steps 1–5 and any printed results with their config → `results/legacy_inventory.md` (≤ 40 lines). Reuse this logic in P1–P2; do not rewrite from scratch. Week 3 numbers from legacy outputs may be cited as "Week 3 pilot (Oct 2026, legacy/<file>)" only if the config is visible. Local data already copied: `data/raw/finsurvival/`, `data/raw/taiwan/`, `data/processed/` (skip downloads that already exist).
+- [x] P0.6 Inventory `legacy/` (Week 3 code by Khanh): for each notebook list cells/functions reusable for Steps 1–5 and any printed results with their config → `results/legacy_inventory.md` (≤ 40 lines). Reuse this logic in P1–P2; do not rewrite from scratch. Week 3 numbers from legacy outputs may be cited as "Week 3 pilot (Oct 2026, legacy/<file>)" only if the config is visible. Local data already copied: `data/raw/finsurvival/`, `data/raw/taiwan/`, `data/processed/` (skip downloads that already exist). → results/legacy_inventory.md
   verify: `test -f results/legacy_inventory.md`
 - **Gate P0:** `.venv/bin/python tools/check_report.py --only 1.5`
 
