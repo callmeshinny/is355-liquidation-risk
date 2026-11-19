@@ -1,0 +1,35 @@
+{
+  "date": "2026-11-19",
+  "seed": 11,
+  "model_sha256": "d4bc57d51a3279c101ed81718855292ef4859c48359763c302fdd1ad9796e02d",
+  "n_loans": 96345,
+  "policies": {
+    "uniform": {
+      "accepted": 96345,
+      "rejected": 0,
+      "liquidations_avoided": 0,
+      "good_loans_rejected": 0,
+      "avoided_per_good_rejected": null,
+      "capital_locked_usd": 44218089861.49733
+    },
+    "tiered": {
+      "accepted": 81295,
+      "rejected": 15050,
+      "liquidations_avoided": 683,
+      "good_loans_rejected": 14367,
+      "avoided_per_good_rejected": 0.047539500243613836,
+      "capital_locked_usd": 42276266306.76018
+    }
+  },
+  "rule": "percentile",
+  "fixed_policy_available": false,
+  "score_scope": "At-origin loan score. Historical open-loan wallet membership is unavailable.",
+  "n_priced": 95596,
+  "collateral_ratios": {
+    "uniform": 1.25,
+    "A": 1.2,
+    "B": 1.5
+  },
+  "capital_freed_tier_a_usd": 1665763650.4885113,
+  "capital_freed_usd": 1941823554.737152
+}

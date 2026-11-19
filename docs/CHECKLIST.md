@@ -3,7 +3,7 @@ Legend: `[ ]` todo · `[x]` done → evidence · `[⚠]` failed/skipped + reason
 Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "planned, not yet run", move on.
 
 ## STATUS (agent updates after every item)
-- Next item: P2.6
+- Next item: P2.7
 - Last gate: P1 PASS (0 FAIL, 0 WARN)
 - Blockers: D1 validation extrema overlap. Historical open-loan membership unavailable. 2024Q3 has no test rows.
 
@@ -37,7 +37,7 @@ Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "plann
   verify: `results/pilot_tiers.json` has tau_A, tau_C, both rules, per-quarter shares.
 - [x] P2.4 `src/power.py`: s per model across seeds, s_d for (O_XGB − B_XGB) paired; n ≈ (2.8·s_d/Δ)² for Δ ∈ {0.01, 0.02}; CI half-width for n=5. → `results/pilot_power.json`. → results/pilot_power.json (3 paired XGB seeds and 5-seed CI estimate)
 - [x] P2.5 Taiwan: O_XGB seed 11, test AUC → `results/pilot_taiwan.json`. → results/pilot_taiwan.json (O_XGB seed 11 on 9,000 test clients)
-- [ ] P2.6 `src/sim_policy.py` (D3a counterfactual with real labels, tiered vs uniform) → `results/pilot_policy.json`. If loan USD amount column is missing, use count-based metrics and say so.
+- [⚠] P2.6 `src/sim_policy.py` (D3a counterfactual with real labels, tiered vs uniform) → `results/pilot_policy.json`. If loan USD amount column is missing, use count-based metrics and say so. → results/pilot_policy.json; verified uniform and percentile sensitivity. Fixed-rule counterfactual unavailable due to D1 overlap
 - [ ] P2.7 Write Steps 3–5 cards + `14_model.md` (columns: Baseline [1] reproduced · Ours · Taiwan; rows: algorithm, hyperparameters & search space, tuning method & budget (Optuna 50 trials each, inner-val), loss, class imbalance, threshold choice (val only), leakage controls). Mark pilot numbers with date.
 - **Gate P2:** `.venv/bin/python tools/check_report.py --only 1.2 --steps 1,2,3,4,5 && .venv/bin/python tools/check_report.py --only 1.4`
 
