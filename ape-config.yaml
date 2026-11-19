@@ -1,0 +1,11 @@
+name: is355-liquidation-risk
+plugins:
+  - name: vyper
+  - name: foundry
+vyper:
+  version: 0.4.3
+default_ecosystem: ethereum
+ethereum:
+  default_network: local
+  local:
+    default_provider: foundry
