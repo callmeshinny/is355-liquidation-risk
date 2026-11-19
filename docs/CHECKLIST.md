@@ -3,9 +3,9 @@ Legend: `[ ]` todo · `[x]` done → evidence · `[⚠]` failed/skipped + reason
 Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "planned, not yet run", move on.
 
 ## STATUS (agent updates after every item)
-- Next item: P2.3
+- Next item: P2.4
 - Last gate: P1 PASS (0 FAIL, 0 WARN)
-- Blockers: —. The local test snapshot ends 2024-05-07; record 2024Q3 as empty in P2.
+- Blockers: D1 validation extrema overlap. Historical open-loan membership unavailable. 2024Q3 has no test rows.
 
 ---
 ## P0 · Setup (human first, then agent) — 30 min
@@ -33,7 +33,7 @@ Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "plann
   verify: `results/pilot_model.json` has AUC (inner-val, val, test) for 4 models and fit_seconds.
 - [x] P2.2 `src/step4_calibrate.py`: isotonic on val; Brier uncal vs cal on test overall + per quarter (2022Q3…2024Q3); reliability bins CSV; SHAP top-10 (TreeExplainer, 2,000 test rows, seed 11). → results/pilot_calib.json and pilot_reliability.csv; native TreeSHAP used because TreeExplainer 0.49 cannot load XGBoost 3.2 vector intercepts
   verify: `results/pilot_calib.json` has brier_uncal, brier_cal, per_quarter list.
-- [ ] P2.3 `src/step5_tiers.py`: D1 fixed thresholds (τ_A, τ_C) + percentile comparison; wallet aggregation = max over open loans (D2); tier share + liquidation rate (Wilson CI) per tier, overall and per test quarter, both rules; model SHA-256; `data/processed/tiers.csv` (wallet, p, tier, model_version) + 20-row sample in `results/`.
+- [⚠] P2.3 `src/step5_tiers.py`: D1 fixed thresholds (τ_A, τ_C) + percentile comparison; wallet aggregation = max over open loans (D2); tier share + liquidation rate (Wilson CI) per tier, overall and per test quarter, both rules; model SHA-256; `data/processed/tiers.csv` (wallet, p, tier, model_version) + 20-row sample in `results/`. → results/pilot_tiers.json; independent D1 extrema overlap, so only the percentile comparison and cohort wallet proxy were run
   verify: `results/pilot_tiers.json` has tau_A, tau_C, both rules, per-quarter shares.
 - [ ] P2.4 `src/power.py`: s per model across seeds, s_d for (O_XGB − B_XGB) paired; n ≈ (2.8·s_d/Δ)² for Δ ∈ {0.01, 0.02}; CI half-width for n=5. → `results/pilot_power.json`.
 - [ ] P2.5 Taiwan: O_XGB seed 11, test AUC → `results/pilot_taiwan.json`.
