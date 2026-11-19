@@ -3,9 +3,9 @@ Legend: `[ ]` todo · `[x]` done → evidence · `[⚠]` failed/skipped + reason
 Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "planned, not yet run", move on.
 
 ## STATUS (agent updates after every item)
-- Next item: P1.3
-- Last gate: P0 PASS (0 FAIL, 0 WARN)
-- Blockers: —
+- Next item: P2.1 (Session 2)
+- Last gate: P1 PASS (0 FAIL, 0 WARN)
+- Blockers: —. The local test snapshot ends 2024-05-07; record 2024Q3 as empty in P2.
 
 ---
 ## P0 · Setup (human first, then agent) — 30 min
@@ -25,7 +25,7 @@ Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "plann
   verify: `.venv/bin/python -c "import json;d=json.load(open('results/pilot_data.json'));print({k:d[k] for k in d if 'n_' in k})"` (compare with CONTEXT §3; explain any difference in the report)
 - [x] P1.2 `src/step2_prepare.py`: label (17.43 d), drop short-observed + duplicate tx ids, D5 split with purges, KS drift (D ≥ 0.15) on train_core vs inner-val, encoding fitted on train_core only. Taiwan 60/10/30 stratified seed 11. Save splits; append to `results/pilot_data.json`: per-split n, positive rate, date range, dropped columns (+KS D). → results/pilot_data.json; 3 data tests passed
   verify: `.venv/bin/python -m pytest -p no:ape_test -q -s tests/test_data.py` (asserts: no id overlap between splits; date ranges match D5; no test row used in fitting encoders; label rates printed; Ape plugin disabled for data-only checks)
-- [ ] P1.3 Write `12_steps.md` Step 1 and Step 2 cards (11 fields each, pseudo-code for Step 2, one real example row, real counts). Note the D5 change.
+- [x] P1.3 Write `12_steps.md` Step 1 and Step 2 cards (11 fields each, pseudo-code for Step 2, one real example row, real counts). Note the D5 change. → report/sections/12_steps.md; Gate P1 PASS
 - **Gate P1:** `.venv/bin/python tools/check_report.py --only 1.2 --steps 1,2`
 
 ## P2 · Model pilot + Steps 3–5 + 1.4 — 2.5 h
