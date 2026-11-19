@@ -3,7 +3,7 @@ Legend: `[ ]` todo · `[x]` done → evidence · `[⚠]` failed/skipped + reason
 Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "planned, not yet run", move on.
 
 ## STATUS (agent updates after every item)
-- Next item: P2.5
+- Next item: P2.6
 - Last gate: P1 PASS (0 FAIL, 0 WARN)
 - Blockers: D1 validation extrema overlap. Historical open-loan membership unavailable. 2024Q3 has no test rows.
 
@@ -36,7 +36,7 @@ Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "plann
 - [⚠] P2.3 `src/step5_tiers.py`: D1 fixed thresholds (τ_A, τ_C) + percentile comparison; wallet aggregation = max over open loans (D2); tier share + liquidation rate (Wilson CI) per tier, overall and per test quarter, both rules; model SHA-256; `data/processed/tiers.csv` (wallet, p, tier, model_version) + 20-row sample in `results/`. → results/pilot_tiers.json; independent D1 extrema overlap, so only the percentile comparison and cohort wallet proxy were run
   verify: `results/pilot_tiers.json` has tau_A, tau_C, both rules, per-quarter shares.
 - [x] P2.4 `src/power.py`: s per model across seeds, s_d for (O_XGB − B_XGB) paired; n ≈ (2.8·s_d/Δ)² for Δ ∈ {0.01, 0.02}; CI half-width for n=5. → `results/pilot_power.json`. → results/pilot_power.json (3 paired XGB seeds and 5-seed CI estimate)
-- [ ] P2.5 Taiwan: O_XGB seed 11, test AUC → `results/pilot_taiwan.json`.
+- [x] P2.5 Taiwan: O_XGB seed 11, test AUC → `results/pilot_taiwan.json`. → results/pilot_taiwan.json (O_XGB seed 11 on 9,000 test clients)
 - [ ] P2.6 `src/sim_policy.py` (D3a counterfactual with real labels, tiered vs uniform) → `results/pilot_policy.json`. If loan USD amount column is missing, use count-based metrics and say so.
 - [ ] P2.7 Write Steps 3–5 cards + `14_model.md` (columns: Baseline [1] reproduced · Ours · Taiwan; rows: algorithm, hyperparameters & search space, tuning method & budget (Optuna 50 trials each, inner-val), loss, class imbalance, threshold choice (val only), leakage controls). Mark pilot numbers with date.
 - **Gate P2:** `.venv/bin/python tools/check_report.py --only 1.2 --steps 1,2,3,4,5 && .venv/bin/python tools/check_report.py --only 1.4`
