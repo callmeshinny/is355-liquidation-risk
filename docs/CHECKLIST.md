@@ -3,7 +3,7 @@ Legend: `[ ]` todo · `[x]` done → evidence · `[⚠]` failed/skipped + reason
 Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "planned, not yet run", move on.
 
 ## STATUS (agent updates after every item)
-- Next item: P3.2
+- Next item: P3.3
 - Last gate: P2 PASS (0 FAIL, 0 WARN in 1.2 and 1.4; P2.3 and P2.6 marked ⚠)
 - Blockers: D1 validation extrema overlap. Historical open-loan membership unavailable. 2024Q3 has no test rows.
 
@@ -44,7 +44,7 @@ Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "plann
 ## P3 · Contracts + T3/T4 pilot + gas + Steps 6–8 + 1.3 — 2.5 h
 - [x] P3.1 `contracts/`: MockERC20.vy, PriceOracle.vy, ScoreOracle.vy, LendingPool.vy (constructor takes policy params so the same code deploys as Tiered or Uniform). Loan stores `tier_at_borrow`. `get_tier` returns 2 (B) if unscored or stale > 30 days. `@nonreentrant` on state-changing functions. Exact assert messages. → Ape compiled four Vyper 0.4.3 contracts
   verify: `.venv/bin/ape compile`
-- [ ] P3.2 `tests/test_t3_functions.py`: every function in CONTEXT §9 → 1 valid + 1 revert (match message).
+- [x] P3.2 `tests/test_t3_functions.py`: every function in CONTEXT §9 → 1 valid + 1 revert (match message). → 11 passed on Anvil, with valid calls and exact guard messages
   verify: `.venv/bin/ape test tests/test_t3_functions.py -q`
 - [ ] P3.3 `tests/test_t4_security.py` (≥6): unauthorized set_score; version mismatch; stale score → B terms; liquidate healthy loan; repay > 50% in liquidation; zero / max uint amounts; Sybil fresh wallet gets B (documents limitation); Hypothesis ≥200 examples: borrow never exceeds tier limit.
   verify: `.venv/bin/ape test tests/test_t4_security.py -q`
