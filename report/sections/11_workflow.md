@@ -1,6 +1,8 @@
-# 1. Detailed method
+# B. CONTENT
 
-## 1.1 Workflow
+## 1. Detailed Method
+
+### 1.1. Updated workflow diagram
 
 ![Eight-step project workflow](figures/workflow.png)
 

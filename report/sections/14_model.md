@@ -1,4 +1,4 @@
-## 1.4 Model specification
+### 1.4. Model and algorithm details
 
 | Field | Baseline [1] reproduced | Ours | Taiwan |
 | --- | --- | --- | --- |

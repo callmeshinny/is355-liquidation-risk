@@ -1,6 +1,6 @@
-## 1.3 Smart contract interfaces
+### 1.3. Smart contract specification
 
-### State variables
+#### State variables
 
 | Contract | State variables and units |
 | --- | --- |
@@ -11,7 +11,7 @@
 
 Tiered borrowing/maintenance ratios are 120%/110% (A) and 150%/130% (B). C is ineligible. The uniform constructor uses 125%/121.2% [6]. The close factor is 50% and bonus 5% [4]. The original tier governs maintenance and withdrawals. Additional borrowing uses the stricter origination ratio. Token errors can include insufficient balance or insufficient allowance. State-changing entry points use a reentrancy guard.
 
-### Functions
+#### Functions
 
 | Function | Role | Assert messages | State change | Event | EVM estimate | Anvil gas |
 | --- | --- | --- | --- | --- | ---: | ---: |
@@ -39,7 +39,7 @@ Gas assumptions are 21,000 base, 22,100 per fresh slot, 5,000 per update, 2,100 
 
 Table 11. Fresh-wallet batch gas using deterministic synthetic inputs on 2026-11-19.
 
-### State machine
+#### State machine
 
 ![Loan state machine](figures/state_machine.png)
 
@@ -56,7 +56,7 @@ Figure 2. Loan state transitions at the current collateral price.
 
 Table 12. Loan transitions and forbidden transitions. The health state is computed from debt, collateral and oracle price. Debt dust and positions where permitted seizure exceeds remaining collateral need a future bad-debt settlement design.
 
-### Events
+#### Events
 
 | Events | Fields | Reader |
 | --- | --- | --- |
@@ -68,7 +68,7 @@ Table 12. Loan transitions and forbidden transitions. The health state is comput
 
 Table 13. Event consumers and reconciliation fields.
 
-### Off-chain and on-chain boundary
+#### Off-chain and on-chain boundary
 
 The planned Ape writer signs with keystore account `oracle`. Keep the private key outside source and results. Verify hash, version and wallet counts before sending. For a stuck transaction after three blocks, check the receipt and resend with the same nonce and 20% higher fee. Stop after three retries and log nonce, hashes and receipt status. Retry behavior is planned, not yet run. The gas pilot uses synthetic accounts.
 

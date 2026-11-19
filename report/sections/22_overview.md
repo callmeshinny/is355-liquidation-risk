@@ -1,4 +1,4 @@
-## 2.2 Scenario overview
+### 2.2. Test scenario overview
 
 | ID | Scenario | Group | Hypothesis or improvement | Environment | Planned runs |
 | --- | --- | --- | --- | --- | --- |

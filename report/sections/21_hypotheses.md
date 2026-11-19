@@ -1,4 +1,6 @@
-## 2.1 Hypotheses and acceptance criteria
+## 2. Test Plan
+
+### 2.1. Research questions and hypotheses
 
 | ID | Hypothesis | Primary metric | Acceptance criterion |
 | --- | --- | --- | --- |

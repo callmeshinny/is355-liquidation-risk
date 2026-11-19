@@ -1,4 +1,4 @@
-## 2.7 Risks and contingencies
+### 2.7. Risks and backup plans
 
 | ID | Risk | Likelihood | Impact | Trigger | Backup |
 | --- | --- | --- | --- | --- | --- |

@@ -24,3 +24,7 @@ Scores are internal coverage estimates on a 0–100% scale before the final revi
 - Presentation coverage improved to an estimated 95%. The final Word export is A4 with 20 pages total and 18 body pages. The cover is page 1. References and Appendix A start on page 20. Visual review used images from the Word-exported PDF. Six references, three figures and 22 sequentially numbered table captions are present.
 - The full source checker passes with 0 FAIL and 0 WARN. Its word-count estimate is approximately 19.8 body pages. Word pagination is the direct measurement. Group members must recheck after entering their tasks and shares.
 - D1 cutoffs remain overlapping. Full fixed-tier and fixed-policy outcomes, Sepolia latency, Monte Carlo and dashboard integration remain planned.
+
+## Template-format revision
+
+The previous pagination applied to the compact edition. The revised DOCX follows IS355_Week4_Project_Report_Template with the Part A and Part B headings, A4, Times New Roman 12, 1.15 line spacing and 2 cm margins. The member names, Week 4 tasks and shares are blank. Word reports 33 body pages, above the template's 12–18 page guideline. The full source checker reports 0 FAIL and 0 WARN.

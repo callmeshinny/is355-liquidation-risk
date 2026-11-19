@@ -1,4 +1,4 @@
-## 2.6 Schedule and milestones
+### 2.6. Test schedule
 
 Hours below are planning allowances. Each row shows runs × time, preparation and analysis. Related runs share artifacts and parallel work is possible after the split and configuration freeze.
 

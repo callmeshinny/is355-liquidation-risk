@@ -1,4 +1,4 @@
-## 2.5 Expected results and decision rules
+### 2.5. Expected results and reasoning
 
 #### H1 · Non-inferiority
 

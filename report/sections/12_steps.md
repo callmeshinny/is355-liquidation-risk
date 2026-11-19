@@ -1,6 +1,6 @@
-## 1.2 Procedure
+### 1.2. Step-by-step specification
 
-### Step 1 · Data collection
+#### Step 1 · Data collection
 
 | Field | Specification |
 | --- | --- |
@@ -35,7 +35,7 @@ Table 3. FinSurvival feature counts before and after loader checks.
 
 After loader checks, 116 features remain. Taiwan loaded 30,000 clients, 23 features and 22.12% defaults.
 
-### Step 2 · Labelling and feature preparation
+#### Step 2 · Labelling and feature preparation
 
 | Field | Specification |
 | --- | --- |
@@ -84,7 +84,7 @@ Removed 13,819 joined rows with repeated IDs, representing 4,159 source rows, an
 
 Example loan: 2020-12-01, event status 0, observed 576.465 days, label 0.
 
-### Step 3 · Train baseline and proposed models
+#### Step 3 · Train baseline and proposed models
 
 | Field | Specification |
 | --- | --- |
@@ -119,7 +119,7 @@ Table 6. FinSurvival pilot fits on 2026-11-19.
 
 Paper deviations were −0.1085 (LR) and −0.0300 (XGB), both outside ±0.02 [1]. Taiwan test AUC was 0.7834 at seed 11. Section 2.4 summarizes paired precision.
 
-### Step 4 · Calibrate and explain probabilities
+#### Step 4 · Calibrate and explain probabilities
 
 | Field | Specification |
 | --- | --- |
@@ -159,7 +159,7 @@ Overall Brier changed from 0.06409 to 0.01636. The SHAP ranking is `userLiquidat
 
 Table 7. FinSurvival test Brier by quarter.
 
-### Step 5 · Assign risk tiers
+#### Step 5 · Assign risk tiers
 
 | Field | Specification |
 | --- | --- |
@@ -203,7 +203,7 @@ D3a percentile sensitivity used origination scores on 2026-11-19. Rejected loans
 
 Table 9. D3a percentile sensitivity and uniform policy on the same test loans.
 
-### Step 6 · Register model and write scores
+#### Step 6 · Register model and write scores
 
 | Field | Specification |
 | --- | --- |
@@ -227,7 +227,7 @@ submit each approved writer batch
 reconcile receipts and effective tier lookups
 ```
 
-### Step 7 · Execute the lending policy
+#### Step 7 · Execute the lending policy
 
 | Field | Specification |
 | --- | --- |
@@ -252,7 +252,7 @@ apply close factor and bonus
 reconcile balances and emit the position event
 ```
 
-### Step 8 · Demonstrate and evaluate
+#### Step 8 · Demonstrate and evaluate
 
 | Field | Specification |
 | --- | --- |

@@ -1,8 +1,12 @@
 **UNIVERSITY OF INFORMATION TECHNOLOGY – VNU-HCM**
 
-**FACULTY OF INFORMATION SYSTEMS** · **IS355 – BLOCKCHAIN TECHNOLOGY**
+**FACULTY OF INFORMATION SYSTEMS**
 
-# WEEK 4 PROJECT REPORT — Detailed Method & Test Plan {.unnumbered}
+**IS355 – BLOCKCHAIN TECHNOLOGY**
+
+# WEEK 4 PROJECT REPORT {.unnumbered}
+
+Detailed Method & Test Plan
 
 **Calibrated and Explainable Liquidation-Risk Scoring for DeFi Lending with an On-chain Risk-Tiered Lending Pool**
 

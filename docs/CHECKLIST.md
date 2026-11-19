@@ -4,7 +4,7 @@ Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "plann
 
 ## STATUS (agent updates after every item)
 - Next item: P5.6 (human submission)
-- Last gate: P5 PASS (0 FAIL, 0 WARN; DOCX verified in Word at 18 A4 body pages)
+- Last gate: P5 checker PASS (0 FAIL, 0 WARN). Template-format revision verified in Word at 33 A4 body pages, above the guideline.
 - Blockers: D1 validation extrema overlap. Historical open-loan membership unavailable. 2024Q3 has no test rows.
 
 ---

@@ -1,4 +1,4 @@
-## 2.4 Repetition, precision and budget
+### 2.4. Number of runs and justification
 
 The unit of repetition is a fit, guard case, transaction, fresh deployment or simulation draw. ML shares splits and seeds 11, 22, 33, 44 and 55. Optuna uses 50 inner-validation trials per variant.
 

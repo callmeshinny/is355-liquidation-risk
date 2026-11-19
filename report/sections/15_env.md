@@ -1,4 +1,4 @@
-## 1.5 Environment and reproducibility
+### 1.5. Implementation environment and reproducibility
 
 The pilot host uses Apple M2 with 8 GiB RAM and macOS-27.0.1-arm64-arm-64bit. The runtime uses the Python 3.11 virtual environment at `.venv`, Vyper 0.4 and Ape 0.8. The measured versions are recorded in `results/env.json`.
 
