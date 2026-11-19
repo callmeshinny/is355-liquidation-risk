@@ -1,0 +1,121 @@
+{
+  "date": "2026-11-19",
+  "network": "ethereum:local:foundry",
+  "case": "Synthetic fresh wallets, local test tokens",
+  "seed": null,
+  "functions": {
+    "register_model": {
+      "gas": 67940,
+      "estimate": 66700,
+      "over_2x": false
+    },
+    "set_oracle": {
+      "gas": 28121,
+      "estimate": 27500,
+      "over_2x": false
+    },
+    "set_score": {
+      "gas": 94739,
+      "estimate": 93000,
+      "over_2x": false
+    },
+    "get_tier": {
+      "gas": 30237,
+      "estimate": 29400,
+      "over_2x": false,
+      "method": "eth_estimateGas"
+    },
+    "deposit_collateral": {
+      "gas": 83813,
+      "estimate": 84600,
+      "over_2x": false
+    },
+    "borrow": {
+      "gas": 119897,
+      "estimate": 115100,
+      "over_2x": false
+    },
+    "withdraw_collateral": {
+      "gas": 53668,
+      "estimate": 75900,
+      "over_2x": false
+    },
+    "repay": {
+      "gas": 49661,
+      "estimate": 67500,
+      "over_2x": false
+    },
+    "set_price": {
+      "gas": 27887,
+      "estimate": 27500,
+      "over_2x": false
+    },
+    "liquidate": {
+      "gas": 96682,
+      "estimate": 120900,
+      "over_2x": false
+    },
+    "set_scores_batch": {
+      "gas": 717192.0,
+      "estimate": 709240,
+      "over_2x": false,
+      "method": "median of 10-wallet batches"
+    }
+  },
+  "batches": {
+    "1": {
+      "samples": [
+        96378,
+        96378,
+        96378,
+        96378,
+        96378,
+        96378,
+        96378,
+        96378,
+        96378,
+        96378
+      ],
+      "median": 96378.0,
+      "estimate": 89824,
+      "median_per_wallet": 96378.0,
+      "over_2x": false
+    },
+    "10": {
+      "samples": [
+        717192,
+        717192,
+        717192,
+        717192,
+        717192,
+        717192,
+        717192,
+        717192,
+        717192,
+        717192
+      ],
+      "median": 717192.0,
+      "estimate": 709240,
+      "median_per_wallet": 71719.2,
+      "over_2x": false
+    },
+    "100": {
+      "samples": [
+        6925200,
+        6925188,
+        6925200,
+        6925188,
+        6925200,
+        6925200,
+        6925188,
+        6925200,
+        6925188,
+        6925200
+      ],
+      "median": 6925200.0,
+      "estimate": 6903400,
+      "median_per_wallet": 69252.0,
+      "over_2x": false
+    }
+  }
+}
