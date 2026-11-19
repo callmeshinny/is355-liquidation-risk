@@ -3,8 +3,8 @@ Legend: `[ ]` todo · `[x]` done → evidence · `[⚠]` failed/skipped + reason
 Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "planned, not yet run", move on.
 
 ## STATUS (agent updates after every item)
-- Next item: P4.7
-- Last gate: P3 PASS (24 tests passed; sections 1.2 and 1.3 each 0 FAIL, 0 WARN)
+- Next item: P5.1
+- Last gate: P4 PASS (0 FAIL, 0 WARN)
 - Blockers: D1 validation extrema overlap. Historical open-loan membership unavailable. 2024Q3 has no test rows.
 
 ---
@@ -59,7 +59,7 @@ Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "plann
 - [x] P4.4 `24_runs.md`: unit of repetition per scenario; runs vs minimum; CI + n formula with pilot s, s_d; Sepolia ETH budget = Σ(gas × tx) × gas price (state assumed gwei) vs faucet amount; summary table (scenario, unit, runs, reason, aggregation, est. time). → Section 2.4 verified against pilot power and gas JSON
 - [x] P4.5 `25_expected.md`: per H: Expected | Basis | Reject if | If rejected; gas estimate vs pilot; latency expectation (Sepolia ~12 s blocks; median 7–15 s, p95 24–36 s) labelled expected; baseline reproduction tolerance ±0.02 AUC. → Section 2.5 passed checks for all four fields in H1–H7
 - [x] P4.6 `26_schedule.md`: Week 5…Week 9 table (task, weeks, duration calc, owner Khanh/Ngoc, depends on, output), M1–M4, ≥20% buffer; `figures/gantt.png` (matplotlib). → Week 5–9 schedule, four milestones and verified 20% buffer; figures/gantt.png
-- [ ] P4.7 `27_risks.md`: ≥4 risks (faucet ETH, RPC limits, baseline not reproducible, prior shift breaks calibration, 2-person team) with likelihood, impact, backup.
+- [x] P4.7 `27_risks.md`: ≥4 risks (faucet ETH, RPC limits, baseline not reproducible, prior shift breaks calibration, 2-person team) with likelihood, impact, backup. → seven risk rows with triggers and backups; Gate P4 passed
 - **Gate P4:** `.venv/bin/python tools/check_report.py --only 2`
 
 ## P5 · Part A, figures, assembly, final review — 1 h
