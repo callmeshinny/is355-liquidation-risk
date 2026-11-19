@@ -1,0 +1,80 @@
+{
+  "date": "2026-11-19",
+  "seed": 11,
+  "model": "O_XGB",
+  "fit_split": "val",
+  "n": 96345,
+  "brier_uncal": 0.06409133970737457,
+  "brier_cal": 0.016363417729735374,
+  "per_quarter": [
+    {
+      "quarter": "2022Q3",
+      "n": 25953,
+      "brier_uncal": 0.0569646954536438,
+      "brier_cal": 0.015483839437365532
+    },
+    {
+      "quarter": "2022Q4",
+      "n": 23787,
+      "brier_uncal": 0.0713864415884018,
+      "brier_cal": 0.02294854074716568
+    },
+    {
+      "quarter": "2023Q1",
+      "n": 17899,
+      "brier_uncal": 0.06409510970115662,
+      "brier_cal": 0.011617619544267654
+    },
+    {
+      "quarter": "2023Q2",
+      "n": 9292,
+      "brier_uncal": 0.056575387716293335,
+      "brier_cal": 0.011609785258769989
+    },
+    {
+      "quarter": "2023Q3",
+      "n": 6354,
+      "brier_uncal": 0.059104230254888535,
+      "brier_cal": 0.013456197455525398
+    },
+    {
+      "quarter": "2023Q4",
+      "n": 6808,
+      "brier_uncal": 0.06095514073967934,
+      "brier_cal": 0.00959385558962822
+    },
+    {
+      "quarter": "2024Q1",
+      "n": 5005,
+      "brier_uncal": 0.09185104072093964,
+      "brier_cal": 0.02531619928777218
+    },
+    {
+      "quarter": "2024Q2",
+      "n": 1247,
+      "brier_uncal": 0.06032378226518631,
+      "brier_cal": 0.028435630723834038
+    },
+    {
+      "quarter": "2024Q3",
+      "n": 0,
+      "brier_uncal": null,
+      "brier_cal": null
+    }
+  ],
+  "shap_rows": 2000,
+  "shap_method": "XGBoost native TreeSHAP (vector intercept compatibility)",
+  "shap_top10": {
+    "userLiquidationCount": 0.3361903131008148,
+    "userDepositAvgAmountUSD": 0.2972085773944855,
+    "cosDayOfQuarter": 0.2893117070198059,
+    "userBorrowCount": 0.28596732020378113,
+    "userDepositAvgAmountETH": 0.2273716777563095,
+    "priceInUSD": 0.199649378657341,
+    "userActiveDaysYearly": 0.1933155059814453,
+    "userActiveDaysWeekly": 0.15548762679100037,
+    "dayOfMonth": 0.14644549787044525,
+    "userBorrowAvgAmountETH": 0.1401490867137909
+  },
+  "elapsed_seconds": 2.072
+}
