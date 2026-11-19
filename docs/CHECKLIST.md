@@ -3,7 +3,7 @@ Legend: `[ ]` todo · `[x]` done → evidence · `[⚠]` failed/skipped + reason
 Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "planned, not yet run", move on.
 
 ## STATUS (agent updates after every item)
-- Next item: P3.3
+- Next item: P3.4
 - Last gate: P2 PASS (0 FAIL, 0 WARN in 1.2 and 1.4; P2.3 and P2.6 marked ⚠)
 - Blockers: D1 validation extrema overlap. Historical open-loan membership unavailable. 2024Q3 has no test rows.
 
@@ -46,7 +46,7 @@ Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "plann
   verify: `.venv/bin/ape compile`
 - [x] P3.2 `tests/test_t3_functions.py`: every function in CONTEXT §9 → 1 valid + 1 revert (match message). → 11 passed on Anvil, with valid calls and exact guard messages
   verify: `.venv/bin/ape test tests/test_t3_functions.py -q`
-- [ ] P3.3 `tests/test_t4_security.py` (≥6): unauthorized set_score; version mismatch; stale score → B terms; liquidate healthy loan; repay > 50% in liquidation; zero / max uint amounts; Sybil fresh wallet gets B (documents limitation); Hypothesis ≥200 examples: borrow never exceeds tier limit.
+- [x] P3.3 `tests/test_t4_security.py` (≥6): unauthorized set_score; version mismatch; stale score → B terms; liquidate healthy loan; repay > 50% in liquidation; zero / max uint amounts; Sybil fresh wallet gets B (documents limitation); Hypothesis ≥200 examples: borrow never exceeds tier limit. → 10 defensive tests passed on Anvil, including 200 Hypothesis examples
   verify: `.venv/bin/ape test tests/test_t4_security.py -q`
 - [ ] P3.4 Gas pilot: `ape test --gas` + `scripts/gas_batch.py` (set_scores_batch with 1/10/100 wallets) → `results/pilot_gas.json`; put EVM estimate (CONTEXT §11) next to measured; flag > 2×.
 - [ ] P3.5 Write `13_contract.md` (state vars; function table with role, asserts+messages, state change, event, est. + measured gas; loan state machine figure `figures/state_machine.png` + transition table incl. forbidden; events table with reader; off-chain ↔ on-chain: Ape scripts sign with Ape keystore account `oracle`, never a raw key in code; failed/stuck tx: wait 3 blocks, resend same nonce with +20% fee, max 3 tries, log; blockchain guarantees vs not; oracle trust & key-leak risk) + Steps 6–8 cards.
