@@ -3,7 +3,7 @@ Legend: `[ ]` todo · `[x]` done → evidence · `[⚠]` failed/skipped + reason
 Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "planned, not yet run", move on.
 
 ## STATUS (agent updates after every item)
-- Next item: P3.1 (Session 3)
+- Next item: P3.2
 - Last gate: P2 PASS (0 FAIL, 0 WARN in 1.2 and 1.4; P2.3 and P2.6 marked ⚠)
 - Blockers: D1 validation extrema overlap. Historical open-loan membership unavailable. 2024Q3 has no test rows.
 
@@ -42,7 +42,7 @@ Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "plann
 - **Gate P2:** `.venv/bin/python tools/check_report.py --only 1.2 --steps 1,2,3,4,5 && .venv/bin/python tools/check_report.py --only 1.4`
 
 ## P3 · Contracts + T3/T4 pilot + gas + Steps 6–8 + 1.3 — 2.5 h
-- [ ] P3.1 `contracts/`: MockERC20.vy, PriceOracle.vy, ScoreOracle.vy, LendingPool.vy (constructor takes policy params so the same code deploys as Tiered or Uniform). Loan stores `tier_at_borrow`. `get_tier` returns 2 (B) if unscored or stale > 30 days. `@nonreentrant` on state-changing functions. Exact assert messages.
+- [x] P3.1 `contracts/`: MockERC20.vy, PriceOracle.vy, ScoreOracle.vy, LendingPool.vy (constructor takes policy params so the same code deploys as Tiered or Uniform). Loan stores `tier_at_borrow`. `get_tier` returns 2 (B) if unscored or stale > 30 days. `@nonreentrant` on state-changing functions. Exact assert messages. → Ape compiled four Vyper 0.4.3 contracts
   verify: `.venv/bin/ape compile`
 - [ ] P3.2 `tests/test_t3_functions.py`: every function in CONTEXT §9 → 1 valid + 1 revert (match message).
   verify: `.venv/bin/ape test tests/test_t3_functions.py -q`
