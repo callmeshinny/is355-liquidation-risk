@@ -3,7 +3,7 @@ Legend: `[ ]` todo · `[x]` done → evidence · `[⚠]` failed/skipped + reason
 Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "planned, not yet run", move on.
 
 ## STATUS (agent updates after every item)
-- Next item: P1.1
+- Next item: P1.2
 - Last gate: P0 PASS (0 FAIL, 0 WARN)
 - Blockers: —
 
@@ -21,7 +21,7 @@ Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "plann
 - **Gate P0:** `.venv/bin/python tools/check_report.py --only 1.5`
 
 ## P1 · Data pilot + Steps 1–2 — 1.5 h
-- [ ] P1.1 `src/step1_load.py`: read all X parts + y (Borrow → Account Liquidated), join by `id`, mirror relevant `dataLoader.R` cleaning; Taiwan via `ucimlrepo` (id 350). Save `data/interim/*.parquet`. Write counts + schema (name, dtype) to `results/pilot_data.json`.
+- [x] P1.1 `src/step1_load.py`: read all X parts + y (Borrow → Account Liquidated), join by `id`, mirror relevant `dataLoader.R` cleaning; Taiwan via `ucimlrepo` (id 350). Save `data/interim/*.parquet`. Write counts + schema (name, dtype) to `results/pilot_data.json`. → results/pilot_data.json (259,886 matched FinSurvival labels, 30,000 Taiwan clients)
   verify: `.venv/bin/python -c "import json;d=json.load(open('results/pilot_data.json'));print({k:d[k] for k in d if 'n_' in k})"` (compare with CONTEXT §3; explain any difference in the report)
 - [ ] P1.2 `src/step2_prepare.py`: label (17.43 d), drop short-observed + duplicate tx ids, D5 split with purges, KS drift (D ≥ 0.15) on train_core vs inner-val, encoding fitted on train_core only. Taiwan 60/10/30 stratified seed 11. Save splits; append to `results/pilot_data.json`: per-split n, positive rate, date range, dropped columns (+KS D).
   verify: `.venv/bin/python -m pytest -q tests/test_data.py` (asserts: no id overlap between splits; date ranges match D5; no test row used in fitting encoders; label rates printed)

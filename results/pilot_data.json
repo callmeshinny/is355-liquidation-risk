@@ -1,0 +1,1121 @@
+{
+  "load_date": "2026-11-19",
+  "n_labels": 259886,
+  "n_joined": 269546,
+  "n_labels_with_features": 259886,
+  "load_seconds": 26.376,
+  "n_shared_features": 116,
+  "n_taiwan": 30000,
+  "n_taiwan_features": 23,
+  "taiwan_positive_rate": 0.2212,
+  "source_splits": {
+    "train": {
+      "n_parts": 4,
+      "n_features_rows": 161826,
+      "n_raw_features": 128,
+      "dropped_all_null": [
+        "fromState",
+        "toState",
+        "liquidator",
+        "collateralAmount",
+        "collateralReserve",
+        "collateralAmountUSD",
+        "collateralAmountETH",
+        "borrowRateModeTo",
+        "borrowRateModeFrom",
+        "stableBorrowRate",
+        "variableBorrowRate",
+        "totalFee"
+      ],
+      "dropped_exogenous": [],
+      "n_labels": 161826,
+      "n_labels_without_features": 0,
+      "n_features_without_labels": 0,
+      "n_joined": 169104,
+      "n_duplicate_id_rows": 10170,
+      "dropped_nonshared": []
+    },
+    "test": {
+      "n_parts": 3,
+      "n_features_rows": 98060,
+      "n_raw_features": 128,
+      "dropped_all_null": [
+        "fromState",
+        "toState",
+        "liquidator",
+        "collateralAmount",
+        "collateralReserve",
+        "collateralAmountUSD",
+        "collateralAmountETH",
+        "borrowRateModeTo",
+        "borrowRateModeFrom",
+        "stableBorrowRate",
+        "variableBorrowRate",
+        "totalFee"
+      ],
+      "dropped_exogenous": [],
+      "n_labels": 98060,
+      "n_labels_without_features": 0,
+      "n_features_without_labels": 0,
+      "n_joined": 100442,
+      "n_duplicate_id_rows": 3649,
+      "dropped_nonshared": []
+    }
+  },
+  "schema": {
+    "finsurvival_train": [
+      {
+        "name": "id",
+        "dtype": "object"
+      },
+      {
+        "name": "timeDiff",
+        "dtype": "float64"
+      },
+      {
+        "name": "status",
+        "dtype": "float64"
+      },
+      {
+        "name": "type",
+        "dtype": "category"
+      },
+      {
+        "name": "timestamp",
+        "dtype": "float64"
+      },
+      {
+        "name": "user",
+        "dtype": "object"
+      },
+      {
+        "name": "pool",
+        "dtype": "category"
+      },
+      {
+        "name": "reserve",
+        "dtype": "category"
+      },
+      {
+        "name": "amount",
+        "dtype": "float64"
+      },
+      {
+        "name": "amountUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "amountETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "borrowRate",
+        "dtype": "float64"
+      },
+      {
+        "name": "borrowRateMode",
+        "dtype": "category"
+      },
+      {
+        "name": "priceInUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "coinType",
+        "dtype": "object"
+      },
+      {
+        "name": "userReserveMode",
+        "dtype": "category"
+      },
+      {
+        "name": "userCoinTypeMode",
+        "dtype": "category"
+      },
+      {
+        "name": "userIsNew",
+        "dtype": "category"
+      },
+      {
+        "name": "userSecondsSinceFirstTransaction",
+        "dtype": "float64"
+      },
+      {
+        "name": "userSecondsSincePreviousTransaction",
+        "dtype": "float64"
+      },
+      {
+        "name": "userCollateralCount",
+        "dtype": "int32"
+      },
+      {
+        "name": "userDepositCount",
+        "dtype": "int32"
+      },
+      {
+        "name": "userDepositSum",
+        "dtype": "float64"
+      },
+      {
+        "name": "userDepositAvgAmount",
+        "dtype": "float64"
+      },
+      {
+        "name": "userDepositSumUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "userDepositAvgAmountUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "userDepositSumETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "userDepositAvgAmountETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "userWithdrawCount",
+        "dtype": "int32"
+      },
+      {
+        "name": "userWithdrawSum",
+        "dtype": "float64"
+      },
+      {
+        "name": "userWithdrawAvgAmount",
+        "dtype": "float64"
+      },
+      {
+        "name": "userWithdrawSumUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "userWithdrawAvgAmountUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "userWithdrawSumETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "userWithdrawAvgAmountETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "userBorrowCount",
+        "dtype": "int32"
+      },
+      {
+        "name": "userBorrowSum",
+        "dtype": "float64"
+      },
+      {
+        "name": "userBorrowAvgAmount",
+        "dtype": "float64"
+      },
+      {
+        "name": "userBorrowSumUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "userBorrowAvgAmountUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "userBorrowSumETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "userBorrowAvgAmountETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "userRepayCount",
+        "dtype": "int32"
+      },
+      {
+        "name": "userRepaySum",
+        "dtype": "float64"
+      },
+      {
+        "name": "userRepayAvgAmount",
+        "dtype": "float64"
+      },
+      {
+        "name": "userRepaySumUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "userRepayAvgAmountUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "userRepaySumETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "userRepayAvgAmountETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "userSwapCount",
+        "dtype": "int32"
+      },
+      {
+        "name": "userLiquidationCount",
+        "dtype": "int32"
+      },
+      {
+        "name": "userLiquidationSum",
+        "dtype": "float64"
+      },
+      {
+        "name": "userLiquidationAvgAmount",
+        "dtype": "float64"
+      },
+      {
+        "name": "userLiquidationSumUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "userLiquidationAvgAmountUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "userLiquidationSumETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "userLiquidationAvgAmountETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "userActiveDaysWeekly",
+        "dtype": "float64"
+      },
+      {
+        "name": "userActiveDaysMonthly",
+        "dtype": "float64"
+      },
+      {
+        "name": "userActiveDaysYearly",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketCollateralCount",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketDepositCount",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketDepositAvgAmount",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketDepositSum",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketDepositAvgAmountUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketDepositSumUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketDepositAvgAmountETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketDepositSumETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketWithdrawCount",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketWithdrawAvgAmount",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketWithdrawSum",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketWithdrawAvgAmountUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketWithdrawSumUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketWithdrawAvgAmountETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketWithdrawSumETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketBorrowCount",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketBorrowAvgAmount",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketBorrowSum",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketBorrowAvgAmountUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketBorrowSumUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketBorrowAvgAmountETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketBorrowSumETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketRepayCount",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketRepayAvgAmount",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketRepaySum",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketRepayAvgAmountUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketRepaySumUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketRepayAvgAmountETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketRepaySumETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketSwapCount",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketLiquidationCount",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketLiquidationAvgAmount",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketLiquidationSum",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketLiquidationAvgAmountUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketLiquidationSumUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketLiquidationAvgAmountETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketLiquidationSumETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "timeOfDay",
+        "dtype": "float64"
+      },
+      {
+        "name": "dayOfWeek",
+        "dtype": "float64"
+      },
+      {
+        "name": "dayOfMonth",
+        "dtype": "float64"
+      },
+      {
+        "name": "dayOfYear",
+        "dtype": "float64"
+      },
+      {
+        "name": "quarter",
+        "dtype": "int32"
+      },
+      {
+        "name": "dayOfQuarter",
+        "dtype": "float64"
+      },
+      {
+        "name": "sinTimeOfDay",
+        "dtype": "float64"
+      },
+      {
+        "name": "cosTimeOfDay",
+        "dtype": "float64"
+      },
+      {
+        "name": "sinDayOfWeek",
+        "dtype": "float64"
+      },
+      {
+        "name": "cosDayOfWeek",
+        "dtype": "float64"
+      },
+      {
+        "name": "sinDayOfMonth",
+        "dtype": "float64"
+      },
+      {
+        "name": "cosDayOfMonth",
+        "dtype": "float64"
+      },
+      {
+        "name": "sinDayOfQuarter",
+        "dtype": "float64"
+      },
+      {
+        "name": "cosDayOfQuarter",
+        "dtype": "float64"
+      },
+      {
+        "name": "sinDayOfYear",
+        "dtype": "float64"
+      },
+      {
+        "name": "cosDayOfYear",
+        "dtype": "float64"
+      },
+      {
+        "name": "sinQuarter",
+        "dtype": "float64"
+      },
+      {
+        "name": "cosQuarter",
+        "dtype": "float64"
+      },
+      {
+        "name": "isWeekend",
+        "dtype": "category"
+      },
+      {
+        "name": "logAmount",
+        "dtype": "float64"
+      },
+      {
+        "name": "logAmountUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "logAmountETH",
+        "dtype": "float64"
+      }
+    ],
+    "finsurvival_test": [
+      {
+        "name": "id",
+        "dtype": "object"
+      },
+      {
+        "name": "timeDiff",
+        "dtype": "float64"
+      },
+      {
+        "name": "status",
+        "dtype": "float64"
+      },
+      {
+        "name": "type",
+        "dtype": "category"
+      },
+      {
+        "name": "timestamp",
+        "dtype": "float64"
+      },
+      {
+        "name": "user",
+        "dtype": "object"
+      },
+      {
+        "name": "pool",
+        "dtype": "category"
+      },
+      {
+        "name": "reserve",
+        "dtype": "category"
+      },
+      {
+        "name": "amount",
+        "dtype": "float64"
+      },
+      {
+        "name": "amountUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "amountETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "borrowRate",
+        "dtype": "float64"
+      },
+      {
+        "name": "borrowRateMode",
+        "dtype": "category"
+      },
+      {
+        "name": "priceInUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "coinType",
+        "dtype": "object"
+      },
+      {
+        "name": "userReserveMode",
+        "dtype": "category"
+      },
+      {
+        "name": "userCoinTypeMode",
+        "dtype": "category"
+      },
+      {
+        "name": "userIsNew",
+        "dtype": "category"
+      },
+      {
+        "name": "userSecondsSinceFirstTransaction",
+        "dtype": "float64"
+      },
+      {
+        "name": "userSecondsSincePreviousTransaction",
+        "dtype": "float64"
+      },
+      {
+        "name": "userCollateralCount",
+        "dtype": "int32"
+      },
+      {
+        "name": "userDepositCount",
+        "dtype": "int32"
+      },
+      {
+        "name": "userDepositSum",
+        "dtype": "float64"
+      },
+      {
+        "name": "userDepositAvgAmount",
+        "dtype": "float64"
+      },
+      {
+        "name": "userDepositSumUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "userDepositAvgAmountUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "userDepositSumETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "userDepositAvgAmountETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "userWithdrawCount",
+        "dtype": "int32"
+      },
+      {
+        "name": "userWithdrawSum",
+        "dtype": "float64"
+      },
+      {
+        "name": "userWithdrawAvgAmount",
+        "dtype": "float64"
+      },
+      {
+        "name": "userWithdrawSumUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "userWithdrawAvgAmountUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "userWithdrawSumETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "userWithdrawAvgAmountETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "userBorrowCount",
+        "dtype": "int32"
+      },
+      {
+        "name": "userBorrowSum",
+        "dtype": "float64"
+      },
+      {
+        "name": "userBorrowAvgAmount",
+        "dtype": "float64"
+      },
+      {
+        "name": "userBorrowSumUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "userBorrowAvgAmountUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "userBorrowSumETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "userBorrowAvgAmountETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "userRepayCount",
+        "dtype": "int32"
+      },
+      {
+        "name": "userRepaySum",
+        "dtype": "float64"
+      },
+      {
+        "name": "userRepayAvgAmount",
+        "dtype": "float64"
+      },
+      {
+        "name": "userRepaySumUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "userRepayAvgAmountUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "userRepaySumETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "userRepayAvgAmountETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "userSwapCount",
+        "dtype": "int32"
+      },
+      {
+        "name": "userLiquidationCount",
+        "dtype": "int32"
+      },
+      {
+        "name": "userLiquidationSum",
+        "dtype": "float64"
+      },
+      {
+        "name": "userLiquidationAvgAmount",
+        "dtype": "float64"
+      },
+      {
+        "name": "userLiquidationSumUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "userLiquidationAvgAmountUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "userLiquidationSumETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "userLiquidationAvgAmountETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "userActiveDaysWeekly",
+        "dtype": "float64"
+      },
+      {
+        "name": "userActiveDaysMonthly",
+        "dtype": "float64"
+      },
+      {
+        "name": "userActiveDaysYearly",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketCollateralCount",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketDepositCount",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketDepositAvgAmount",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketDepositSum",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketDepositAvgAmountUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketDepositSumUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketDepositAvgAmountETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketDepositSumETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketWithdrawCount",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketWithdrawAvgAmount",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketWithdrawSum",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketWithdrawAvgAmountUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketWithdrawSumUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketWithdrawAvgAmountETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketWithdrawSumETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketBorrowCount",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketBorrowAvgAmount",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketBorrowSum",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketBorrowAvgAmountUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketBorrowSumUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketBorrowAvgAmountETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketBorrowSumETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketRepayCount",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketRepayAvgAmount",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketRepaySum",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketRepayAvgAmountUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketRepaySumUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketRepayAvgAmountETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketRepaySumETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketSwapCount",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketLiquidationCount",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketLiquidationAvgAmount",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketLiquidationSum",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketLiquidationAvgAmountUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketLiquidationSumUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketLiquidationAvgAmountETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "marketLiquidationSumETH",
+        "dtype": "float64"
+      },
+      {
+        "name": "timeOfDay",
+        "dtype": "float64"
+      },
+      {
+        "name": "dayOfWeek",
+        "dtype": "float64"
+      },
+      {
+        "name": "dayOfMonth",
+        "dtype": "float64"
+      },
+      {
+        "name": "dayOfYear",
+        "dtype": "float64"
+      },
+      {
+        "name": "quarter",
+        "dtype": "int32"
+      },
+      {
+        "name": "dayOfQuarter",
+        "dtype": "float64"
+      },
+      {
+        "name": "sinTimeOfDay",
+        "dtype": "float64"
+      },
+      {
+        "name": "cosTimeOfDay",
+        "dtype": "float64"
+      },
+      {
+        "name": "sinDayOfWeek",
+        "dtype": "float64"
+      },
+      {
+        "name": "cosDayOfWeek",
+        "dtype": "float64"
+      },
+      {
+        "name": "sinDayOfMonth",
+        "dtype": "float64"
+      },
+      {
+        "name": "cosDayOfMonth",
+        "dtype": "float64"
+      },
+      {
+        "name": "sinDayOfQuarter",
+        "dtype": "float64"
+      },
+      {
+        "name": "cosDayOfQuarter",
+        "dtype": "float64"
+      },
+      {
+        "name": "sinDayOfYear",
+        "dtype": "float64"
+      },
+      {
+        "name": "cosDayOfYear",
+        "dtype": "float64"
+      },
+      {
+        "name": "sinQuarter",
+        "dtype": "float64"
+      },
+      {
+        "name": "cosQuarter",
+        "dtype": "float64"
+      },
+      {
+        "name": "isWeekend",
+        "dtype": "category"
+      },
+      {
+        "name": "logAmount",
+        "dtype": "float64"
+      },
+      {
+        "name": "logAmountUSD",
+        "dtype": "float64"
+      },
+      {
+        "name": "logAmountETH",
+        "dtype": "float64"
+      }
+    ],
+    "taiwan": [
+      {
+        "name": "X1",
+        "dtype": "int64"
+      },
+      {
+        "name": "X2",
+        "dtype": "int64"
+      },
+      {
+        "name": "X3",
+        "dtype": "int64"
+      },
+      {
+        "name": "X4",
+        "dtype": "int64"
+      },
+      {
+        "name": "X5",
+        "dtype": "int64"
+      },
+      {
+        "name": "X6",
+        "dtype": "int64"
+      },
+      {
+        "name": "X7",
+        "dtype": "int64"
+      },
+      {
+        "name": "X8",
+        "dtype": "int64"
+      },
+      {
+        "name": "X9",
+        "dtype": "int64"
+      },
+      {
+        "name": "X10",
+        "dtype": "int64"
+      },
+      {
+        "name": "X11",
+        "dtype": "int64"
+      },
+      {
+        "name": "X12",
+        "dtype": "int64"
+      },
+      {
+        "name": "X13",
+        "dtype": "int64"
+      },
+      {
+        "name": "X14",
+        "dtype": "int64"
+      },
+      {
+        "name": "X15",
+        "dtype": "int64"
+      },
+      {
+        "name": "X16",
+        "dtype": "int64"
+      },
+      {
+        "name": "X17",
+        "dtype": "int64"
+      },
+      {
+        "name": "X18",
+        "dtype": "int64"
+      },
+      {
+        "name": "X19",
+        "dtype": "int64"
+      },
+      {
+        "name": "X20",
+        "dtype": "int64"
+      },
+      {
+        "name": "X21",
+        "dtype": "int64"
+      },
+      {
+        "name": "X22",
+        "dtype": "int64"
+      },
+      {
+        "name": "X23",
+        "dtype": "int64"
+      },
+      {
+        "name": "label",
+        "dtype": "int64"
+      }
+    ]
+  }
+}

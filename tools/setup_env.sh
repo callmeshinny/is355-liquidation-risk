@@ -13,7 +13,9 @@ source .venv/bin/activate
 # chain stack first (lets Ape choose its own web3 version)
 uv pip install "eth-ape==0.8.54" "ape-vyper==0.8.13" "ape-foundry==0.8.13" "vyper==0.4.3"
 # ML / data / test / report
-uv pip install pandas pyarrow pyreadr xlrd ucimlrepo scikit-learn xgboost shap optuna scipy nbconvert \
+# PyArrow 26 requires NumPy 2. Keep a wheel compatible with this stack.
+
+uv pip install pandas "pyarrow==22.0.0" pyreadr xlrd ucimlrepo scikit-learn xgboost shap optuna scipy nbconvert \
   matplotlib streamlit hypothesis pytest python-dotenv
 cat > ape-config.yaml <<'YAML'
 name: is355-liquidation-risk
@@ -30,5 +32,5 @@ ethereum:
 YAML
 ape plugins list
 anvil --version
-python -c "import xgboost, sklearn, vyper; print('OK', xgboost.__version__, sklearn.__version__, vyper.__version__)"
+python -c "import pyarrow, xgboost, sklearn, vyper; print('OK', xgboost.__version__, sklearn.__version__, vyper.__version__)"
 echo "Setup done. Next: bash tools/get_data.sh"
