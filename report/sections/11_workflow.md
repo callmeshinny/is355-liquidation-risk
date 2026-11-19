@@ -13,4 +13,4 @@ Figure 1. Frozen scores cross the on-chain boundary as wallet tiers and model id
 | I3 | Keep tier and model identifiers on-chain and enforce collateral by tier | Contract checks, gas receipts and planned integration |
 | I4 | Evaluate the model pipeline on Taiwan credit defaults | Seed-11 held-out pilot ROC AUC and planned seed spread |
 
-Table 21. Changes linked to the eight-step workflow.
+Table 2. Changes linked to the eight-step workflow.

@@ -3,8 +3,8 @@ Legend: `[ ]` todo · `[x]` done → evidence · `[⚠]` failed/skipped + reason
 Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "planned, not yet run", move on.
 
 ## STATUS (agent updates after every item)
-- Next item: P5.5
-- Last gate: P4 PASS (0 FAIL, 0 WARN)
+- Next item: P5.6 (human submission)
+- Last gate: P5 PASS (0 FAIL, 0 WARN; DOCX verified in Word at 18 A4 body pages)
 - Blockers: D1 validation extrema overlap. Historical open-loan membership unavailable. 2024Q3 has no test rows.
 
 ---
@@ -67,6 +67,6 @@ Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "plann
 - [x] P5.2 `11_workflow.md` + `figures/workflow.png` (graphviz): Steps 1–8 exactly as 1.2, I1–I4 marks, off-chain/on-chain boundary, data name on every arrow; change table. → Section 1.1 checker passed and Graphviz workflow has eight steps
 - [x] P5.3 `30_next.md`, `90_refs.md` (CONTEXT §12), `95_appendix.md` (pilot table). → Next steps, six IEEE references and Appendix A; full checker has 0 FAIL
 - [x] P5.4 `bash tools/build_docx.sh` → `out/6_BC_IS355_Week4_Project.docx`. → Pandoc built and ZIP integrity verified for out/6_BC_IS355_Week4_Project.docx
-- [ ] P5.5 Full check + self-review: `.venv/bin/python tools/check_report.py` → 0 FAIL. Then write `results/rubric_review.md`: per rubric row (CONTEXT §7) score 0–100% with the weakest point; fix the 2 weakest; rebuild.
+- [x] P5.5 Full check + self-review: `.venv/bin/python tools/check_report.py` → 0 FAIL. Then write `results/rubric_review.md`: per rubric row (CONTEXT §7) score 0–100% with the weakest point; fix the 2 weakest; rebuild. → results/rubric_review.md; two weakest rubric rows revised, DOCX rebuilt and 18 body pages verified in Word
 - [ ] 👤 P5.6 Open docx in Word: fill members' tasks/shares, check 12–18 pages, figures readable, export PDF if wanted, submit on Moodle (Exercise 4). Push repo; make it visible to the lecturer.
 - **Gate P5:** `.venv/bin/python tools/check_report.py && test -f out/6_BC_IS355_Week4_Project.docx`

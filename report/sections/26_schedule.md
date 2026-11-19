@@ -13,7 +13,7 @@ Hours below are planning allowances. Each row shows runs × time, preparation an
 | Analyze and polish final draft | 8–9 | 2 review passes × 1 + 1 prep + 2 revision = 5 | Khanh and Ngoc | M3 | M4, analysis and final draft |
 | Buffer | 9 | 10 reserved hours | Khanh and Ngoc | Release as needed | Reruns, RPC delays or review |
 
-Table 18. Week 5–9 schedule by owner.
+Table 20. Week 5–9 schedule by owner.
 
 M1 means all T3 checks pass on Anvil. M2 freezes the configuration and leaves test for evaluation. M3 closes execution with raw results and explicit records of unavailable scenarios. M4 is the final analyzed draft. The plan allocates 40 working hours plus 10 buffer hours, so buffer is 10/50 = 20% of total capacity.
 

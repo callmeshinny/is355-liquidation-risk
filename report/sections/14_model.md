@@ -10,6 +10,6 @@
 | Threshold choice | AUC uses continuous scores. Any decision threshold uses validation only. | Fit isotonic and D1 tiers on validation only. Freeze for test. | Pilot reports held-out AUC. Any later threshold uses the reserved validation fold. |
 | Leakage controls | Training-only scaling and PCA. Chronological D5 folds with purges. Test only for evaluation and bootstrap. | KS uses train_core versus inner-val. Vocabularies and scaling use train_core. Test SHAP uses a frozen model. | Stratify once at seed 11. Tune within training. Reserve validation and test separately. |
 
-Table 8. Models and validation controls.
+Table 14. Models and validation controls.
 
 Pilot date 2026-11-19. The baseline test AUCs were 0.6145 for LR and 0.7020 averaged over XGB seeds. Compare with the paper's 0.723 and 0.732 [1]. The reported pilot configurations and seed-level scores are in results/pilot_model.json. Taiwan O_XGB test AUC was 0.7834 on 2026-11-19, compared with the chart-derived range of approximately 0.68–0.71 [3].

@@ -4,64 +4,64 @@
 
 | Field | Specification |
 | --- | --- |
-| Purpose | Assemble loan-level features and survival outcomes, plus an external credit-default dataset for I4. |
-| Input | FinSurvival Borrow RDS feature parts and Account Liquidated RDS labels [1]. UCI credit defaults, dataset 350 [3]. |
-| Processing | Concatenate four benchmark training X parts and three test X parts. Remove missing IDs, all-null feature columns and columns starting with exo. Join each y to the matching X by ID and align the shared columns. Load Taiwan features and binary default outcome through ucimlrepo. |
-| Parameters | Use the Borrow → Account Liquidated benchmark cohort and UCI dataset ID 350. |
-| Libraries / tools | pandas, pyreadr, pyarrow and ucimlrepo. |
-| Output | Three interim parquet files and counts with schemas in results/pilot_data.json. |
-| Runs | One load per input snapshot. Pilot date 2026-11-19. Loading has no random operations. |
-| Correctness check | Compare label coverage and matched counts with Week 3. Check the RDS columns and record the Taiwan target rate. |
-| Errors & edge cases | Missing parts stop the load. Unmatched IDs are counted by source split. Repeated IDs are handled in Step 2. |
-| Est. run time | Pilot wall time 26.4 s including the UCI fetch and parquet writes. |
-| Improvement | I4 adds a separate credit-default dataset using the same input and reporting conventions. |
+| Purpose | Load standardized loan and credit records. |
+| Input | RDS features and liquidation labels [1]. UCI 350 [5]. |
+| Processing | Concatenate X parts. Drop empty/exo columns. Inner join y by ID. Align schemas. |
+| Parameters | Borrow → Account Liquidated. UCI dataset 350. |
+| Libraries / tools | pandas, pyreadr, pyarrow, ucimlrepo. |
+| Output | Interim parquet. Example: finsurvival_train.parquet and taiwan.parquet. |
+| Runs | One load, 2026-11-19. |
+| Correctness check | Check IDs, source row counts and schema. |
+| Errors & edge cases | Missing parts stop loading. Record unmatched and duplicate IDs. |
+| Est. run time | 26.4 s pilot including UCI and writes. |
+| Improvement | I4 adds Taiwan. |
 
 ```text
-for each benchmark source split:
-    concatenate X parts, clean columns and join to y by id
-align train and test schemas
-fetch dataset 350 and save all three frames and their counts
+concat FinSurvival X parts by benchmark split
+drop all-null and exogenous columns
+join X and y by loan id
+align train and test feature columns
+fetch UCI 350 and write interim parquet and schema counts
 ```
 
-The pilot loaded 259,886 FinSurvival label rows, of which 259,886 matched a feature ID. The join produced 269,546 rows with 116 shared feature columns excluding ID and target fields. Repeated matches can yield more joined rows than matched label rows. The label files contained 0 training and 0 test label rows without features. Week 3 recorded 264,536 label rows, 259,886 with features and 4,650 unmatched test labels. The local snapshot contains 4,650 fewer label rows and has complete ID coverage, which accounts for the label-count difference.
+All 259,886 local labels matched features, yielding 269,546 joined rows after repeat matches. The source has 4,650 fewer test labels than Week 3, which reported those labels as unmatched.
 
 | Source split | Raw features | All-null removed | Exogenous removed | Non-shared removed |
 | --- | ---: | ---: | ---: | ---: |
 | train | 128 | 12 | 0 | 0 |
 | test | 128 | 12 | 0 | 0 |
 
-Table 1. FinSurvival feature counts before and after loader checks.
+Table 3. FinSurvival feature counts before and after loader checks.
 
-The feature-count difference from Week 3's 128 is shown by these loader checks. The Taiwan load yielded 30,000 clients, 23 features and 22.12% defaults.
+After loader checks, 116 features remain. Taiwan loaded 30,000 clients, 23 features and 22.12% defaults.
 
 ### Step 2 · Labelling and feature preparation
 
 | Field | Specification |
 | --- | --- |
-| Purpose | Build a binary outcome and temporally separated model inputs with train-only encoding. |
-| Input | Step 1 interim parquet files and the D5 calendar. |
-| Processing | Remove repeated transaction IDs and rows with insufficient follow-up. Split on loan start in UTC. On train_core and inner-val compute KS D for numeric features. Record D ≥ 0.15 for removal in the O branch. Fit top-ten categorical vocabularies on train_core. Map other levels to a fallback column and fill missing numerics with zero. |
-| Parameters | 17.43-day horizon [1]. D5 purge windows of 18 days. KS D ≥ 0.15. Taiwan 60/10/30 stratified with seed 11. |
-| Libraries / tools | pandas, SciPy, scikit-learn and pyarrow. |
-| Output | Split parquet files with encoded features and a manifest of feature rules in results/pilot_data.json. |
-| Runs | One fixed calendar split and one Taiwan stratified split. Pilot date 2026-11-19. |
-| Correctness check | tests/test_data.py checks disjoint IDs, D5 date bounds and train-only categorical fitting. |
-| Errors & edge cases | Keep observed early liquidations. Drop short censored outcomes and exclude IDs and label fields from modelling. |
-| Est. run time | Pilot wall time 9.7 s including the split parquet writes. |
-| Improvement | I2 uses an inner validation window and KS drift removal. I4 applies the pipeline to Taiwan without a time-based drift test. |
+| Purpose | Prepare leak-resistant inputs. |
+| Input | Interim parquet and D5 calendar. |
+| Processing | Deduplicate transactions, label, purge and encode. Record KS drops for O variants. |
+| Parameters | 17.43 days, D5 windows, D ≥ 0.15, Taiwan seed 11. |
+| Libraries / tools | pandas, SciPy, scikit-learn, pyarrow. |
+| Output | Split parquet (example: fin_train_core.parquet) and feature-rule manifest. |
+| Runs | One split per dataset, 2026-11-19. |
+| Correctness check | Test date boundaries, ID disjointness and train-only vocabularies. |
+| Errors & edge cases | Keep observed early liquidations. Drop insufficient follow-up. |
+| Est. run time | 9.7 s pilot including writes. |
+| Improvement | I2 freezes chronological feature preparation. |
 
 ```text
-discard all rows whose transaction ID repeats
-if status is 1 and duration <= 17.43 days: label = 1
-else if duration > 17.43 days: label = 0
-else: discard insufficient follow-up
-split on UTC start date and drop the two D5 purge windows
-fit categories and identify empty columns using train_core
-compare numeric features between train_core and inner-val
-transform each fold with the fitted feature rules
+drop repeated IDs
+label observed events within 17.43 days as positive
+label later observations as negative and discard short censored records
+split by UTC start date and purge D5 gaps
+fit categories on train_core
+compare train_core and inner-val with KS
+transform all folds with frozen rules
 ```
 
-D5 replaces the Week 3 moving validation cutoff. Train_core ends before 2021-11-27. Inner validation spans 2021-12-15 through 2022-03-14. Calibration and tier selection use 2022-04-02 through 2022-06-30. The test window begins 2022-07-01. The date gaps are purged before fitting. The local test snapshot ends on 2024-05-07, leaving no rows in 2024Q3. Mark that quarter as empty in the calibration and tier tables. Taiwan omits SEX and MARRIAGE and uses stratification without a calendar.
+D5 replaces the Week 3 moving cutoff with two purged gaps. Inner-val ends 2022-03-14, calibration val ends 2022-06-30 and test starts 2022-07-01. The actual test ends 2024-05-07. Taiwan drops SEX and MARRIAGE before stratified splitting.
 
 | FinSurvival split | Rows | Positive rate | Observed UTC dates |
 | --- | ---: | ---: | --- |
@@ -70,7 +70,7 @@ D5 replaces the Week 3 moving validation cutoff. Train_core ends before 2021-11-
 | val | 19,305 | 4.33% | 2022-04-02 to 2022-06-28 |
 | test | 96,345 | 1.31% | 2022-07-01 to 2024-05-07 |
 
-Table 2. FinSurvival pilot split counts.
+Table 4. FinSurvival pilot split counts.
 
 | Taiwan split | Rows | Positive rate |
 | --- | ---: | ---: |
@@ -78,33 +78,34 @@ Table 2. FinSurvival pilot split counts.
 | val | 3,000 | 22.13% |
 | test | 9,000 | 22.12% |
 
-Table 3. Taiwan pilot split counts.
+Table 5. Taiwan pilot split counts.
 
-The FinSurvival pilot removed 13,819 joined rows with repeated IDs, corresponding to 4,159 source feature rows before the join, and 4,556 rows during labelling. The resulting 251,171 rows had a positive rate of 4.81% before D5 excluded 6,828 rows. The pre-purge count and rounded rate match the Week 3 totals of 251,171 and 4.81%. The KS screen flagged 46 numeric features.
+Removed 13,819 joined rows with repeated IDs, representing 4,159 source rows, and 4,556 rows during labelling. Before purging 6,828 rows, 251,171 remained with 4.81% positives, matching Week 3. KS flagged 46 numeric features.
 
-In one pilot row, the loan started on 2020-12-01. Its event status was 0, observed duration was 576.465 days and the label was 0.
+Example loan: 2020-12-01, event status 0, observed 576.465 days, label 0.
 
 ### Step 3 · Train baseline and proposed models
 
 | Field | Specification |
 | --- | --- |
-| Purpose | Compare all-feature PCA models with drift-filtered models under the D5 split and evaluate H1. |
-| Input | Step 2 encoded FinSurvival splits and the KS drop list. Taiwan provides an external cohort. |
-| Processing | For LR, apply signed log1p and standardize. For baseline XGB, standardize before PCA. Fit all transforms on train_core. Train two LR and two XGB variants. Use inner-val AUC for XGB early stopping. Score all held-out folds after fitting. |
-| Parameters | Baseline PCA retains 95% variance as our assumption about [1]. LR uses C=0.1 and balanced weights. XGB uses learning rate 0.05, depth 6 and patience 50. |
-| Libraries / tools | scikit-learn, XGBoost, NumPy and pandas. |
-| Output | AUC and fit time per run in results/pilot_model.json. Save proposed XGB trees and held-out scores locally. |
-| Runs | Pilot 2026-11-19. XGB seeds 11, 22 and 33. LR uses seed 11 with 1,000 stratified test bootstrap samples. Taiwan uses seed 11. |
-| Correctness check | Check the complete model-by-seed matrix and AUCs on inner-val, val and test. Pair XGB runs by seed for H1. |
-| Errors & edge cases | Convert nonfinite features to zero consistently. Compare paper reproduction using ±0.02 AUC tolerance. |
-| Est. run time | Mean fit time by variant is shown below. It includes scaling and PCA where used. |
-| Improvement | I2 drops variables flagged for drift and keeps the original feature space for explanation. I4 checks transfer to a separate credit dataset. |
+| Purpose | Compare baseline and proposed models. |
+| Input | Split parquet and feature-rule manifest. |
+| Processing | Fit LR or XGB. Scale as needed. Fit baseline PCA in training. Early-stop XGB on inner-val. |
+| Parameters | 95% PCA assumption, LR C=0.1, XGB learning rate 0.05, depth 6, patience 50. |
+| Libraries / tools | scikit-learn, XGBoost. |
+| Output | Frozen XGB artifact (example: O_XGB_11.ubj), validation and test score parquet, AUC and fit time. |
+| Runs | 2026-11-19. XGB seeds 11/22/33. LR seed 11 and 1,000 bootstrap draws. |
+| Correctness check | Check model/seed coverage and paired test AUC. |
+| Errors & edge cases | Replace nonfinite features with zero. Paper reproduction tolerance ±0.02 AUC. |
+| Est. run time | Measured mean fit times below. |
+| Improvement | I2 isolates the proposed feature pipeline. I4 checks Taiwan. |
 
 ```text
-fit scaling and PCA on train_core for each baseline branch
-fit LR on train_core and early-stop XGB using inner-val
-evaluate frozen models on inner-val, calibration val and test
-pair XGB test AUC by seed and bootstrap LR test AUC
+fit scaling and PCA for baseline using train_core
+fit LR on train_core
+early-stop XGB on inner-val
+score frozen models on evaluation folds
+compare paired XGB seeds and bootstrap LR test AUC
 ```
 
 | Model | Seeds | Mean inner-val AUC | Mean val AUC | Mean test AUC | Mean fit (s) |
@@ -114,31 +115,32 @@ pair XGB test AUC by seed and bootstrap LR test AUC
 | B_LR | 11 | 0.7931 | 0.7519 | 0.6145 | 2.45 |
 | O_LR | 11 | 0.8053 | 0.7974 | 0.7861 | 3.92 |
 
-Table 4. FinSurvival pilot fits on 2026-11-19.
+Table 6. FinSurvival pilot fits on 2026-11-19.
 
-The B_LR test AUC differs from [1] by -0.1085 and the B_XGB mean differs by -0.0300. Both exceed the ±0.02 reproduction tolerance in absolute difference. The paired XGB AUC difference has seed SD 0.00566. Using a t interval with five seeds, its estimated 95% half-width is 0.00703. Taiwan O_XGB achieved test AUC 0.7834 on 2026-11-19 with seed 11.
+Paper deviations were −0.1085 (LR) and −0.0300 (XGB), both outside ±0.02 [1]. Taiwan test AUC was 0.7834 at seed 11. Section 2.4 summarizes paired precision.
 
 ### Step 4 · Calibrate and explain probabilities
 
 | Field | Specification |
 | --- | --- |
-| Purpose | Test probability calibration under changing base rates and rank features by model contribution. |
-| Input | Frozen O_XGB seed 11 scores on validation and chronological test. |
-| Processing | Fit isotonic using validation labels. Apply the frozen monotone mapping to test. Compute Brier before and after, overall and by quarter. For SHAP, use the trees through the selected early-stopping iteration and rank mean absolute contributions. |
-| Parameters | Clip isotonic predictions outside the fitted score range. Reliability uses ten fixed equal-width bins. XGBoost native TreeSHAP (vector intercept compatibility) uses 2,000 distinct test rows. |
-| Libraries / tools | scikit-learn, SHAP, XGBoost and pandas. |
-| Output | results/pilot_calib.json and results/pilot_reliability.csv. |
-| Runs | Pilot 2026-11-19, seed 11. The multi-seed H2 test is planned, not yet run. |
-| Correctness check | Verify validation-only calibration and Brier on identical raw and calibrated test pools. |
-| Errors & edge cases | Empty quarters have undefined Brier. Empty reliability bins retain their zero counts. SHAP describes raw model output. |
-| Est. run time | Pilot wall time 2.1 s. |
-| Improvement | I1 adds an interpretable probability mapping and feature attributions. D4 evaluates quarterly reliability. |
+| Purpose | Calibrate risk and explain model output. |
+| Input | Frozen XGB artifact and validation/test score parquet. |
+| Processing | Fit isotonic on val. Compare raw and frozen mapped scores on test. Rank TreeSHAP. |
+| Parameters | Ten reliability bins, 2,000 test loans, seed 11. |
+| Libraries / tools | scikit-learn, XGBoost TreeSHAP, pandas. |
+| Output | Calibrated score parquet (example: calibrated_test.parquet), Brier, reliability bins and SHAP top ten. |
+| Runs | 2026-11-19, seed 11. Multi-seed H2 planned, not yet run. |
+| Correctness check | Verify matching pools and validation-only fit. |
+| Errors & edge cases | Empty quarters have undefined Brier. TreeSHAP describes raw output. |
+| Est. run time | 2.1 s pilot. |
+| Improvement | I1 and D4 add calibration, interpretation and quarterly checks. |
 
 ```text
 fit isotonic(raw_val, label_val)
-score test with the frozen mapping
-compute raw and calibrated Brier on each test quarter
-rank contributions on a seeded sample using TreeSHAP
+apply frozen mapping to validation and test scores
+compare raw and calibrated Brier by quarter
+sample 2,000 test loans at seed 11
+rank mean absolute TreeSHAP contributions
 ```
 
 Overall Brier changed from 0.06409 to 0.01636. The SHAP ranking is `userLiquidationCount`, `userDepositAvgAmountUSD`, `cosDayOfQuarter`, `userBorrowCount`, `userDepositAvgAmountETH`, `priceInUSD`, `userActiveDaysYearly`, `userActiveDaysWeekly`, `dayOfMonth`, `userBorrowAvgAmountETH`.
@@ -155,34 +157,34 @@ Overall Brier changed from 0.06409 to 0.01636. The SHAP ranking is `userLiquidat
 | 2024Q2 | 1,247 | 0.06032 | 0.02844 |
 | 2024Q3 | 0 | — | — |
 
-Table 5. FinSurvival test Brier by quarter.
+Table 7. FinSurvival test Brier by quarter.
 
 ### Step 5 · Assign risk tiers
 
 | Field | Specification |
 | --- | --- |
-| Purpose | Convert calibrated risk to A/B/C and compare fixed D1 thresholds with a validation percentile rule. |
-| Input | Calibrated scores, validation labels, held-out cohort and the locally saved model. |
-| Processing | Group validation scores by distinct value. Use cumulative lower and upper tail counts to select the feasible D1 cutoffs. Freeze these and the comparison quantiles. Compute held-out shares and liquidation rates for both rules. Take maximum risk across each wallet's input loans. |
-| Parameters | A uses a lower tail rate ≤ 0.5 times validation prevalence. C uses an upper tail rate ≥ 3 times prevalence and at least 30 positives. Comparison uses the validation 70th and 90th percentiles. |
-| Libraries / tools | pandas, NumPy and hashlib. |
-| Output | results/pilot_tiers.json, a hashed 20-wallet percentile sample and a local tiers_percentile.csv for the comparison. |
-| Runs | Pilot 2026-11-19 using model seed 11 and the two frozen validation rules. |
-| Correctness check | Check ordering of the thresholds, model SHA-256, and partition totals for each rule and cohort. |
-| Errors & edge cases | The snapshot lacks point-in-time open-loan membership. Use the observed cohort for the wallet pilot. Live D2 aggregation takes open loans as input. |
-| Est. run time | Measure end-to-end tier and export latency in the planned chain integration test. |
-| Improvement | I1 replaces percentile buckets with validation-derived fixed thresholds for the main policy. |
+| Purpose | Convert scores to A/B/C. |
+| Input | Calibrated score parquet, outcomes and frozen XGB artifact. |
+| Processing | Fit D1 and percentile rules on validation. Apply feasible rules to test. Aggregate wallet maximum. |
+| Parameters | A tail ≤0.5× prevalence. C tail ≥3× and ≥30 positives. Compare p70/p90. |
+| Libraries / tools | pandas, NumPy, hashlib. |
+| Output | Wallet tiers and model SHA-256/version. The pilot emits tiers_percentile.csv as a labelled comparator. |
+| Runs | 2026-11-19, seed 11. |
+| Correctness check | Verify cutoff order, hash and partition totals. |
+| Errors & edge cases | Pilot uses cohort wallets because open-loan status is unavailable. |
+| Est. run time | Measure export latency during integration. |
+| Improvement | I1 adds fixed-risk tier rules. |
 
 ```text
-choose D1 thresholds and comparison quantiles using validation only
-for each test cohort and rule:
-    assign loan tiers
-    aggregate maximum score per wallet and assign wallet tiers
-    publish shares, realized rates and Wilson intervals
-hash the fitted model and export wallet tiers
+calculate D1 extrema and comparison quantiles on validation
+check fixed cutoffs are ordered
+freeze feasible rules and score test cohorts
+take wallet maximum across available input loans
+compute shares, outcome rates and Wilson intervals
+hash model artifact and export wallet tiers
 ```
 
-Validation prevalence was 4.33%. The independent D1 extrema were τ_A = 0.106122 and τ_C = 0.043348. D1 produces overlapping A/C regions on validation. The fixed-tier pilot is planned, not yet run. The comparison cutoffs were 0.020427 and 0.106122. The test cohort has 96,345 loans from 21,641 wallet groups. Quarterly loan and wallet summaries for the percentile rule are in results/pilot_tiers.json. Wallet rates indicate whether any observed loan for the wallet liquidated.
+Validation prevalence was 4.33%. D1 extrema τ_A = 0.106122 and τ_C = 0.043348 overlap. Fixed tiers are planned, not yet run. Percentile cutoffs were 0.020427 and 0.106122. The pilot covered 96,345 loans in 21,641 wallet groups.
 
 | Rule | Tier | Test loans | Share | Liquidation rate | 95% Wilson CI |
 | --- | --- | ---: | ---: | ---: | --- |
@@ -190,68 +192,86 @@ Validation prevalence was 4.33%. The independent D1 extrema were τ_A = 0.106122
 | percentile | B | 19,203 | 19.93% | 1.58% | 1.41%–1.76% |
 | percentile | C | 15,050 | 15.62% | 4.54% | 4.22%–4.88% |
 
-Table 6. Percentile tiers on the held-out loan cohort.
+Table 8. Percentile tiers on the held-out loan cohort.
 
-The fixed-rule D3a pilot is planned, not yet run because D1 yields overlapping regions. The percentile sensitivity pilot on 2026-11-19 used the contemporaneous loan score and its observed outcome. The historical data lacks open-loan membership, so the pilot uses each loan's origination score for acceptance. “Liquidations avoided” counts rejected loans that later liquidated. This is a counterfactual proxy. The price-shock simulation is planned, not yet run. Capital totals use 95,596 loans with positive finite USD amounts. Capital freed is uniform minus tiered capital, or USD 1,941,823,554.74. The tier-A subset frees USD 1,665,763,650.49.
+D3a percentile sensitivity used origination scores on 2026-11-19. Rejected loans that later liquidated count as the avoidance proxy. Capital uses 95,596 positively priced loans. Uniform minus tiered capital is USD 1,941,823,554.74, including USD 1,665,763,650.49 for tier A. Fixed D3a and price shocks are planned, not yet run.
 
 | Policy | Accepted | Rejected | Liquidations avoided | Good loans rejected | Capital locked (USD) |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | uniform | 96,345 | 0 | 0 | 0 | 44,218,089,861.50 |
 | tiered | 81,295 | 15,050 | 683 | 14,367 | 42,276,266,306.76 |
 
-Table 7. D3a percentile sensitivity and uniform policy on the same test loans.
+Table 9. D3a percentile sensitivity and uniform policy on the same test loans.
 
 ### Step 6 · Register model and write scores
 
 | Field | Specification |
 | --- | --- |
-| Purpose | Link each wallet tier to a registered fitted model and keep a verifiable score history. |
-| Input | A model SHA-256, monotonic version and wallet-tier pairs. FinSurvival's fixed-rule export is planned, not yet run because of the D1 overlap. |
-| Processing | Owner registers the hash. The approved writer sends rows or batches. Each score write records the current version and block timestamp. Reconcile event counts to submitted wallet counts. |
-| Parameters | Tier codes 1–3, max batch 100, validity through 30 days. Missing, older or revision-mismatched scores return B. |
-| Libraries / tools | Vyper 0.4.3, Ape and Anvil. The planned writer uses keystore account oracle. |
-| Output | Current registered version and ScoreUpdated receipts. Pilot results are in results/pilot_gas.json. |
-| Runs | Anvil pilot 2026-11-19. Ten calls each for 1, 10 and 100 freshly written synthetic wallets per batch. |
-| Correctness check | Confirm version, model hash and tier reads. T3 and T4 exercise role, version, freshness and batch guards. |
-| Errors & edge cases | Confirm receipt state before nonce replacement. Log any failed batch and reconcile its receipt. Fallback B applies until a current score is available. |
-| Est. run time | Use Anvil receipts for functional checks. Sepolia confirmation latency is planned, not yet run. |
-| Improvement | I3 stores compact tiers and model identifiers on-chain. |
+| Purpose | Attach tiers to a registered model. |
+| Input | Wallet tiers, model SHA-256 and version. Fixed-rule export remains blocked. |
+| Processing | Register digest as owner. Write tiers as approved signer. Reconcile receipts. |
+| Parameters | Tiers 1–3, batch ≤100, age ≤30 days. |
+| Libraries / tools | Vyper, Ape, Anvil and planned oracle keystore. |
+| Output | Registered digest, version, effective tier lookup and ScoreUpdated receipts. |
+| Runs | 2026-11-19. Ten batches each for 1, 10 and 100 synthetic wallets. |
+| Correctness check | Check version, hash, reads and guard messages. |
+| Errors & edge cases | Missing/stale tiers fall back to B. Check receipt before retry. |
+| Est. run time | Sepolia timing planned, not yet run. |
+| Improvement | I3 stores tier and model identifiers. |
 
 ```text
-register hash and version with owner account
-validate wallet list and version
-send local batch as the approved writer
-reconcile ScoreUpdated events and recorded score state
+verify digest and proposed model version
+register with owner on the selected local network
+validate wallet and tier inputs
+submit each approved writer batch
+reconcile receipts and effective tier lookups
 ```
 
 ### Step 7 · Execute the lending policy
 
 | Field | Specification |
 | --- | --- |
-| Purpose | Enforce collateral and liquidation rules using the registered score tier. |
-| Input | Wallet collateral deposit, requested debt, score oracle tier and current collateral price. |
-| Processing | Check maximum debt before transferring test tokens. Freeze the tier used for maintenance when initial debt opens. Evaluate liquidations at the current price, close at most half the debt per call and transfer collateral with the stated bonus. |
-| Parameters | Tiered A 120% borrowing and 110% maintenance. B 150% and 130%. C ineligible. Uniform 125% and approximately 121.2%. Bonus 5% [4]. |
-| Libraries / tools | Vyper, Ape, Anvil, MockERC20 and Hypothesis. |
-| Output | Position balances, tier snapshot and lending events. |
-| Runs | Local T3 and T4 guards plus 200 generated borrowing-limit cases. |
-| Correctness check | Check position and token balances after valid transitions. Assert guard messages and the borrowing boundary. |
-| Errors & edge cases | Guard zero or oversized amounts, unhealthy withdrawals, healthy liquidation and repayment over the close factor. Bad-debt settlement remains a planned extension. |
-| Est. run time | Record receipt gas for local calls. Measure remote confirmation latency separately when Sepolia is run. |
-| Improvement | I3 tests tiered collateral and compares it with a common uniform constructor configuration. |
+| Purpose | Enforce collateral policy. |
+| Input | Effective tier lookup, collateral balance, debt request and scaled oracle price. |
+| Processing | Check debt limits, freeze original tier and evaluate health at current price. |
+| Parameters | A 120%/110%, B 150%/130%, C ineligible. Uniform 125%/121.2%. Close 50%, bonus 5%. |
+| Libraries / tools | Vyper, Ape, Anvil, MockERC20, Hypothesis. |
+| Output | Position balances and loan receipts, such as Liquidated(wallet, liquidator, repaid, seized). |
+| Runs | T3/T4 plus 200 generated boundary cases. |
+| Correctness check | Match balances, snapshots and guard messages. |
+| Errors & edge cases | Reject unsafe amounts and transitions. Bad-debt settlement planned. |
+| Est. run time | Record local gas and future Sepolia latency separately. |
+| Improvement | I3 enforces policy on-chain. |
+
+```text
+read effective tier and scaled collateral value
+apply origination collateral requirement
+store tier at first borrow
+check current health using stored tier at liquidation
+apply close factor and bonus
+reconcile balances and emit the position event
+```
 
 ### Step 8 · Demonstrate and evaluate
 
 | Field | Specification |
 | --- | --- |
-| Purpose | Make model metrics and chain outcomes visible and verify the off-chain-to-chain path. |
-| Input | Committed metric summaries, tier exports, local price shocks and contract events. |
-| Processing | Start with a fresh deployment, load a validated tier export and compare model hash, wallet count and receipt events. Then simulate a price decrease and show the resulting position and liquidation in the dashboard. |
-| Parameters | Model pilot seed 11. Use fresh deployment per complete run. Batch pilot sizes are 1, 10 and 100. |
-| Libraries / tools | Ape, Anvil, pytest, Streamlit and report scripts. |
-| Output | AUC, Brier, tier rates, gas receipts and a planned end-to-end demonstration. |
-| Runs | Local pilots and contract checks are measured. Three fresh full integration runs and the Streamlit demonstration are planned, not yet run. |
-| Correctness check | Compare model hash and wallet counts across export and events. Confirm that price change, position health and liquidation receipts agree. |
-| Errors & edge cases | The fixed-tier export is presently unavailable. Keep mock data and comparison-percentile results labelled. Log failed transactions and check their status before retry. |
-| Est. run time | Log wall time for each integration run. Measure median and p95 confirmation latency in the later Sepolia test. |
-| Improvement | I3 connects auditable contract activity with the model evaluation and policy comparison. |
+| Purpose | Verify end-to-end evidence. |
+| Input | Position balances, loan receipts, score receipts and committed pilot metrics. |
+| Processing | Reconcile export, hash and receipts. Show local price change and liquidation in Streamlit. |
+| Parameters | Seed 11 model. Fresh local deployment per run. |
+| Libraries / tools | Ape, Anvil, pytest, Streamlit. |
+| Output | Scenario evidence package. Example: local gas JSON plus deployment and dashboard logs for T6. |
+| Runs | Local pilots measured. Three full runs planned, not yet run. |
+| Correctness check | Match counts, digest, price, health and events. |
+| Errors & edge cases | Keep synthetic and percentile inputs labelled. Fixed export unavailable. |
+| Est. run time | Log wall time and future testnet median/p95. |
+| Improvement | I3 links model outputs to contract evidence. |
+
+```text
+start a fresh local deployment
+compare model version, digest and wallet counts
+apply the planned local price change
+reconcile dashboard values against loan receipts
+attach metrics and logs to the scenario run
+```

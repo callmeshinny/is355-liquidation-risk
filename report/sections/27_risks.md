@@ -10,4 +10,4 @@
 | R6 | Fixed D1 cutoffs overlap | Observed | High | Independent validation extrema are unordered | Mark the fixed outputs unavailable. Keep percentile sensitivity labelled and publish the feasibility evidence. |
 | R7 | Wallet history lacks open-loan membership | Observed | High | Snapshot cannot reconstruct active positions at scoring time | Use the cohort proxy for retrospective evidence. Validate D2 on a timestamped open-loan fixture before integration. |
 
-Table 19. Risk triggers and contingency actions.
+Table 21. Risk triggers and contingency actions.

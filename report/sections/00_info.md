@@ -23,7 +23,7 @@
 | 5 | Resolve conflicting validation descriptions | D5 supplies calendar cutoffs, purges and distinct inner validation and calibration roles. | 1.2 Step 2, 1.4 |
 | 6 | Avoid an absolute AUC claim for filtered models | D6 uses paired non-inferiority with a 0.02 margin. | 2.1, 2.5 |
 
-Table 20. Response to Week 3 feedback.
+Table 1. Response to Week 3 feedback.
 
 ### Changes since Week 3
 

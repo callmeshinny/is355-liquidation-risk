@@ -9,7 +9,7 @@
 | LendingPool | Immutable token and oracle addresses and borrow/maintenance ratio arrays in basis points. A wallet position stores collateral, debt and tier_at_borrow. Token quantities use 18 decimals. |
 | MockERC20 | Test-token balances and allowances by account. The deployer mints local pilot balances. |
 
-The tiered pool starts at 120% collateral for A and 150% for B. C is ineligible. Maintenance ratios are 110% and 130%. The uniform pool uses 125% at origination and approximately 121.2% maintenance for each tier [6]. The same constructor takes either set of ratios. The close factor is 50% and the liquidation bonus is 5% [4]. Outstanding debt keeps its original tier for maintenance and withdrawals. Additional borrowing must meet the stricter of the original and current borrowing ratios. Mock token transfer guards can also bubble up `insufficient balance` or `insufficient allowance`. State-changing entry points use a reentrancy guard.
+Tiered borrowing/maintenance ratios are 120%/110% (A) and 150%/130% (B). C is ineligible. The uniform constructor uses 125%/121.2% [6]. The close factor is 50% and bonus 5% [4]. The original tier governs maintenance and withdrawals. Additional borrowing uses the stricter origination ratio. Token errors can include insufficient balance or insufficient allowance. State-changing entry points use a reentrancy guard.
 
 ### Functions
 
@@ -27,9 +27,9 @@ The tiered pool starts at 120% collateral for A and 150% for B. C is ineligible.
 | `liquidate` | Anyone | invalid amount, no debt, healthy loan, exceeds close factor, invalid seizure, transfer failed | Reduce debt and transfer seized collateral to liquidator | Liquidated | 120,900 | 96,682 |
 | `set_price` | Owner | owner only, invalid price | Update collateral price | PriceUpdated | 27,500 | 27,887 |
 
-Table 9. Contract interface and gas pilot on 2026-11-19. get_tier uses eth_estimateGas for a transaction-equivalent quote. set_scores_batch uses the median 10-wallet receipt.
+Table 10. Contract interface and gas pilot on 2026-11-19. get_tier uses eth_estimateGas for a transaction-equivalent quote. set_scores_batch uses the median 10-wallet receipt.
 
-Estimates start with 21,000 gas per transaction. Each first nonzero storage write adds about 22,100 gas and a nonzero update adds about 5,000. Cold reads add about 2,100 each and each token movement is budgeted at 40,000. Logs and calldata add approximate overhead. Each fresh score batch entry is budgeted as three new storage slots, 1,500 gas for the event and 1,024 gas for two 32-byte calldata words. Exact gas varies with storage state and calldata bytes.
+Gas assumptions are 21,000 base, 22,100 per fresh slot, 5,000 per update, 2,100 per cold read and 40,000 per token transfer. Each batch entry budgets three fresh slots, 1,500 for logs and 1,024 for calldata.
 
 | Wallets per batch | Calls | Estimate | Median receipt gas | Median gas per wallet | Any receipt >2× |
 | ---: | ---: | ---: | ---: | ---: | --- |
@@ -37,7 +37,7 @@ Estimates start with 21,000 gas per transaction. Each first nonzero storage writ
 | 10 | 10 | 709,240 | 717,192 | 71,719 | No |
 | 100 | 10 | 6,903,400 | 6,925,200 | 69,252 | No |
 
-Table 10. Fresh-wallet batch gas using deterministic synthetic inputs on 2026-11-19.
+Table 11. Fresh-wallet batch gas using deterministic synthetic inputs on 2026-11-19.
 
 ### State machine
 
@@ -54,7 +54,7 @@ Figure 2. Loan state transitions at the current collateral price.
 | Liquidation eligible | Up to 50% debt repaid and 5% bonus seized | Debt remains, re-evaluate health | Seizure beyond remaining collateral or repayment above the close factor |
 | Collateral only | Withdraw remaining collateral | Empty | Withdraw more collateral than deposited |
 
-Table 11. Loan transitions and forbidden transitions. The health state is computed from debt, collateral and oracle price. Debt dust and positions where permitted seizure exceeds remaining collateral need a future bad-debt settlement design.
+Table 12. Loan transitions and forbidden transitions. The health state is computed from debt, collateral and oracle price. Debt dust and positions where permitted seizure exceeds remaining collateral need a future bad-debt settlement design.
 
 ### Events
 
@@ -66,10 +66,10 @@ Table 11. Loan transitions and forbidden transitions. The health state is comput
 | Liquidated | Wallet, liquidator, repaid debt and seized collateral | Liquidation dashboard and audit |
 | PriceUpdated | Scaled collateral price | Scenario runner and price history |
 
-Table 12. Event consumers and reconciliation fields.
+Table 13. Event consumers and reconciliation fields.
 
 ### Off-chain and on-chain boundary
 
-The planned writer uses the Ape keystore account `oracle` for signatures. The private key stays out of source and result files. The local gas pilot uses Ape's synthetic funded test accounts. Before sending a batch, the writer verifies the model hash and version, checks wallet/tier counts and logs a local batch identifier. If a transaction is stuck pending after three blocks, the planned writer checks for a receipt and resends the same nonce with a 20% fee increase. Stop after three retries and log the nonce, transaction hashes and last receipt status for reconciliation. Retry behavior is planned, not yet run.
+The planned Ape writer signs with keystore account `oracle`. Keep the private key outside source and results. Verify hash, version and wallet counts before sending. For a stuck transaction after three blocks, check the receipt and resend with the same nonce and 20% higher fee. Stop after three retries and log nonce, hashes and receipt status. Retry behavior is planned, not yet run. The gas pilot uses synthetic accounts.
 
-The blockchain can guarantee contract-enforced access, monotonic model version registration, atomic score batches and an auditable record of state changes. Model accuracy, raw input quality and the correctness of a tier submitted by the trusted writer depend on the off-chain process. A leaked oracle key allows accepted score updates until rotation. An unscored wallet receives B terms. Owners and writers are trusted roles, and the local price oracle accepts owner-set prices. Repeated scores intentionally update a wallet's existing record.
+Chain guarantees include role enforcement, monotonic versioning, atomic batches and auditable updates. Model accuracy, input quality and submitted tiers depend on the off-chain process. A leaked writer key enables updates until rotation. New wallets get B. The trusted price owner supplies local prices. Repeated score submissions update existing records.

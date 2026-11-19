@@ -1,6 +1,6 @@
 ## 2.4 Repetition, precision and budget
 
-The unit of repetition is a fit for model tests, a deterministic assertion for contract guards, a transaction for gas or latency, a fresh deployment for integration, and a shared simulation draw for price shocks. The ML conditions share splits and seeds 11, 22, 33, 44 and 55. Optuna uses the same 50-trial budget per variant on inner validation.
+The unit of repetition is a fit, guard case, transaction, fresh deployment or simulation draw. ML shares splits and seeds 11, 22, 33, 44 and 55. Optuna uses 50 inner-validation trials per variant.
 
 | Scenarios | Unit | Plan versus minimum and reason | Aggregation | Expected elapsed time |
 | --- | --- | --- | --- | --- |
@@ -16,9 +16,9 @@ The unit of repetition is a fit for model tests, a deterministic assertion for c
 | T7-01 | Seed on fixed test quarters | Five seeds and every non-empty quarter | Quarterly Brier, reliability and prevalence | 20 min |
 | T7-03 | Paired Monte Carlo draw | At least 1,000 per shock. Continue to precision target | Mean paired effect and 95% CI width | 60 min |
 
-Table 16. Planned run counts, analysis and elapsed-time allowances.
+Table 18. Planned run counts, analysis and elapsed-time allowances.
 
-Pilot XGB seed SDs are 0.00224 (baseline) and 0.00411 (proposed). Paired SD s_d = 0.00566. LR bootstrap SDs are 0.00806 and 0.00739. For a paired mean use d̄ ± t(0.975, n−1)·s_d/√n. The pilot implies a 95% half-width of 0.00703 at n = 5. Using n ≈ (2.8·s_d/Δ)², expected n is 2.51 for Δ = 0.01 and 0.63 for Δ = 0.02. Round up and add a planning cushion of 1–2. Keep five seeds to meet the minimum and estimate uncertainty from the full run. Three pilot seeds give a provisional dispersion estimate.
+XGB pilot SDs were 0.00224 (baseline) and 0.00411 (proposed), with paired s_d = 0.00566. LR bootstrap SDs were 0.00806 and 0.00739. The paired CI is d̄ ± t(0.975, n−1)·s_d/√n. Expected half-width at n = 5 is 0.00703. Using n ≈ (2.8·s_d/Δ)² gives 2.51 for Δ = 0.01 and 0.63 for Δ = 0.02. Round up and add 1–2. Keep the five-seed minimum because the pilot has three pairs.
 
 ### Sepolia budget (planned, not yet run)
 
@@ -30,6 +30,6 @@ Pilot XGB seed SDs are 0.00224 (baseline) and 0.00411 (proposed). Paired SD s_d 
 | repay | 100 | 49,661 | 4,966,100 |
 | liquidate | 100 | 96,682 | 9,668,200 |
 
-Table 17. Confirmation sample budget using the pilot receipt gas as a planning proxy.
+Table 19. Confirmation sample budget using the pilot receipt gas as a planning proxy.
 
-The measurement subtotal is 44,479,200 gas. Allow an expected 5,000,000 gas for deployment, approvals and reset actions. At an assumed 2 gwei per gas with a 25% contingency, the budget is (44,479,200 + 5,000,000) × 1.25 × 2 × 10⁻⁹ = 0.1237 test ETH. An assumed 0.10 test ETH funding allocation would leave a shortfall of 0.0237 test ETH. Verify available faucet funds before execution. Stage the collection if funding is limited and report the smaller sample explicitly. Anvil receipts supply the gas proxy. Sepolia confirmation time is measured only on Sepolia.
+At an assumed 2 gwei and 25% contingency, the budget is (44,479,200 measured-call gas proxy + 5,000,000 setup allowance) × 1.25 × 2 × 10⁻⁹ = 0.1237 test ETH. Against an assumed 0.10 faucet allocation the shortfall is 0.0237. Confirm funding and stage collection if needed. Anvil provides gas estimates. Measure latency on Sepolia.
