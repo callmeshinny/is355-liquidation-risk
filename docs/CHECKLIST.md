@@ -3,7 +3,7 @@ Legend: `[ ]` todo · `[x]` done → evidence · `[⚠]` failed/skipped + reason
 Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "planned, not yet run", move on.
 
 ## STATUS (agent updates after every item)
-- Next item: P0.3
+- Next item: P0.4
 - Last gate: —
 - Blockers: —
 
@@ -11,7 +11,7 @@ Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "plann
 ## P0 · Setup (human first, then agent) — 30 min
 - [ ] 👤 P0.1 Create GitHub repo `is355-liquidation-risk` (private), add teammate as collaborator, clone, copy this kit in, first commit.
 - [ ] 👤 P0.2 Run `bash tools/setup_env.sh`; then `bash tools/push_initial.sh <Khanh folder> <Khanh email>` (copies legacy code + local data, pushes safely); run `bash tools/get_data.sh` only if `data/raw/finsurvival/Data` is missing.
-- [ ] P0.3 Folders: `src/ tests/ contracts/ scripts/ results/ logs/ figures/ out/ data/`; `.gitignore` per AGENTS.md; README stub (purpose, setup, run commands).
+- [x] P0.3 Folders: `src/ tests/ contracts/ scripts/ results/ logs/ figures/ out/ data/`; `.gitignore` per AGENTS.md; README stub (purpose, setup, run commands). → verify command passed; README.md
   verify: `grep -q '^data/' .gitignore && test -f README.md`
 - [ ] P0.4 `tools/env_report.py` → `results/env.json` (OS, CPU, RAM, python, pandas, sklearn, xgboost, shap, optuna, vyper, eth-ape, anvil version).
   verify: `.venv/bin/python -c "import json;d=json.load(open('results/env.json'));assert d['python'].startswith('3.11') and d['vyper'].startswith('0.4')"`
