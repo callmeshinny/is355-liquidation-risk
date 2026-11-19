@@ -3,7 +3,7 @@ Legend: `[ ]` todo · `[x]` done → evidence · `[⚠]` failed/skipped + reason
 Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "planned, not yet run", move on.
 
 ## STATUS (agent updates after every item)
-- Next item: P4.1 (Session 4)
+- Next item: P4.2
 - Last gate: P3 PASS (24 tests passed; sections 1.2 and 1.3 each 0 FAIL, 0 WARN)
 - Blockers: D1 validation extrema overlap. Historical open-loan membership unavailable. 2024Q3 has no test rows.
 
@@ -53,7 +53,7 @@ Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "plann
 - **Gate P3:** `.venv/bin/ape test -q && .venv/bin/python tools/check_report.py --only 1.2 && .venv/bin/python tools/check_report.py --only 1.3`
 
 ## P4 · Test plan sections — 2 h (write from results/*.json)
-- [ ] P4.1 `21_hypotheses.md`: H1–H7 from CONTEXT §6, each with primary metric and acceptance criterion.
+- [x] P4.1 `21_hypotheses.md`: H1–H7 from CONTEXT §6, each with primary metric and acceptance criterion. → report/sections/21_hypotheses.md; verified seven primary metrics and acceptance criteria
 - [ ] P4.2 `22_overview.md`: table of all scenarios (ID, name, group, H/I link, env, runs).
 - [ ] P4.3 `23_scenarios.md`: T1 (reproduce baseline; H1; H2; H3 tiers both rules; H4 policy tiered vs uniform; H6 Taiwan) · T2 (drift on/off, PCA on/off, isotonic/Platt/none, KS threshold, tier rule) · T3 compact table (all 11 functions) · T4 ≥ 8 incl. edge-of-design (oracle key leak, owner price manipulation, front-run of tier downgrade, Sybil) with "not blocked" stated · T5 gas sizes + Sepolia latency · T6 ×2 (data→tiers→chain with hash/count match; price drop→liquidation via Streamlit) · T7 (per-quarter calibration; Taiwan; 1,000-run Monte Carlo price shocks for D3b).
 - [ ] P4.4 `24_runs.md`: unit of repetition per scenario; runs vs minimum; CI + n formula with pilot s, s_d; Sepolia ETH budget = Σ(gas × tx) × gas price (state assumed gwei) vs faucet amount; summary table (scenario, unit, runs, reason, aggregation, est. time).
