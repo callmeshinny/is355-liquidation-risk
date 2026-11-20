@@ -13,8 +13,8 @@
 
 | No. | Full name | Student ID | Week 4 tasks | Share |
 | --- | --- | --- | --- | --- |
-| 1 | | 23520724 | | |
-| 2 | | 23521031 | | |
+| 1 | Tran Quang Khanh (Leader) | 23520724 | Checked the ML pilot results against the Week 3 code; wrote Steps 1–5 and model details (1.4); designed hypotheses H1–H3, H7 and scenarios T1, T2, T7; wrote the schedule and risks; assembled the report | 50% |
+| 2 | Nguyen Le Nhu Ngoc | 23521031 | Set up the repository and environment; ran the ML pilots on both datasets (split, baseline vs. ours, calibration, tiers); wrote the smart contracts, T3/T4 pilot tests and gas pilot; wrote Steps 6–8 and the contract spec (1.3); designed H4–H6 and scenarios T3–T6 | 50% |
 
 ### Response to Week 3 feedback
 

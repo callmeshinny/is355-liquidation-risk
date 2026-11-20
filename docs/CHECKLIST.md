@@ -3,7 +3,7 @@ Legend: `[ ]` todo · `[x]` done → evidence · `[⚠]` failed/skipped + reason
 Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "planned, not yet run", move on.
 
 ## STATUS (agent updates after every item)
-- Next item: P5.6 (human submission)
+- Next item: R8
 - Last gate: R4–R6 PASS (0 FAIL, 1 source-length WARN). Word shows 16 main-body pages and 44 pages total.
 - Blockers: Historical open-loan membership unavailable. 2024Q3 has no test rows. [⚠] Word verified pagination. Page-by-page rendering was unavailable.
 
@@ -82,3 +82,9 @@ Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "plann
 - [x] R5 Fix presentation and contract transitions → Part A, matching Figure 1 labels, section 1.3 and plain-text formulas verified.
 - [x] R6 Complete steps, runtimes and pilot manifest → all 46 KS drops, Optuna compute estimate and validation-only Platt comparison in results/pilot_calib.json.
 - **R4–R6 final gate:** Full checker returned 0 FAIL. DOCX rebuilt and opened in Word, with References starting on page 18. Rebuilt Markdown and extracted DOCX text have zero literal LaTeX opening delimiters. [⚠] Word PDF export timed out, so visual QA remains manual.
+- [x] R7 Restore member details → both exact contribution rows and 50% shares in report/sections/00_info.md.
+- [ ] R8 Move required cards and reasoning into the main body, retain Appendix A.
+- [ ] R9 Evaluate H1 against the all-feature XGBoost baseline without PCA.
+- [ ] R10 Cap validation tier C share and rerun tiers and policy.
+- [ ] R11 Normalize shock outcomes per accepted loan and debt dollar.
+- [ ] R12 Explain calibration choice, Taiwan seed variation, the wallet proxy and H7.
