@@ -23,6 +23,7 @@ def summarize(accepted, labels, collateral=None):
 
 def shocks(debt, initial_ratio, maintenance_ratio, buffers):
     collateral = debt * (initial_ratio + buffers)
+    accepted_debt = float(debt.sum())
     outcomes = []
     for shock in (-0.10, -0.20, -0.30, -0.40):
         mark = collateral * (1 + shock)
@@ -33,7 +34,10 @@ def shocks(debt, initial_ratio, maintenance_ratio, buffers):
         bad_debt = np.maximum(debt[triggered] - repay - (mark[triggered] - seized), 0)
         outcomes.append(dict(shock=shock, liquidated_loans=int(triggered.sum()),
                              liquidated_collateral_usd=float(seized.sum()),
-                             bad_debt_usd=float(bad_debt.sum())))
+                             bad_debt_usd=float(bad_debt.sum()),
+                             liquidations_per_accepted_loan=float(triggered.mean()) if debt.size else None,
+                             bad_debt_per_accepted_debt=float(bad_debt.sum()) / accepted_debt
+                             if accepted_debt else None))
     return outcomes
 
 
@@ -77,8 +81,10 @@ def main():
         keep = mask[priced]
         indices = priced[keep]
         policies[name]["n_priced_accepted"] = len(indices)
+        debt = usd.to_numpy()[indices]
+        policies[name]["priced_accepted_debt_usd"] = float(debt.sum())
         policies[name]["simulated_shocks"] = shocks(
-            usd.to_numpy()[indices], initial[indices], maintenance[indices], buffers[keep]
+            debt, initial[indices], maintenance[indices], buffers[keep]
         )
     report["simulation"] = dict(
         label="simulated", seed=11, borrower_buffer="Uniform(0, 0.20) added to collateral/debt ratio",

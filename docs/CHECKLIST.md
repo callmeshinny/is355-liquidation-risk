@@ -3,7 +3,7 @@ Legend: `[ ]` todo · `[x]` done → evidence · `[⚠]` failed/skipped + reason
 Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "planned, not yet run", move on.
 
 ## STATUS (agent updates after every item)
-- Next item: R11
+- Next item: R12
 - Last gate: R4–R6 PASS (0 FAIL, 1 source-length WARN). Word shows 16 main-body pages and 44 pages total.
 - Blockers: Historical open-loan membership unavailable. 2024Q3 has no test rows. [⚠] Word verified pagination. Page-by-page rendering was unavailable.
 
@@ -86,5 +86,5 @@ Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "plann
 - [x] R8 Move cards and reasoning into the main body → default build uses canonical sections and Appendix A only.
 - [x] R9 Evaluate H1 against no-PCA baseline → results/pilot_power.json. Smaller gap, non-inferiority not established.
 - [x] R10 Cap tier C and rerun tiers and policy → validation C share 16.21%, strict constraint feasible, cutoffs 0.005 and 0.065.
-- [ ] R11 Normalize shock outcomes per accepted loan and debt dollar.
+- [x] R11 Normalize shock outcomes → priced accepted denominators and corrected USD 64.56 m in section 2.5.
 - [ ] R12 Explain calibration choice, Taiwan seed variation, the wallet proxy and H7.

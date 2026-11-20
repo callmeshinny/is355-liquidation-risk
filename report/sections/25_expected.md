@@ -28,20 +28,22 @@
 - **Reject if** Reject if tiering fails to avoid more labelled liquidations or to lower tier-A collateral per debt dollar, raises total locked collateral, or raises bad debt at any specified shock.
 - **If rejected** Report the acceptance and good-loan rejection trade-off and the shock results separately. The pilot fails the total collateral and −20% bad debt conditions.
 
-The simulated pilot draws one shared borrower buffer per loan from Uniform(0, 0.20), seed 11, and adds it to each policy's initial collateral ratio. Debt stays fixed. It evaluates accepted loans with valid USD amounts (95,596 uniform and 78,703 tiered), applies one liquidation call below the maintenance ratio, and uses the 50% close factor and 5% bonus. Bad debt is the positive gap between remaining debt and remaining marked collateral after the call. The same buffer draw is used for every shock.
+The simulated pilot draws one shared borrower buffer per loan from Uniform(0, 0.20), seed 11, and adds it to each policy's initial collateral ratio. Debt stays fixed. It evaluates accepted loans with valid USD amounts (95,596 uniform and 78,703 tiered), applies one liquidation call below the maintenance ratio, and uses the 50% close factor and 5% bonus. Bad debt is the positive gap between remaining debt and remaining marked collateral after the call. The same buffer draw is used for every shock. Both rates use the priced accepted cohort. Its debt totals USD 35.37 billion uniform and USD 34.75 billion tiered.
 
-| Shock | Policy | Liquidated loans | Seized collateral (USD m) | Bad debt (USD m) |
-| --- | --- | ---: | ---: | ---: |
-| -10% | Uniform | 46,237 | 9,015.35 | 0.00 |
-| -10% | Tiered | 475 | 510.94 | 0.00 |
-| -20% | Uniform | 95,596 | 18,571.60 | 64.56 |
-| -20% | Tiered | 50,195 | 12,662.78 | 121.47 |
-| -30% | Uniform | 95,596 | 18,571.60 | 2,833.23 |
-| -30% | Tiered | 78,703 | 18,244.27 | 1,085.32 |
-| -40% | Uniform | 95,596 | 18,571.60 | 7,608.31 |
-| -40% | Tiered | 78,703 | 18,244.27 | 3,967.75 |
+| Shock | Policy | Liquidated loans | Seized collateral (USD m) | Bad debt (USD m) | Liquidated / accepted loans | Bad debt / accepted debt |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| -10% | Uniform | 46,237 | 9,015.35 | 0.00 | 48.37% | 0.000% |
+| -10% | Tiered | 475 | 510.94 | 0.00 | 0.60% | 0.000% |
+| -20% | Uniform | 95,596 | 18,571.60 | 64.56 | 100.00% | 0.183% |
+| -20% | Tiered | 50,195 | 12,662.78 | 121.47 | 63.78% | 0.350% |
+| -30% | Uniform | 95,596 | 18,571.60 | 2,833.23 | 100.00% | 8.009% |
+| -30% | Tiered | 78,703 | 18,244.27 | 1,085.32 | 100.00% | 3.123% |
+| -40% | Uniform | 95,596 | 18,571.60 | 7,608.31 | 100.00% | 21.508% |
+| -40% | Tiered | 78,703 | 18,244.27 | 3,967.75 | 100.00% | 11.418% |
 
 Table 21. Paired simulated shocks on the priced subset of test loans. See `results/pilot_policy_v2.json`.
+
+Tiering reduced the share liquidated at −10% and −20%, but at −30% and −40% all priced accepted loans liquidated under both policies. At −20%, bad debt rose from USD 64.56 m under uniform to USD 121.47 m tiered, or from 0.183% to 0.350% of accepted debt. Tiering lowered the bad-debt share at −30% and −40%, but increased total locked collateral and still fails H4.
 
 #### H5 · Gas and guards
 
