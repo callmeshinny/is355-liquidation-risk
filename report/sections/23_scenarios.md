@@ -44,7 +44,7 @@
 
 **Steps** Apply tiered 120%/150% and reject C. Apply uniform 125%. Tabulate acceptance, avoided liquidations, rejected good loans and collateral. **Expected result** Tier A requires less collateral per USD.
 
-**Pass criterion** Apply H4. Report counts and capital for undefined ratios. **Runs & environment** Python. Five paired seeds. The seed-11 fixed-policy pilot is measured.
+**Pass criterion** Apply H4. Report acceptance, avoided liquidations, good loans rejected and locked collateral for both policies. **Runs & environment** Python. Five paired seeds. The seed-11 fixed-policy pilot is measured.
 
 
 ##### T1-06 · Evaluate Taiwan test AUC
@@ -251,4 +251,4 @@ Reuse the five Taiwan fits. Report mean and sample SD of held-out ROC AUC. Verif
 
 For shocks −10%, −20%, −30% and −40%, compare both policies on paired simulated borrowers with stable debt. Draw the collateral buffer uniformly from 0 to 0.20 above each policy minimum using seed 11 and common draws. Apply maintenance ratios, 50% close factor and 5% bonus. Track liquidation counts, seized USD and residual unsecured debt.
 
-Run at least 1,000 paired draws per shock. Extend until the 95% CI width is narrower than the prespecified effect size. Record distribution, seed, draws and precision. Fixed D1 tiers require feasible cutoffs. Simulation is planned, not yet run.
+Run at least 1,000 paired draws per shock. Extend until the 95% CI width is narrower than the prespecified effect size. Record distribution, seed, draws and precision. Fixed D1 tiers require feasible cutoffs. The deterministic pilot ran one paired draw per shock. The 1,000-draw analysis is planned, not yet run.

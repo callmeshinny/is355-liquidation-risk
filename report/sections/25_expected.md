@@ -23,10 +23,25 @@
 
 #### H4 · Policy
 
-- **Expected** Tier A saves 0.05 USD in required collateral per USD of debt versus uniform. Rejection effectiveness is measurable where both denominators are positive.
-- **Basis** 125% minus 120% yields a five-point reduction. Percentile sensitivity saw 683 rejected loans with a liquidation label and 14,367 rejected good loans. Fixed-policy D3a is planned, not yet run.
-- **Reject if** For a feasible comparison, the tiered rejection ratio fails to exceed uniform or tier-A capital freed is nonpositive. The ratio is undefined for the all-accept uniform case.
-- **If rejected** Report counts, ratio availability and collateral effects separately. Use the planned price-shock analysis to inspect trade-offs.
+- **Expected** Tiering avoids more historically liquidating loans, lowers tier-A collateral per dollar of debt, and holds total collateral and simulated bad debt at or below uniform.
+- **Basis** Uniform accepted 96,345 and tiering accepted 62,092. Tiering avoided 986 historically labelled liquidations and rejected 33,267 good loans. Uniform had zero for both. Collateral locked was USD 44.22 billion uniform and USD 47.13 billion tiered. At −20%, simulated bad debt was USD 64.56 million uniform and USD 121.47 million tiered.
+- **Reject if** Reject if tiering fails to avoid more labelled liquidations or to lower tier-A collateral per debt dollar, raises total locked collateral, or raises bad debt at any specified shock.
+- **If rejected** Report the acceptance and good-loan rejection trade-off and the shock results separately. The pilot fails the total collateral and −20% bad debt conditions.
+
+The simulated pilot draws one shared borrower buffer per loan from Uniform(0, 0.20), seed 11, and adds it to each policy's initial collateral ratio. Debt stays fixed. It evaluates accepted loans with valid USD amounts (95,596 uniform and 61,695 tiered), applies one liquidation call below the maintenance ratio, and uses the 50% close factor and 5% bonus. Bad debt is the positive gap between remaining debt and remaining marked collateral after the call. The same buffer draw is used for every shock.
+
+| Shock | Policy | Liquidated loans | Seized collateral (USD m) | Bad debt (USD m) |
+| --- | --- | ---: | ---: | ---: |
+| -10% | Uniform | 46,237 | 9,015.35 | 0.00 |
+| -10% | Tiered | 475 | 510.94 | 0.00 |
+| -20% | Uniform | 95,596 | 18,571.60 | 64.56 |
+| -20% | Tiered | 39,660 | 12,203.87 | 121.47 |
+| -30% | Uniform | 95,596 | 18,571.60 | 2,833.23 |
+| -30% | Tiered | 61,695 | 17,490.52 | 1,085.32 |
+| -40% | Uniform | 95,596 | 18,571.60 | 7,608.31 |
+| -40% | Tiered | 61,695 | 17,490.52 | 3,877.05 |
+
+Table 21. Paired simulated shocks on the priced subset of test loans. See `results/pilot_policy_v2.json`.
 
 #### H5 · Gas and guards
 

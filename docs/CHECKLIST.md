@@ -3,7 +3,7 @@ Legend: `[ ]` todo · `[x]` done → evidence · `[⚠]` failed/skipped + reason
 Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "planned, not yet run", move on.
 
 ## STATUS (agent updates after every item)
-- Next item: R3
+- Next item: Gate P6
 - Last gate: P5 checker PASS (0 FAIL, 0 WARN). Concise template revision verified in Word at 15 A4 body pages.
 - Blockers: Historical open-loan membership unavailable. 2024Q3 has no test rows.
 
@@ -76,5 +76,5 @@ Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "plann
 - [x] R0 Sync manual edits → out/submitted_v1.docx absent. No edits copied.
 - [x] R1 Audit baseline, PCA and feature availability → results/pilot_audit.json. No post-loan feature identified in validation top 15.
 - [x] R2 Fit D1 cutoffs and rerun tiers and policy → 0.005 and 0.015 in results/pilot_tiers.json and results/pilot_policy.json.
-- [ ] R3 Redefine H4 and compare observed outcomes and simulated shocks.
+- [x] R3 Redefine H4 and compare observed outcomes and simulated shocks → results/pilot_policy_v2.json. H4 pilot fails total collateral and −20% bad debt criteria.
 - **Gate P6:** `python tools/check_report.py --only 1.2,2 && bash tools/build_docx.sh`

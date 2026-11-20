@@ -69,7 +69,7 @@ General lecturer notes to honour: say what blockchain guarantees (integrity, no 
 - H1 (I2, D6): ΔAUC = AUC(ours) − AUC(baseline reproduced, all features + PCA), paired by seed; accept if lower 95% CI bound > −0.02. Secondary: val–test AUC gap smaller for ours.
 - H2 (I1): Brier(calibrated) < Brier(uncalibrated) on test; paired by seed; CI of difference excludes 0.
 - H3 (I1, D1): fixed-threshold tiers give liquidation rate A < B < C on test with non-overlapping 95% Wilson CIs; share of C on test falls with base rate (percentile rule stays ≈10%).
-- H4 (I3, D3): versus uniform, tiered rule avoids more liquidations per rejected good loan and frees capital for tier A; give expected numbers from pilot (a).
+- H4 (I3, D3): tiering avoids more labelled liquidations, lowers tier-A collateral per debt dollar and keeps total collateral and simulated bad debt at or below uniform. Record counts, USD and the paired shock results for both policies.
 - H5 (I3): gas — set_score ≤ X, batch(100) per wallet ≤ Y (from EVM estimate + Anvil pilot); security — every designed-to-block T4 attack reverts with its exact message; Sybil and oracle-key compromise documented as not blocked.
 - H6 (I4): Taiwan test AUC within expected range from pilot; compare [3] ≈ 0.68–0.71.
 - H7 (D4): calibration drifts: Brier/curve per test quarter; expected over-prediction as base rate falls.

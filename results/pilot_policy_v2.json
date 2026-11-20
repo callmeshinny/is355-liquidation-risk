@@ -1,0 +1,101 @@
+{
+  "date": "2026-11-20",
+  "seed": 11,
+  "model_sha256": "d4bc57d51a3279c101ed81718855292ef4859c48359763c302fdd1ad9796e02d",
+  "n_loans": 96345,
+  "policies": {
+    "uniform": {
+      "accepted": 96345,
+      "rejected": 0,
+      "liquidations_avoided": 0,
+      "good_loans_rejected": 0,
+      "capital_locked_usd": 44218089861.49733,
+      "n_priced_accepted": 95596,
+      "simulated_shocks": [
+        {
+          "shock": -0.1,
+          "liquidated_loans": 46237,
+          "liquidated_collateral_usd": 9015348328.42147,
+          "bad_debt_usd": 0.0
+        },
+        {
+          "shock": -0.2,
+          "liquidated_loans": 95596,
+          "liquidated_collateral_usd": 18571597741.828876,
+          "bad_debt_usd": 64564190.09927385
+        },
+        {
+          "shock": -0.3,
+          "liquidated_loans": 95596,
+          "liquidated_collateral_usd": 18571597741.828876,
+          "bad_debt_usd": 2833225878.160852
+        },
+        {
+          "shock": -0.4,
+          "liquidated_loans": 95596,
+          "liquidated_collateral_usd": 18571597741.828876,
+          "bad_debt_usd": 7608312707.913274
+        }
+      ]
+    },
+    "tiered": {
+      "accepted": 62092,
+      "rejected": 34253,
+      "liquidations_avoided": 986,
+      "good_loans_rejected": 33267,
+      "capital_locked_usd": 47128047527.85721,
+      "n_priced_accepted": 61695,
+      "simulated_shocks": [
+        {
+          "shock": -0.1,
+          "liquidated_loans": 475,
+          "liquidated_collateral_usd": 510944678.1306638,
+          "bad_debt_usd": 0.0
+        },
+        {
+          "shock": -0.2,
+          "liquidated_loans": 39660,
+          "liquidated_collateral_usd": 12203868871.96613,
+          "bad_debt_usd": 121474082.25474074
+        },
+        {
+          "shock": -0.3,
+          "liquidated_loans": 61695,
+          "liquidated_collateral_usd": 17490518330.129353,
+          "bad_debt_usd": 1085320397.053439
+        },
+        {
+          "shock": -0.4,
+          "liquidated_loans": 61695,
+          "liquidated_collateral_usd": 17490518330.129353,
+          "bad_debt_usd": 3877053323.838836
+        }
+      ]
+    }
+  },
+  "rule": "fixed",
+  "fixed_policy_available": true,
+  "score_scope": "At-origin loan score. Historical open-loan wallet membership is unavailable.",
+  "n_priced": 95596,
+  "collateral_ratios": {
+    "uniform": 1.25,
+    "A": 1.2,
+    "B": 1.5
+  },
+  "capital_freed_tier_a_usd": 474143664.46634793,
+  "capital_freed_usd": -2909957666.3598785,
+  "simulation": {
+    "label": "simulated",
+    "seed": 11,
+    "borrower_buffer": "Uniform(0, 0.20) added to collateral/debt ratio",
+    "pairing": "Same origination-id-ordered draw for both policies and all price shocks",
+    "debt": "Stable USD debt; exclude loans with missing or nonpositive USD amounts",
+    "liquidation": "One call for each breached maintenance ratio; 50% close factor and 5% bonus",
+    "maintenance_ratios": {
+      "uniform": 1.212,
+      "A": 1.1,
+      "B": 1.3
+    },
+    "bad_debt": "Positive residual debt minus remaining marked collateral after the liquidation call"
+  }
+}
