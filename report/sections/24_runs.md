@@ -20,7 +20,7 @@ The unit of repetition is a fit, guard case, transaction, fresh deployment or si
 
 Table 18. Planned run counts, analysis and elapsed-time allowances.
 
-XGB pilot SDs were 0.00224 (baseline) and 0.00411 (proposed), with paired s_d = 0.00566. LR bootstrap SDs were 0.00806 and 0.00739. The mean paired AUC difference is (0.10093 + 0.10712 + 0.09581) / 3 = 0.10129. The paired interval is the mean difference plus or minus the t critical value times the sample SD divided by the square root of the number of pairs. Expected half-width at n = 5 is 0.00703. Using n ≈ (2.8·s_d/Δ)² gives 2.51 for Δ = 0.01 and 0.63 for Δ = 0.02. Round up and add 1–2. Keep the five-seed minimum because the pilot has three pairs.
+All-feature no-PCA and proposed XGBoost seed SDs were 0.01324 and 0.00411. Paired SD was 0.01490. The paired interval uses the t critical value and seed-level differences. Expected five-pair half-width is 0.01850. The planning formula n ≈ (2.8 × paired SD / target difference)² yields 17.41 for 0.01 and 4.35 for 0.02. Round up. Five seeds target the 0.02 margin.
 
 ### Sepolia budget (planned, not yet run)
 

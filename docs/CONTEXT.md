@@ -66,7 +66,7 @@ General lecturer notes to honour: say what blockchain guarantees (integrity, no 
 - KS drift: numeric feature dropped if KS D(train_core, inner-val) ≥ 0.15 (T2 sensitivity: 0.10/0.15/0.20/0.30).
 
 ## 6. Hypotheses (use these IDs)
-- H1 (I2, D6): ΔAUC = AUC(ours) − AUC(baseline reproduced, all features + PCA), paired by seed; accept if lower 95% CI bound > −0.02. Secondary: val–test AUC gap smaller for ours.
+- H1 (I2, D6): ΔAUC = AUC(ours) − AUC(primary baseline, all features without PCA), paired by seed; accept if lower 95% CI bound > −0.02. Secondary: val–test AUC gap smaller for ours.
 - H2 (I1): Brier(calibrated) < Brier(uncalibrated) on test; paired by seed; CI of difference excludes 0.
 - H3 (I1, D1): fixed-threshold tiers give liquidation rate A < B < C on test with non-overlapping 95% Wilson CIs; share of C on test falls with base rate (percentile rule stays ≈10%).
 - H4 (I3, D3): tiering avoids more labelled liquidations, lowers tier-A collateral per debt dollar and keeps total collateral and simulated bad debt at or below uniform. Record counts, USD and the paired shock results for both policies.

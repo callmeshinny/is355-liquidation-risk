@@ -4,7 +4,7 @@
 
 | ID | Hypothesis | Primary metric | Acceptance criterion |
 | --- | --- | --- | --- |
-| H1 · I2, D6 | Drift-filtered XGBoost is non-inferior to all-feature PCA. | Test ΔAUC = proposed − baseline, paired by seed. | Accept if lower 95% bound > −0.02. Report validation-to-test AUC gaps as secondary. |
+| H1 · I2, D6 | Drift-filtered XGBoost is non-inferior to all-feature XGBoost without PCA. | Test ΔAUC = O_XGB − B_XGB_noPCA, paired by seed. | Accept if lower 95% bound > −0.02. Report validation-to-test AUC gaps as secondary. |
 | H2 · I1 | Isotonic improves test probabilities. | Test ΔBrier = calibrated − raw, paired by seed. | Accept if upper 95% bound < 0. |
 | H3 · I1, D1 | Fixed tiers separate risk and C share falls with prevalence. | Tier rates, 95% Wilson intervals, quarterly C share and prevalence. | Accept if A < B < C with disjoint adjacent intervals. Check that C share falls when prevalence falls. Compare the percentile rule's expected ~10% C share and report ties. Use the ordered validation grid with A ≤0.75× and C ≥2× validation prevalence. |
 | H4 · I3, D3 | Tiering reduces liquidation losses while conserving collateral. | Accepted loans, avoided liquidations, rejected good loans and collateral locked. Under shocks, liquidated loans, seized collateral and bad debt. | See the H4 decision rule below. |

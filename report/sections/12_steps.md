@@ -93,11 +93,11 @@ Example loan: 2020-12-01, event status 0, observed 576.465 days, label 0.
 
 The B prefix identifies baseline variants and O identifies proposed variants. LR denotes logistic regression and XGB denotes XGBoost.
 
-**Purpose** Compare baseline and proposed models. **Input** Split parquet and feature-rule manifest. **Processing** Fit LR or XGB. Scale as needed. Fit baseline PCA in training. Early-stop XGB on inner validation. **Parameters** 95% PCA assumption, LR C=0.1, XGB learning rate 0.05, depth 6, patience 50.
+**Purpose** Compare drift-filtered and all-feature XGBoost without PCA for H1. **Input** Split parquet and feature-rule manifest. **Processing** Fit LR or XGB. Scale as needed. Fit PCA in training for the paper reproduction only. Early-stop XGB on inner validation. **Parameters** 95% PCA assumption, LR C=0.1, XGB learning rate 0.05, depth 6, patience 50.
 
 **Libraries / tools** scikit-learn, XGBoost. **Output** Frozen XGBoost model artifact, validation and test score parquet, AUC and fit time. **Runs** 2026-11-19. XGB seeds 11/22/33. LR seed 11 and 1,000 bootstrap draws.
 
-**Correctness check** Check model/seed coverage and paired test AUC. **Errors & edge cases** Replace nonfinite features with zero. Paper reproduction tolerance ±0.02 AUC. **Est. run time** Mean XGBoost fit times were 3.61 s baseline, 3.10 s proposed and 2.66 s without PCA. **Improvement** I2 isolates the proposed feature pipeline. I4 checks Taiwan.
+**Correctness check** Check model/seed coverage and paired test AUC. **Errors & edge cases** Replace nonfinite features with zero. Paper reproduction tolerance ±0.02 AUC. **Est. run time** Mean XGBoost fit times were 3.61 s baseline, 3.10 s proposed and 2.66 s without PCA. **Improvement** I2 tests non-inferiority and the validation-to-test AUC gap. I4 checks Taiwan.
 
 ```text
 select eligible features and apply the drift list for proposed variants
@@ -111,13 +111,14 @@ record fit time, AUC, paired seed differences and LR bootstrap intervals
 | Model | Seeds | Mean inner validation AUC | Mean val AUC | Mean test AUC | Mean fit (s) |
 | --- | --- | ---: | ---: | ---: | ---: |
 | B_XGB | 11, 22, 33 | 0.7885 | 0.6870 | 0.7020 | 3.61 |
+| B_XGB_noPCA | 11, 22, 33 | 0.8367 | 0.8348 | 0.8091 | 2.66 |
 | O_XGB | 11, 22, 33 | 0.8089 | 0.8113 | 0.8033 | 3.10 |
 | B_LR | 11 | 0.7931 | 0.7519 | 0.6145 | 2.45 |
 | O_LR | 11 | 0.8053 | 0.7974 | 0.7861 | 3.92 |
 
-Table 6. FinSurvival pilot fits on 2026-11-19.
+Table 6. FinSurvival fits from 2026-11-19 and 2026-11-20. B_XGB is the PCA reproduction. B_XGB_noPCA is the H1 baseline.
 
-Paper deviations were −0.1085 (LR) and −0.0300 (XGB), both outside ±0.02 [1]. Taiwan test AUC was 0.7834 at seed 11. Section 2.4 summarizes paired precision.
+Paper deviations were −0.1085 (LR) and −0.0300 (XGB), both outside ±0.02 [1]. Taiwan test AUC was 0.7834 at seed 11. Across seeds 11, 22 and 33, proposed minus all-feature no-PCA test AUC was -0.00583 (paired 95% t interval -0.04285 to 0.03118). Mean validation minus test AUC was 0.00807 proposed and 0.02567 baseline. The gap narrowed, but the interval crosses the −0.02 non-inferiority margin.
 
 #### Step 4 · Calibrate and explain probabilities
 

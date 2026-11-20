@@ -3,7 +3,7 @@ Legend: `[ ]` todo · `[x]` done → evidence · `[⚠]` failed/skipped + reason
 Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "planned, not yet run", move on.
 
 ## STATUS (agent updates after every item)
-- Next item: R9
+- Next item: R10
 - Last gate: R4–R6 PASS (0 FAIL, 1 source-length WARN). Word shows 16 main-body pages and 44 pages total.
 - Blockers: Historical open-loan membership unavailable. 2024Q3 has no test rows. [⚠] Word verified pagination. Page-by-page rendering was unavailable.
 
@@ -84,7 +84,7 @@ Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "plann
 - **R4–R6 final gate:** Full checker returned 0 FAIL. DOCX rebuilt and opened in Word, with References starting on page 18. Rebuilt Markdown and extracted DOCX text have zero literal LaTeX opening delimiters. [⚠] Word PDF export timed out, so visual QA remains manual.
 - [x] R7 Restore member details → both exact contribution rows and 50% shares in report/sections/00_info.md.
 - [x] R8 Move cards and reasoning into the main body → default build uses canonical sections and Appendix A only.
-- [ ] R9 Evaluate H1 against the all-feature XGBoost baseline without PCA.
+- [x] R9 Evaluate H1 against no-PCA baseline → results/pilot_power.json. Smaller gap, non-inferiority not established.
 - [ ] R10 Cap validation tier C share and rerun tiers and policy.
 - [ ] R11 Normalize shock outcomes per accepted loan and debt dollar.
 - [ ] R12 Explain calibration choice, Taiwan seed variation, the wallet proxy and H7.

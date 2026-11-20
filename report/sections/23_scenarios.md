@@ -13,7 +13,7 @@
 
 ##### T1-02 · Test model non-inferiority
 
-**Objective** Test H1. **Preconditions** Matched D5 folds and seeds. **Input data** Baseline and proposed XGB features. **Steps** Fit both variants on matched seeds. Subtract baseline test AUC from proposed test AUC and compute the paired 95% t interval. **Expected result** Proposed model within margin. **Pass criterion** Lower endpoint > −0.02. Report both validation-to-test gaps. **Runs & environment** Python. Five paired seeds. **Evidence** Pilot model and audit JSON.
+**Objective** Test H1. **Preconditions** Matched D5 folds and seeds. **Input data** All-feature and drift-filtered XGBoost inputs without PCA. **Steps** Fit both variants on matched seeds. Subtract B_XGB_noPCA test AUC from proposed test AUC and compute the paired 95% t interval. **Expected result** Proposed model within margin. **Pass criterion** Lower endpoint > −0.02. Report both validation-to-test gaps. **Runs & environment** Python. Five paired seeds. **Evidence** Pilot model and audit JSON.
 
 ##### T1-03 · Compare raw and isotonic scores
 

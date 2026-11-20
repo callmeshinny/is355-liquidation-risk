@@ -3,9 +3,9 @@
 #### H1 · Non-inferiority
 
 - **Expected** Paired XGBoost ΔAUC has a lower 95% confidence bound above −0.02.
-- **Basis** D5 mean test AUC was 0.8033 for proposed XGBoost, 0.7020 with PCA and 0.8091 with all eligible features and PCA disabled. This matched ablation implicates PCA in the local gap, and the top 15 validation TreeSHAP features were available at origination. Local PCA LR scored 0.6145, versus 0.723 in [1], which uses R glm and a different training and preprocessing protocol. The paper's XGBoost AUC of 0.732 also uses a different fit protocol [1].
+- **Basis** Across seeds 11, 22 and 33, proposed minus all-feature no-PCA test AUC was -0.00583 (paired 95% t interval -0.04285 to 0.03118). Mean validation minus test AUC was 0.00807 proposed and 0.02567 baseline. The gap narrowed, but the interval crosses the −0.02 non-inferiority margin.
 - **Reject if** The lower paired bound is at or below −0.02.
-- **If rejected** Report the result and inspect split, PCA and drift-filter differences using the planned ablations. Keep baseline reproduction status visible.
+- **If rejected** Report the result and complete the planned matched runs and report the validation-to-test gap. Keep baseline reproduction status visible.
 
 #### H2 · Calibration
 

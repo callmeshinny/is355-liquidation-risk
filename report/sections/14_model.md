@@ -12,4 +12,4 @@
 
 Table 14. Models and validation controls.
 
-Pilot date 2026-11-19. The baseline test AUCs were 0.6145 for LR and 0.7020 averaged over XGB seeds. Compare with the paper's 0.723 and 0.732 [1]. The reported pilot configurations and seed-level scores are in results/pilot_model.json. Taiwan O_XGB test AUC was 0.7834 on 2026-11-19, compared with the chart-derived range of approximately 0.68–0.71 [3].
+H1 uses B_XGB_noPCA, with all eligible features and no PCA. B_XGB uses PCA for the separate [1] reproduction. Across seeds 11, 22 and 33, proposed minus all-feature no-PCA test AUC was -0.00583 (paired 95% t interval -0.04285 to 0.03118). Mean validation minus test AUC was 0.00807 proposed and 0.02567 baseline. The gap narrowed, but the interval crosses the −0.02 non-inferiority margin. The baseline test AUCs were 0.6145 for LR and 0.7020 averaged over XGB seeds. Compare with the paper's 0.723 and 0.732 [1]. The reported pilot configurations and seed-level scores are in results/pilot_model.json. Taiwan O_XGB test AUC was 0.7834 on 2026-11-19, compared with the chart-derived range of approximately 0.68–0.71 [3].
