@@ -3,7 +3,7 @@ Legend: `[ ]` todo · `[x]` done → evidence · `[⚠]` failed/skipped + reason
 Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "planned, not yet run", move on.
 
 ## STATUS (agent updates after every item)
-- Next item: P5.6 (human submission)
+- Next item: R5
 - Last gate: P6 checker PASS (0 FAIL, 0 WARN for 1.2,2). Rebuilt DOCX passed ZIP and text checks. Full linter warns about estimated length.
 - Blockers: Historical open-loan membership unavailable. 2024Q3 has no test rows. [⚠] DOCX visual verification requires LibreOffice; page count unverified.
 
@@ -78,3 +78,6 @@ Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "plann
 - [x] R2 Fit D1 cutoffs and rerun tiers and policy → 0.005 and 0.015 in results/pilot_tiers.json and results/pilot_policy.json.
 - [x] R3 Redefine H4 and compare observed outcomes and simulated shocks → results/pilot_policy_v2.json. H4 pilot fails total collateral and −20% bad debt criteria.
 - **Gate P6:** `python tools/check_report.py --only 1.2,2 && bash tools/build_docx.sh` → PASS. DOCX rebuilt; [⚠] page rendering unavailable (missing soffice).
+- [x] R4 Complete scenario cards and compact T7 → report/sections/23_scenarios.md. Twenty eight-field cards, each no more than 90 words.
+- [ ] R5 Fix presentation, terminology and contract transitions.
+- [ ] R6 Complete step detail, runtime estimates and pilot manifest.
