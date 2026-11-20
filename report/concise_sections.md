@@ -64,7 +64,7 @@ Appendix C supplies inputs, prerequisites, procedures, expected outcomes and pas
 | --- | --- | --- |
 | H1 | Paired lower AUC bound > −0.02. Pilot means 0.8033 proposed, 0.7020 with PCA, and 0.8091 without PCA on all eligible features. | At or below −0.02, inspect matched feature and PCA ablations. |
 | H2 | Lower calibrated Brier. Seed 11 measured 0.01636 versus 0.06409 raw. | If the upper difference bound is nonnegative, compare quarterly calibration maps. |
-| H3 | Ordered tier liquidation rates and disjoint intervals. Fixed pilot rates were 0.02%, 0.48% and 2.88%, with disjoint overall intervals. | If feasible cutoffs fail separation, report results. For infeasible cutoffs, mark the test unevaluable. |
+| H3 | Ordered tier liquidation rates and disjoint intervals. Fixed pilot rates were 0.02%, 0.48% and 2.88%, with disjoint overall intervals. Quarterly C share did not consistently fall with prevalence. | If feasible cutoffs fail separation, report results. For infeasible cutoffs, mark the test unevaluable. |
 | H4 | Avoid more labelled liquidations, lower tier-A collateral per debt dollar and keep total collateral and simulated bad debt at or below uniform. | The pilot fails on total collateral and at the −20% shock. Appendix D gives counts and USD amounts. |
 | H5 | Single gas ≤100,000 and 100-wallet gas ≤75,000 per wallet. Pilot measured 94,739 and 69,252 respectively. | Investigate any exceeded limit or guard failure. Sepolia latency remains planned. |
 | H6 | AUC 0.760–0.810 around the 0.7834 Taiwan pilot. | If outside range, review exclusions, split and seed variation. |

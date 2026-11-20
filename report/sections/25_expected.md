@@ -17,8 +17,8 @@
 #### H3 · Tier separation
 
 - **Expected** Rates increase from A to C with disjoint adjacent 95% Wilson intervals. C share falls when risk falls.
-- **Basis** The ordered validation grid yields 0.005 and 0.015. Fixed test rates are 0.02%, 0.48% and 2.88%, with disjoint overall 95% Wilson intervals. Step 5 reports quarterly comparisons and the empty 2024Q3 cohort.
-- **Reject if** With a feasible fixed rule, any adjacent ordering or interval condition fails. Treat infeasible thresholds as an unevaluable hypothesis.
+- **Basis** The ordered validation grid yields 0.005 and 0.015. Fixed test rates are 0.02%, 0.48% and 2.88%, with disjoint overall 95% Wilson intervals. The quarterly C share does not consistently fall with prevalence. From 2023Q3 to 2023Q4, prevalence fell from 1.10% to 0.43% while fixed C share rose from 34.26% to 39.15%. Step 5 reports all quarters, including the empty 2024Q3 cohort.
+- **Reject if** With a feasible fixed rule, any adjacent ordering or interval condition fails, or the quarterly C share does not consistently fall with prevalence. Treat infeasible thresholds as an unevaluable hypothesis.
 - **If rejected** Report the observed tiers or infeasibility and retain the comparator as labelled evidence. Any future threshold revision requires approval and validation-only selection.
 
 #### H4 · Policy
