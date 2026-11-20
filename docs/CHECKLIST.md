@@ -3,9 +3,9 @@ Legend: `[ ]` todo · `[x]` done → evidence · `[⚠]` failed/skipped + reason
 Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "planned, not yet run", move on.
 
 ## STATUS (agent updates after every item)
-- Next item: R4–R6 final gate
-- Last gate: P6 checker PASS (0 FAIL, 0 WARN for 1.2,2). Rebuilt DOCX passed ZIP and text checks. Full linter warns about estimated length.
-- Blockers: Historical open-loan membership unavailable. 2024Q3 has no test rows. [⚠] DOCX visual verification requires LibreOffice; page count unverified.
+- Next item: P5.6 (human submission)
+- Last gate: R4–R6 PASS (0 FAIL, 1 source-length WARN). Word shows 16 main-body pages and 44 pages total.
+- Blockers: Historical open-loan membership unavailable. 2024Q3 has no test rows. [⚠] Word verified pagination. Page-by-page rendering was unavailable.
 
 ---
 ## P0 · Setup (human first, then agent) — 30 min
@@ -68,7 +68,7 @@ Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "plann
 - [x] P5.3 `30_next.md`, `90_refs.md` (CONTEXT §12), `95_appendix.md` (pilot table). → Next steps, six IEEE references and Appendix A; full checker has 0 FAIL
 - [x] P5.4 `bash tools/build_docx.sh` → `out/6_BC_IS355_Week4_Project.docx`. → Pandoc built and ZIP integrity verified for out/6_BC_IS355_Week4_Project.docx
 - [x] P5.5 Full check + self-review: `.venv/bin/python tools/check_report.py` → 0 FAIL. Then write `results/rubric_review.md`: per rubric row (CONTEXT §7) score 0–100% with the weakest point; fix the 2 weakest; rebuild. → results/rubric_review.md; two weakest rubric rows revised, DOCX rebuilt and 18 body pages verified in Word
-- [ ] 👤 P5.6 Open docx in Word: fill members' tasks/shares, check 12–18 pages, figures readable, export PDF if wanted, submit on Moodle (Exercise 4). Push repo; make it visible to the lecturer.
+- [ ] 👤 P5.6 Open docx in Word: fill members' tasks/shares, check 12–18 pages, figures readable, export PDF if wanted, submit on Moodle (Exercise 4). Confirm lecturer access to the repository.
 - **Gate P5:** `.venv/bin/python tools/check_report.py && test -f out/6_BC_IS355_Week4_Project.docx`
 
 ## P6 · Review fixes
@@ -81,3 +81,4 @@ Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "plann
 - [x] R4 Complete scenario cards and compact T7 → report/sections/23_scenarios.md. Twenty eight-field cards, each no more than 90 words.
 - [x] R5 Fix presentation and contract transitions → Part A, matching Figure 1 labels, section 1.3 and plain-text formulas verified.
 - [x] R6 Complete steps, runtimes and pilot manifest → all 46 KS drops, Optuna compute estimate and validation-only Platt comparison in results/pilot_calib.json.
+- **R4–R6 final gate:** Full checker returned 0 FAIL. DOCX rebuilt and opened in Word, with References starting on page 18. Rebuilt Markdown and extracted DOCX text have zero literal LaTeX opening delimiters. [⚠] Word PDF export timed out, so visual QA remains manual.
