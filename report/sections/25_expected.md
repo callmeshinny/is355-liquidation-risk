@@ -17,29 +17,29 @@
 #### H3 · Tier separation
 
 - **Expected** Rates increase from A to C with disjoint adjacent 95% Wilson intervals. C share falls when risk falls.
-- **Basis** The ordered validation grid yields 0.005 and 0.015. Fixed test rates are 0.02%, 0.48% and 2.88%, with disjoint overall 95% Wilson intervals. The quarterly C share does not consistently fall with prevalence. From 2023Q3 to 2023Q4, prevalence fell from 1.10% to 0.43% while fixed C share rose from 34.26% to 39.15%. Step 5 reports all quarters, including the empty 2024Q3 cohort.
+- **Basis** Cutoffs were 0.005 and 0.065. Fixed test rates were 0.02%, 0.72%, 4.23% for A, B and C, with disjoint overall Wilson intervals.
 - **Reject if** With a feasible fixed rule, any adjacent ordering or interval condition fails, or the quarterly C share does not consistently fall with prevalence. Treat infeasible thresholds as an unevaluable hypothesis.
 - **If rejected** Report the observed tiers or infeasibility and retain the comparator as labelled evidence. Any future threshold revision requires approval and validation-only selection.
 
 #### H4 · Policy
 
 - **Expected** Tiering avoids more historically liquidating loans, lowers tier-A collateral per dollar of debt, and holds total collateral and simulated bad debt at or below uniform.
-- **Basis** Uniform accepted 96,345 and tiering accepted 62,092. Tiering avoided 986 historically labelled liquidations and rejected 33,267 good loans. Uniform had zero for both. Collateral locked was USD 44.22 billion uniform and USD 47.13 billion tiered. At −20%, simulated bad debt was USD 64.56 million uniform and USD 121.47 million tiered.
+- **Basis** Uniform accepted 96,345 and tiering accepted 79,296. Tiering avoided 722 labelled liquidations and rejected 16,327 good loans. Uniform had zero for both. Locked collateral was USD 44.22 billion uniform and USD 49.28 billion tiered.
 - **Reject if** Reject if tiering fails to avoid more labelled liquidations or to lower tier-A collateral per debt dollar, raises total locked collateral, or raises bad debt at any specified shock.
 - **If rejected** Report the acceptance and good-loan rejection trade-off and the shock results separately. The pilot fails the total collateral and −20% bad debt conditions.
 
-The simulated pilot draws one shared borrower buffer per loan from Uniform(0, 0.20), seed 11, and adds it to each policy's initial collateral ratio. Debt stays fixed. It evaluates accepted loans with valid USD amounts (95,596 uniform and 61,695 tiered), applies one liquidation call below the maintenance ratio, and uses the 50% close factor and 5% bonus. Bad debt is the positive gap between remaining debt and remaining marked collateral after the call. The same buffer draw is used for every shock.
+The simulated pilot draws one shared borrower buffer per loan from Uniform(0, 0.20), seed 11, and adds it to each policy's initial collateral ratio. Debt stays fixed. It evaluates accepted loans with valid USD amounts (95,596 uniform and 78,703 tiered), applies one liquidation call below the maintenance ratio, and uses the 50% close factor and 5% bonus. Bad debt is the positive gap between remaining debt and remaining marked collateral after the call. The same buffer draw is used for every shock.
 
 | Shock | Policy | Liquidated loans | Seized collateral (USD m) | Bad debt (USD m) |
 | --- | --- | ---: | ---: | ---: |
 | -10% | Uniform | 46,237 | 9,015.35 | 0.00 |
 | -10% | Tiered | 475 | 510.94 | 0.00 |
 | -20% | Uniform | 95,596 | 18,571.60 | 64.56 |
-| -20% | Tiered | 39,660 | 12,203.87 | 121.47 |
+| -20% | Tiered | 50,195 | 12,662.78 | 121.47 |
 | -30% | Uniform | 95,596 | 18,571.60 | 2,833.23 |
-| -30% | Tiered | 61,695 | 17,490.52 | 1,085.32 |
+| -30% | Tiered | 78,703 | 18,244.27 | 1,085.32 |
 | -40% | Uniform | 95,596 | 18,571.60 | 7,608.31 |
-| -40% | Tiered | 61,695 | 17,490.52 | 3,877.05 |
+| -40% | Tiered | 78,703 | 18,244.27 | 3,967.75 |
 
 Table 21. Paired simulated shocks on the priced subset of test loans. See `results/pilot_policy_v2.json`.
 

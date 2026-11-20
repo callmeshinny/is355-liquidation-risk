@@ -20,7 +20,7 @@
 
 | No. | Feedback | Week 4 response | Section |
 | --- | --- | --- | --- |
-| 1 | Percentiles assign high-risk tiers even when prevalence falls | Fixed cutoffs are selected on validation and compared with percentile tiers. To resolve the overlapping extrema, the pilot searches ordered cutoffs on validation and uses A ≤0.75× and C ≥2× prevalence. | 1.2 Step 5, 2.3 |
+| 1 | Percentiles assign high-risk tiers even when prevalence falls | Fixed cutoffs are selected on validation and compared with percentile tiers. To resolve the overlapping extrema, the pilot searches ordered cutoffs on validation and uses A ≤0.75× and C ≥2× prevalence with at most 20% of validation loans in C. | 1.2 Step 5, 2.3 |
 | 2 | Specify loan-to-wallet aggregation and new-wallet terms | The wallet uses its highest open-loan score, with B terms for an unscored or stale wallet. Document the cohort proxy and Sybil limitation. | 1.2 Step 5, 1.3, 2.3 |
 | 3 | Add policy comparison alongside gas | The tiered pool is compared with an Aave V2 launch-style uniform policy using actual outcomes and simulated price shocks. | 1.2 Step 5, 1.3, 2.3 |
 | 4 | Report calibration outside the validation window | Test Brier scores and reliability are measured by quarter. Record the empty local 2024Q3 cohort. | 1.2 Step 4, 2.3 |

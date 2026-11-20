@@ -155,7 +155,7 @@ Table 7. FinSurvival test Brier by quarter.
 
 #### Step 5 · Assign risk tiers
 
-**Purpose** Convert scores to A/B/C. **Input** Calibrated score parquet, outcomes and frozen XGB artifact. **Processing** Fit D1 and percentile rules on validation. Apply feasible rules to test. Aggregate wallet maximum. **Parameters** Validation grid step 0.005. A ≤0.75× prevalence, C ≥2× and ≥30 positives. Require all tiers. Compare p70/p90.
+**Purpose** Convert scores to A/B/C. **Input** Calibrated score parquet, outcomes and frozen XGB artifact. **Processing** Fit D1 and percentile rules on validation. Apply feasible rules to test. Aggregate wallet maximum. **Parameters** Validation grid step 0.005. A ≤0.75× prevalence, C ≥2× prevalence, ≥30 positives and ≤20% validation share. Relax the C rate to 1.5× only if the strict grid has no feasible pair. Require all tiers. Compare p70/p90.
 
 **Libraries / tools** pandas, NumPy, hashlib. **Output** Wallet tiers and model SHA-256/version. The pilot exports fixed tiers.csv and reports the percentile comparator. **Runs** 2026-11-20, seed 11.
 
@@ -170,27 +170,27 @@ compute shares, outcome rates and Wilson intervals
 hash model artifact and export wallet tiers
 ```
 
-Validation prevalence was 4.33%. The former independent A ≤0.5× and C ≥3× extrema overlapped (0.106122 and 0.043348). The revised joint search uses A ≤0.75× and C ≥2× to preserve a low-risk and an elevated-risk tail while requiring ordered cutoffs and a nonempty B. It found τ_A = 0.005 and τ_C = 0.015. Validation A had 0 positives in 289 loans, B had 12,445 loans and C had 666 positives in 6,571 loans (10.14%). A zero observed rate gives an infinite objective. Ties favor greater combined tail coverage, then smaller cutoffs. Percentile cutoffs were 0.020427 and 0.106122.
+Validation prevalence was 4.33%. Ordered cutoffs 0.005 and 0.065 met the strict rule. On validation, C was 16.21% of loans with 541 positives and a 17.28% liquidation rate. The search maximizes C/A, treating zero A rate as infinite. Ties favor combined tail coverage, then smaller cutoffs. Percentile cutoffs were 0.020427 and 0.106122.
 
 | Test cohort | Rule | Tier A | Tier B | Tier C |
 | --- | --- | --- | --- | --- |
-| overall | Fixed | 4.58% / 0.02% [0.00%, 0.13%] | 59.87% / 0.48% [0.43%, 0.54%] | 35.55% / 2.88% [2.71%, 3.06%] |
+| overall | Fixed | 4.58% / 0.02% [0.00%, 0.13%] | 77.73% / 0.72% [0.67%, 0.79%] | 17.70% / 4.23% [3.94%, 4.55%] |
 | overall | Percentile | 64.45% / 0.45% [0.40%, 0.51%] | 19.93% / 1.58% [1.41%, 1.76%] | 15.62% / 4.54% [4.22%, 4.88%] |
-| 2022Q3 | Fixed | 2.52% / 0.00% [0.00%, 0.58%] | 65.85% / 0.46% [0.37%, 0.58%] | 31.63% / 3.72% [3.33%, 4.15%] |
+| 2022Q3 | Fixed | 2.52% / 0.00% [0.00%, 0.58%] | 82.42% / 0.67% [0.57%, 0.79%] | 15.06% / 6.14% [5.43%, 6.94%] |
 | 2022Q3 | Percentile | 68.37% / 0.45% [0.36%, 0.55%] | 18.19% / 1.59% [1.27%, 1.99%] | 13.43% / 6.60% [5.82%, 7.47%] |
-| 2022Q4 | Fixed | 3.70% / 0.11% [0.02%, 0.64%] | 59.55% / 0.94% [0.79%, 1.11%] | 36.75% / 3.73% [3.35%, 4.15%] |
+| 2022Q4 | Fixed | 3.70% / 0.11% [0.02%, 0.64%] | 77.29% / 1.56% [1.39%, 1.75%] | 19.01% / 3.80% [3.28%, 4.40%] |
 | 2022Q4 | Percentile | 63.25% / 0.89% [0.75%, 1.05%] | 19.88% / 3.64% [3.14%, 4.21%] | 16.87% / 3.84% [3.29%, 4.48%] |
-| 2023Q1 | Fixed | 6.10% / 0.00% [0.00%, 0.35%] | 57.49% / 0.26% [0.18%, 0.38%] | 36.42% / 0.91% [0.70%, 1.17%] |
+| 2023Q1 | Fixed | 6.10% / 0.00% [0.00%, 0.35%] | 75.63% / 0.26% [0.19%, 0.36%] | 18.27% / 1.56% [1.19%, 2.04%] |
 | 2023Q1 | Percentile | 63.58% / 0.24% [0.16%, 0.34%] | 20.38% / 0.25% [0.13%, 0.47%] | 16.03% / 1.74% [1.32%, 2.29%] |
-| 2023Q2 | Fixed | 6.48% / 0.00% [0.00%, 0.63%] | 58.96% / 0.31% [0.19%, 0.50%] | 34.56% / 1.90% [1.48%, 2.43%] |
+| 2023Q2 | Fixed | 6.48% / 0.00% [0.00%, 0.63%] | 77.25% / 0.35% [0.24%, 0.51%] | 16.27% / 3.51% [2.69%, 4.56%] |
 | 2023Q2 | Percentile | 65.44% / 0.28% [0.17%, 0.45%] | 20.24% / 0.69% [0.40%, 1.18%] | 14.31% / 3.61% [2.73%, 4.75%] |
-| 2023Q3 | Fixed | 8.56% / 0.00% [0.00%, 0.70%] | 57.18% / 0.14% [0.06%, 0.32%] | 34.26% / 2.99% [2.35%, 3.79%] |
+| 2023Q3 | Fixed | 8.56% / 0.00% [0.00%, 0.70%] | 72.43% / 0.28% [0.17%, 0.48%] | 19.01% / 4.72% [3.66%, 6.06%] |
 | 2023Q3 | Percentile | 65.74% / 0.12% [0.05%, 0.28%] | 18.04% / 0.70% [0.35%, 1.37%] | 16.23% / 5.53% [4.29%, 7.10%] |
-| 2023Q4 | Fixed | 6.77% / 0.00% [0.00%, 0.83%] | 54.08% / 0.08% [0.03%, 0.24%] | 39.15% / 0.98% [0.67%, 1.43%] |
+| 2023Q4 | Fixed | 6.77% / 0.00% [0.00%, 0.83%] | 76.78% / 0.21% [0.12%, 0.38%] | 16.45% / 1.61% [1.02%, 2.53%] |
 | 2023Q4 | Percentile | 60.85% / 0.07% [0.02%, 0.21%] | 24.69% / 0.48% [0.24%, 0.94%] | 14.45% / 1.83% [1.16%, 2.87%] |
-| 2024Q1 | Fixed | 2.66% / 0.00% [0.00%, 2.81%] | 51.99% / 0.35% [0.18%, 0.66%] | 45.35% / 4.54% [3.76%, 5.47%] |
+| 2024Q1 | Fixed | 2.66% / 0.00% [0.00%, 2.81%] | 71.15% / 0.39% [0.23%, 0.66%] | 26.19% / 7.48% [6.17%, 9.03%] |
 | 2024Q1 | Percentile | 54.65% / 0.33% [0.17%, 0.62%] | 22.04% / 0.73% [0.37%, 1.42%] | 23.32% / 8.14% [6.71%, 9.85%] |
-| 2024Q2 | Fixed | 3.61% / 0.00% [0.00%, 7.87%] | 59.34% / 0.68% [0.29%, 1.57%] | 37.05% / 8.87% [6.61%, 11.82%] |
+| 2024Q2 | Fixed | 3.61% / 0.00% [0.00%, 7.87%] | 80.51% / 1.29% [0.76%, 2.20%] | 15.88% / 16.67% [12.12%, 22.48%] |
 | 2024Q2 | Percentile | 62.95% / 0.64% [0.27%, 1.48%] | 23.50% / 3.41% [1.86%, 6.17%] | 13.55% / 18.34% [13.23%, 24.86%] |
 | 2024Q3 | Fixed | — | — | — |
 | 2024Q3 | Percentile | — | — | — |
@@ -200,9 +200,11 @@ Table 8. Held-out loan tier share / liquidation rate [95% Wilson interval]. The 
 | Policy | Accepted | Liquidations avoided | Good loans rejected | Collateral locked (USD) |
 | --- | ---: | ---: | ---: | ---: |
 | uniform | 96,345 | 0 | 0 | 44,218,089,861.50 |
-| tiered | 62,092 | 986 | 33,267 | 47,128,047,527.86 |
+| tiered | 79,296 | 722 | 16,327 | 49,281,618,994.69 |
 
 Table 9. Uniform and fixed-tier D3a on the same loans. USD totals use 95,596 loans with valid origination USD.
+
+The cap reduced good-loan rejections from 33,267 to 16,327. Labelled liquidations avoided fell from 986 to 722. For every avoided liquidation, the capped policy rejected about 22.6 good loans, compared with 33.7 before the cap.
 
 #### Step 6 · Register model and write scores
 

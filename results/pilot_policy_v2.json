@@ -39,12 +39,12 @@
       ]
     },
     "tiered": {
-      "accepted": 62092,
-      "rejected": 34253,
-      "liquidations_avoided": 986,
-      "good_loans_rejected": 33267,
-      "capital_locked_usd": 47128047527.85721,
-      "n_priced_accepted": 61695,
+      "accepted": 79296,
+      "rejected": 17049,
+      "liquidations_avoided": 722,
+      "good_loans_rejected": 16327,
+      "capital_locked_usd": 49281618994.69025,
+      "n_priced_accepted": 78703,
       "simulated_shocks": [
         {
           "shock": -0.1,
@@ -54,21 +54,21 @@
         },
         {
           "shock": -0.2,
-          "liquidated_loans": 39660,
-          "liquidated_collateral_usd": 12203868871.96613,
+          "liquidated_loans": 50195,
+          "liquidated_collateral_usd": 12662775478.249477,
           "bad_debt_usd": 121474082.25474074
         },
         {
           "shock": -0.3,
-          "liquidated_loans": 61695,
-          "liquidated_collateral_usd": 17490518330.129353,
-          "bad_debt_usd": 1085320397.053439
+          "liquidated_loans": 78703,
+          "liquidated_collateral_usd": 18244268343.520916,
+          "bad_debt_usd": 1085320397.0534391
         },
         {
           "shock": -0.4,
-          "liquidated_loans": 61695,
-          "liquidated_collateral_usd": 17490518330.129353,
-          "bad_debt_usd": 3877053323.838836
+          "liquidated_loans": 78703,
+          "liquidated_collateral_usd": 18244268343.520916,
+          "bad_debt_usd": 3967749094.6979704
         }
       ]
     }
@@ -83,7 +83,7 @@
     "B": 1.5
   },
   "capital_freed_tier_a_usd": 474143664.46634793,
-  "capital_freed_usd": -2909957666.3598785,
+  "capital_freed_usd": -5063529133.192917,
   "simulation": {
     "label": "simulated",
     "seed": 11,

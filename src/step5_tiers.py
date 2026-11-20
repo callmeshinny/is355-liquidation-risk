@@ -17,7 +17,7 @@ from step3_train import INTERIM, MODELS
 RESULT = Path("results/pilot_tiers.json")
 
 
-def fixed_thresholds(val):
+def fixed_thresholds(val, min_c_multiple):
     scores = val.sort_values("p")
     grid = np.arange(1, 201) / 200
     below = np.searchsorted(scores.p.to_numpy(), grid, side="left")
@@ -35,7 +35,9 @@ def fixed_thresholds(val):
         for j in range(i + 1, len(grid)):
             n_c = len(scores) - below[j]
             pos_c = cumulative[-1] - positives[j]
-            if below[j] == n_a or pos_c < 30 or pos_c / n_c < 2 * rate:
+            if below[j] == n_a or 5 * n_c > len(scores) or pos_c < 30:
+                continue
+            if pos_c / n_c < min_c_multiple * rate:
                 continue
             candidates += 1
             rate_c = pos_c / n_c
@@ -89,7 +91,12 @@ def main():
     test = pd.read_parquet(INTERIM / "calibrated_test.parquet")
     if json.loads(Path("results/pilot_calib.json").read_text())["seed"] != args.seed:
         raise ValueError("Run calibration for this seed first")
-    fixed, candidates = fixed_thresholds(val)
+    fixed, candidates = fixed_thresholds(val, 2)
+    strict_candidates = candidates
+    min_c_multiple = 2
+    if fixed is None:
+        min_c_multiple = 1.5
+        fixed, candidates = fixed_thresholds(val, min_c_multiple)
     percentile = tuple(float(v) for v in val.p.quantile([0.7, 0.9]))
     if percentile[0] >= percentile[1]:
         raise ValueError("Validation quantile scores do not define three ordered tiers")
@@ -122,7 +129,8 @@ def main():
     sample.to_csv(f"results/pilot_tiers_sample{suffix}.csv", index=False)
     report = dict(date=date.today().isoformat(), seed=args.seed, tau_A=fixed[0] if fixed else None, tau_C=fixed[1] if fixed else None,
                   fixed_search={"step": 0.005, "feasible_pairs": candidates, "max_A_multiple": 0.75,
-                                "min_C_multiple": 2, "min_C_positives": 30,
+                                "min_C_multiple": min_c_multiple, "min_C_positives": 30,
+                                "max_C_share": 0.20, "strict_feasible_pairs": strict_candidates,
                                 "objective": "Maximize C/A; zero A rate gives infinite ratio. Then maximize tail coverage and prefer lower cutoffs."},
                   export_rule=export_rule,
                   fit_split="val", validation_liquidation_rate=float(val.label.mean()),
