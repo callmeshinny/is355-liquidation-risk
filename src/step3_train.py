@@ -51,10 +51,10 @@ def feature_names(columns, branch):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--model", required=True, choices=["B_LR", "B_XGB", "O_LR", "O_XGB"])
+    parser.add_argument("--model", required=True, choices=["B_LR", "B_XGB", "O_LR", "O_XGB", "B_XGB_noPCA"])
     parser.add_argument("--seed", type=int, default=11)
     args = parser.parse_args()
-    branch, algorithm = args.model.split("_")
+    branch, algorithm = args.model.split("_")[:2]
     frames = {s: pd.read_parquet(INTERIM / f"fin_{s}.parquet") for s in SPLITS}
     cols = feature_names(frames["train_core"].columns, branch)
     x = {s: frames[s][cols].replace([np.inf, -np.inf], 0).to_numpy() for s in SPLITS}
@@ -62,10 +62,11 @@ def main():
     started = perf_counter()
     if algorithm == "LR":
         x = {s: np.sign(a) * np.log1p(np.abs(a)) for s, a in x.items()}
-    if branch == "B" or algorithm == "LR":
+    use_pca = branch == "B" and args.model != "B_XGB_noPCA"
+    if use_pca or algorithm == "LR":
         scaler = StandardScaler().fit(x["train_core"])
         x = {s: scaler.transform(a) for s, a in x.items()}
-    if branch == "B":
+    if use_pca:
         pca = PCA(n_components=0.95, svd_solver="full").fit(x["train_core"])
         x = {s: pca.transform(a) for s, a in x.items()}
     if algorithm == "LR":

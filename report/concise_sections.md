@@ -62,7 +62,7 @@ Appendix C supplies inputs, prerequisites, procedures, expected outcomes and pas
 
 | Hypothesis | Expected and evidence | Reject condition and response |
 | --- | --- | --- |
-| H1 | Paired lower AUC bound > −0.02. Pilot means 0.8033 versus 0.7020. | At or below −0.02, inspect matched feature and PCA ablations. |
+| H1 | Paired lower AUC bound > −0.02. Pilot means 0.8033 proposed, 0.7020 with PCA, and 0.8091 without PCA on all eligible features. | At or below −0.02, inspect matched feature and PCA ablations. |
 | H2 | Lower calibrated Brier. Seed 11 measured 0.01636 versus 0.06409 raw. | If the upper difference bound is nonnegative, compare quarterly calibration maps. |
 | H3 | Ordered tier liquidation rates and disjoint intervals. D1 pilot extrema overlap. | If feasible cutoffs fail separation, report results. For infeasible cutoffs, mark the test unevaluable. |
 | H4 | Tier A requires five percentage points less collateral than uniform. | If savings fail or rejection efficiency is undefined, report counts and collateral separately. |

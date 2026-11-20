@@ -206,5 +206,82 @@
         ]
       }
     }
+  },
+  "B_XGB_noPCA": {
+    "11": {
+      "date": "2026-11-20",
+      "seed": 11,
+      "n_features_in": 147,
+      "n_features_model": 147,
+      "fit_seconds": 2.761,
+      "auc": {
+        "inner_val": 0.8448152045078067,
+        "val": 0.8250022150138563,
+        "test": 0.8243050994294797
+      },
+      "config": {
+        "n_estimators": 1000,
+        "learning_rate": 0.05,
+        "max_depth": 6,
+        "min_child_weight": 5,
+        "subsample": 0.8,
+        "colsample_bytree": 0.8,
+        "eval_metric": "auc",
+        "early_stopping_rounds": 50,
+        "n_jobs": 4,
+        "scale_pos_weight": 12.03179158847555
+      },
+      "best_iteration": 145
+    },
+    "22": {
+      "date": "2026-11-20",
+      "seed": 22,
+      "n_features_in": 147,
+      "n_features_model": 147,
+      "fit_seconds": 3.001,
+      "auc": {
+        "inner_val": 0.8271441301709703,
+        "val": 0.8475766388317576,
+        "test": 0.8030202691804363
+      },
+      "config": {
+        "n_estimators": 1000,
+        "learning_rate": 0.05,
+        "max_depth": 6,
+        "min_child_weight": 5,
+        "subsample": 0.8,
+        "colsample_bytree": 0.8,
+        "eval_metric": "auc",
+        "early_stopping_rounds": 50,
+        "n_jobs": 4,
+        "scale_pos_weight": 12.03179158847555
+      },
+      "best_iteration": 114
+    },
+    "33": {
+      "date": "2026-11-20",
+      "seed": 33,
+      "n_features_in": 147,
+      "n_features_model": 147,
+      "fit_seconds": 2.217,
+      "auc": {
+        "inner_val": 0.8380173756564688,
+        "val": 0.8317669126670554,
+        "test": 0.8000202616976593
+      },
+      "config": {
+        "n_estimators": 1000,
+        "learning_rate": 0.05,
+        "max_depth": 6,
+        "min_child_weight": 5,
+        "subsample": 0.8,
+        "colsample_bytree": 0.8,
+        "eval_metric": "auc",
+        "early_stopping_rounds": 50,
+        "n_jobs": 4,
+        "scale_pos_weight": 12.03179158847555
+      },
+      "best_iteration": 108
+    }
   }
 }

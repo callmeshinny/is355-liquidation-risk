@@ -3,7 +3,7 @@
 #### H1 · Non-inferiority
 
 - **Expected** Paired XGBoost ΔAUC has a lower 95% confidence bound above −0.02.
-- **Basis** Mean pilot test AUC was 0.8033 (proposed) and 0.7020 (baseline). Pilot LR and XGB baseline results fell outside ±0.02 of the 0.723 and 0.732 targets in [1].
+- **Basis** D5 mean test AUC was 0.8033 for proposed XGBoost, 0.7020 with PCA and 0.8091 with all eligible features and PCA disabled. This matched ablation implicates PCA in the local gap, and the top 15 validation TreeSHAP features were available at origination. Local PCA LR scored 0.6145, versus 0.723 in [1], which uses R glm and a different training and preprocessing protocol. The paper's XGBoost AUC of 0.732 also uses a different fit protocol [1].
 - **Reject if** The lower paired bound is at or below −0.02.
 - **If rejected** Report the result and inspect split, PCA and drift-filter differences using the planned ablations. Keep baseline reproduction status visible.
 
