@@ -1,65 +1,76 @@
 {
-  "date": "2026-11-19",
+  "date": "2026-11-20",
   "seed": 11,
   "model": "O_XGB",
   "fit_split": "val",
+  "platt_method": "Unpenalized logistic regression on clipped raw logits",
   "n": 96345,
   "brier_uncal": 0.06409133970737457,
   "brier_cal": 0.016363417729735374,
+  "brier_platt": 0.015494591556489468,
   "per_quarter": [
     {
       "quarter": "2022Q3",
       "n": 25953,
       "brier_uncal": 0.0569646954536438,
-      "brier_cal": 0.015483839437365532
+      "brier_cal": 0.015483839437365532,
+      "brier_platt": 0.015083453617990017
     },
     {
       "quarter": "2022Q4",
       "n": 23787,
       "brier_uncal": 0.0713864415884018,
-      "brier_cal": 0.02294854074716568
+      "brier_cal": 0.02294854074716568,
+      "brier_platt": 0.022163918241858482
     },
     {
       "quarter": "2023Q1",
       "n": 17899,
       "brier_uncal": 0.06409510970115662,
-      "brier_cal": 0.011617619544267654
+      "brier_cal": 0.011617619544267654,
+      "brier_platt": 0.010469499044120312
     },
     {
       "quarter": "2023Q2",
       "n": 9292,
       "brier_uncal": 0.056575387716293335,
-      "brier_cal": 0.011609785258769989
+      "brier_cal": 0.011609785258769989,
+      "brier_platt": 0.010905327275395393
     },
     {
       "quarter": "2023Q3",
       "n": 6354,
       "brier_uncal": 0.059104230254888535,
-      "brier_cal": 0.013456197455525398
+      "brier_cal": 0.013456197455525398,
+      "brier_platt": 0.01238190196454525
     },
     {
       "quarter": "2023Q4",
       "n": 6808,
       "brier_uncal": 0.06095514073967934,
-      "brier_cal": 0.00959385558962822
+      "brier_cal": 0.00959385558962822,
+      "brier_platt": 0.008604640141129494
     },
     {
       "quarter": "2024Q1",
       "n": 5005,
       "brier_uncal": 0.09185104072093964,
-      "brier_cal": 0.02531619928777218
+      "brier_cal": 0.02531619928777218,
+      "brier_platt": 0.022534240037202835
     },
     {
       "quarter": "2024Q2",
       "n": 1247,
       "brier_uncal": 0.06032378226518631,
-      "brier_cal": 0.028435630723834038
+      "brier_cal": 0.028435630723834038,
+      "brier_platt": 0.02837817557156086
     },
     {
       "quarter": "2024Q3",
       "n": 0,
       "brier_uncal": null,
-      "brier_cal": null
+      "brier_cal": null,
+      "brier_platt": null
     }
   ],
   "shap_rows": 2000,
@@ -76,5 +87,5 @@
     "dayOfMonth": 0.14644549787044525,
     "userBorrowAvgAmountETH": 0.1401490867137909
   },
-  "elapsed_seconds": 2.072
+  "elapsed_seconds": 40.814
 }

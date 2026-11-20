@@ -3,7 +3,7 @@ Legend: `[ ]` todo · `[x]` done → evidence · `[⚠]` failed/skipped + reason
 Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "planned, not yet run", move on.
 
 ## STATUS (agent updates after every item)
-- Next item: R6
+- Next item: R4–R6 final gate
 - Last gate: P6 checker PASS (0 FAIL, 0 WARN for 1.2,2). Rebuilt DOCX passed ZIP and text checks. Full linter warns about estimated length.
 - Blockers: Historical open-loan membership unavailable. 2024Q3 has no test rows. [⚠] DOCX visual verification requires LibreOffice; page count unverified.
 
@@ -80,4 +80,4 @@ Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "plann
 - **Gate P6:** `python tools/check_report.py --only 1.2,2 && bash tools/build_docx.sh` → PASS. DOCX rebuilt; [⚠] page rendering unavailable (missing soffice).
 - [x] R4 Complete scenario cards and compact T7 → report/sections/23_scenarios.md. Twenty eight-field cards, each no more than 90 words.
 - [x] R5 Fix presentation and contract transitions → Part A, matching Figure 1 labels, section 1.3 and plain-text formulas verified.
-- [ ] R6 Complete step detail, runtime estimates and pilot manifest.
+- [x] R6 Complete steps, runtimes and pilot manifest → all 46 KS drops, Optuna compute estimate and validation-only Platt comparison in results/pilot_calib.json.

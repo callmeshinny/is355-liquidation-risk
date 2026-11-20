@@ -9,7 +9,9 @@ from time import perf_counter
 import numpy as np
 import pandas as pd
 from sklearn.isotonic import IsotonicRegression
+from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import brier_score_loss
+from scipy.special import logit
 from xgboost import DMatrix, XGBClassifier
 
 from step3_train import INTERIM, MODELS, feature_names
@@ -28,7 +30,13 @@ def brier(frame):
     n = len(frame)
     return dict(n=n,
                 brier_uncal=float(brier_score_loss(frame.label, frame.p_raw)) if n else None,
-                brier_cal=float(brier_score_loss(frame.label, frame.p)) if n else None)
+                brier_cal=float(brier_score_loss(frame.label, frame.p)) if n else None,
+                brier_platt=float(brier_score_loss(frame.label, frame.p_platt)) if n else None)
+
+
+def raw_margins(frame):
+    eps = np.finfo(np.float32).eps
+    return logit(np.clip(frame.p_raw.to_numpy(), eps, 1 - eps)).reshape(-1, 1)
 
 
 def main():
@@ -38,8 +46,10 @@ def main():
     started = perf_counter()
     val, test = (scored_split(s, args.seed) for s in ("val", "test"))
     calibrator = IsotonicRegression(out_of_bounds="clip", y_min=0, y_max=1).fit(val.p_raw, val.label)
+    platt = LogisticRegression(C=np.inf).fit(raw_margins(val), val.label)
     for split, frame in (("val", val), ("test", test)):
         frame["p"] = calibrator.predict(frame.p_raw)
+        frame["p_platt"] = platt.predict_proba(raw_margins(frame))[:, 1]
         columns = ["id", "label", "timestamp", "user", "p_raw", "p"]
         if "amountUSD" in frame:
             columns.append("amountUSD")
@@ -48,7 +58,7 @@ def main():
     reliability = []
     cohorts = [("overall", test), *((str(q), test.loc[test.quarter.eq(q)]) for q in QUARTERS)]
     for cohort, frame in cohorts:
-        for name, col in (("raw", "p_raw"), ("isotonic", "p")):
+        for name, col in (("raw", "p_raw"), ("isotonic", "p"), ("platt", "p_platt")):
             bins = pd.cut(frame[col], np.linspace(0, 1, 11), include_lowest=True)
             for interval, group in frame.groupby(bins, observed=False):
                 reliability.append(dict(cohort=cohort, score=name, bin=str(interval), n=len(group),
@@ -77,7 +87,7 @@ def main():
         method = "XGBoost native TreeSHAP (vector intercept compatibility)"
     ranking = pd.Series(np.abs(values).mean(axis=0), index=cols).nlargest(10)
     report = dict(date=date.today().isoformat(), seed=args.seed, model="O_XGB",
-                  fit_split="val", **brier(test),
+                  fit_split="val", platt_method="Unpenalized logistic regression on clipped raw logits", **brier(test),
                   per_quarter=[dict(quarter=name, **brier(frame)) for name, frame in cohorts[1:]],
                   shap_rows=len(sample), shap_method=method, shap_top10=ranking.to_dict(),
                   elapsed_seconds=round(perf_counter() - started, 3))

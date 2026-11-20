@@ -2,6 +2,8 @@
 
 The unit of repetition is a fit, guard case, transaction, fresh deployment or simulation draw. ML shares splits and seeds 11, 22, 33, 44 and 55. Optuna uses 50 inner-validation trials per variant.
 
+**Optuna compute estimate.** Four primary FinSurvival variants and Taiwan XGBoost make 5 models. The model-weighted mean pilot fit time is 2.675 s. Serial estimate = 50 trials × 5 models × 5 seeds × 2.675 s = 3,344 s (55.7 min), excluding trial overhead, scoring and extra ablations.
+
 | Scenarios | Unit | Plan versus minimum and reason | Aggregation | Expected elapsed time |
 | --- | --- | --- | --- | --- |
 | T1-01 | Baseline fit or LR bootstrap draw | Five XGB fits meet the five-seed minimum. Deterministic LR uses one fit and 1,000 stratified test bootstrap draws | Seed mean and sample SD or LR bootstrap interval | 10 min |
@@ -18,7 +20,7 @@ The unit of repetition is a fit, guard case, transaction, fresh deployment or si
 
 Table 18. Planned run counts, analysis and elapsed-time allowances.
 
-XGB pilot SDs were 0.00224 (baseline) and 0.00411 (proposed), with paired s_d = 0.00566. LR bootstrap SDs were 0.00806 and 0.00739. The paired CI is d̄ ± t(0.975, n−1)·s_d/√n. Expected half-width at n = 5 is 0.00703. Using n ≈ (2.8·s_d/Δ)² gives 2.51 for Δ = 0.01 and 0.63 for Δ = 0.02. Round up and add 1–2. Keep the five-seed minimum because the pilot has three pairs.
+XGB pilot SDs were 0.00224 (baseline) and 0.00411 (proposed), with paired s_d = 0.00566. LR bootstrap SDs were 0.00806 and 0.00739. The mean paired AUC difference is (0.10093 + 0.10712 + 0.09581) / 3 = 0.10129. The paired interval is the mean difference plus or minus the t critical value times the sample SD divided by the square root of the number of pairs. Expected half-width at n = 5 is 0.00703. Using n ≈ (2.8·s_d/Δ)² gives 2.51 for Δ = 0.01 and 0.63 for Δ = 0.02. Round up and add 1–2. Keep the five-seed minimum because the pilot has three pairs.
 
 ### Sepolia budget (planned, not yet run)
 

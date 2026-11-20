@@ -1996,5 +1996,6 @@
   },
   "n_wallets": 21641,
   "n_test_loans": 96345,
+  "elapsed_seconds": 0.36,
   "wallet_scope": "Retrospective cohort proxy. Loan open status is unavailable."
 }

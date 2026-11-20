@@ -6,6 +6,7 @@ import json
 from datetime import date
 from math import sqrt
 from pathlib import Path
+from time import perf_counter
 
 import numpy as np
 import pandas as pd
@@ -83,6 +84,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--seed", type=int, default=11)
     args = parser.parse_args()
+    started = perf_counter()
     val = pd.read_parquet(INTERIM / "calibrated_val.parquet")
     test = pd.read_parquet(INTERIM / "calibrated_test.parquet")
     if json.loads(Path("results/pilot_calib.json").read_text())["seed"] != args.seed:
@@ -126,6 +128,7 @@ def main():
                   fit_split="val", validation_liquidation_rate=float(val.label.mean()),
                   model_version=1, model_sha256=model_hash, rules=rules,
                   n_wallets=len(wallets), n_test_loans=len(test),
+                  elapsed_seconds=round(perf_counter() - started, 3),
                   wallet_scope="Retrospective cohort proxy. Loan open status is unavailable.")
     RESULT.write_text(json.dumps(report, indent=2, allow_nan=False) + "\n")
     print({key: report[key] for key in ("tau_A", "tau_C", "n_wallets", "n_test_loans")})

@@ -10,7 +10,7 @@
 #### H2 · Calibration
 
 - **Expected** Calibrated test Brier is smaller than raw Brier.
-- **Basis** The seed-11 pilot measured 0.01636 after calibration and 0.06409 before it.
+- **Basis** Seed 11 test Brier was 0.06409 raw, 0.01636 isotonic and 0.01549 Platt. Class weighting emphasizes positives during training, which pushes raw probabilities upward relative to the observed event prevalence and inflates raw Brier. Both maps were fitted on validation.
 - **Reject if** The upper bound of the paired 95% interval for calibrated minus raw Brier is zero or positive.
 - **If rejected** Report raw, isotonic and Platt results by quarter and examine validation-to-test prevalence shift.
 
@@ -53,7 +53,7 @@ Table 21. Paired simulated shocks on the priced subset of test loans. See `resul
 #### H6 · Taiwan transfer
 
 - **Expected** ROC AUC is in the 0.760–0.810 planning range.
-- **Basis** The seed-11 pilot measured 0.7834. The chart-based range in [3] is approximately 0.68–0.71 and uses its own evaluation setup.
+- **Basis** The seed-11 pilot measured 0.7834 on the local stratified Taiwan split with sex and marital status excluded, class-weighted XGBoost and early stopping within training. These choices can change the fitted ranking and evaluated cases relative to the random-forest AutoML pipeline reported in [3]. A matched replication would be needed to attribute the gap.
 - **Reject if** The full estimate falls outside the expected range on the frozen evaluation protocol.
 - **If rejected** Audit the split, feature exclusions and training variance. Document differences from the paper protocol.
 

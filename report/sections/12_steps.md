@@ -26,7 +26,7 @@ fetch UCI 350 and write interim parquet and schema counts
 
 All 259,886 local labels matched features, yielding 269,546 joined rows after repeat matches. The source has 4,650 fewer test labels than Week 3, which reported those labels as unmatched.
 
-| Source split | Raw features | All-null removed | Exogenous removed | Non-shared removed |
+| Source split | Raw features | All-null removed | External covariates removed | Non-shared removed |
 | --- | ---: | ---: | ---: | ---: |
 | train | 128 | 12 | 0 | 0 |
 | test | 128 | 12 | 0 | 0 |
@@ -41,7 +41,7 @@ After loader checks, 116 features remain. Taiwan loaded 30,000 clients, 23 featu
 | --- | --- |
 | Purpose | Prepare leak-resistant inputs. |
 | Input | Interim parquet and D5 calendar. |
-| Processing | Deduplicate transactions, label, purge and encode. Record KS drops for O variants. |
+| Processing | Deduplicate transactions, label, purge and encode. Record proposed-model drops using the Kolmogorov–Smirnov (KS) statistic. |
 | Parameters | 17.43 days, D5 windows, D ≥ 0.15, Taiwan seed 11. |
 | Libraries / tools | pandas, SciPy, scikit-learn, pyarrow. |
 | Output | Split parquet (example: fin_train_core.parquet) and feature-rule manifest. |
@@ -57,13 +57,13 @@ label observed events within 17.43 days as positive
 label later observations as negative and discard short censored records
 split by UTC start date and purge D5 gaps
 fit categories on train_core
-compare train_core and inner validation with KS
+flag numeric features with train_core versus inner validation KS D at or above the cutoff
 transform all folds with frozen rules
 ```
 
-D5 replaces the Week 3 moving cutoff with two purged gaps. Inner-val ends 2022-03-14, calibration val ends 2022-06-30 and test starts 2022-07-01. The actual test ends 2024-05-07. Taiwan drops SEX and MARRIAGE before stratified splitting.
+D5 replaces the Week 3 moving cutoff with two purged gaps. The inner validation fold ends 2022-03-14, calibration val ends 2022-06-30 and test starts 2022-07-01. The actual test ends 2024-05-07. Taiwan drops SEX and MARRIAGE before stratified splitting.
 
-| FinSurvival split | Rows | Positive rate | Observed UTC dates |
+| FinSurvival fold | Rows | Positive rate | Observed UTC dates |
 | --- | ---: | ---: | --- |
 | train_core | 118,055 | 7.67% | 2020-12-01 to 2021-11-26 |
 | inner_val | 10,638 | 5.99% | 2021-12-15 to 2022-03-14 |
@@ -82,6 +82,27 @@ Table 5. Taiwan pilot split counts.
 
 Removed 13,819 joined rows with repeated IDs, representing 4,159 source rows, and 4,556 rows during labelling. Before purging 6,828 rows, 251,171 remained with 4.81% positives, matching Week 3. KS flagged 46 numeric features.
 
+| Dropped feature (D) | Dropped feature (D) | Dropped feature (D) |
+| --- | --- | --- |
+| borrowRate (0.40481) | userSecondsSinceFirstTransaction (0.32442) | userBorrowAvgAmountUSD (0.16052) |
+| marketCollateralCount (0.95954) | marketDepositCount (0.96822) | marketDepositAvgAmount (0.95278) |
+| marketDepositSum (0.39857) | marketDepositAvgAmountUSD (0.93619) | marketDepositSumUSD (0.35849) |
+| marketDepositAvgAmountETH (0.95650) | marketDepositSumETH (0.30556) | marketWithdrawCount (0.86506) |
+| marketWithdrawAvgAmount (0.91356) | marketWithdrawSum (0.64778) | marketWithdrawAvgAmountUSD (0.88221) |
+| marketWithdrawSumUSD (0.40575) | marketWithdrawAvgAmountETH (0.91647) | marketWithdrawSumETH (0.37987) |
+| marketBorrowCount (0.95595) | marketBorrowAvgAmount (0.60867) | marketBorrowSum (0.64386) |
+| marketBorrowAvgAmountUSD (0.69632) | marketBorrowSumUSD (0.64375) | marketBorrowAvgAmountETH (0.42474) |
+| marketBorrowSumETH (0.69006) | marketRepayCount (0.58686) | marketRepayAvgAmount (0.84588) |
+| marketRepaySum (0.38776) | marketRepayAvgAmountUSD (0.83307) | marketRepaySumUSD (0.38448) |
+| marketRepayAvgAmountETH (0.46280) | marketRepaySumETH (0.31501) | marketSwapCount (0.88608) |
+| marketLiquidationCount (0.70087) | marketLiquidationAvgAmount (0.22057) | marketLiquidationSum (0.51510) |
+| marketLiquidationAvgAmountUSD (0.22807) | marketLiquidationSumUSD (0.51465) | marketLiquidationAvgAmountETH (0.53013) |
+| marketLiquidationSumETH (0.38131) | dayOfYear (0.57617) | quarter (0.54472) |
+| sinDayOfYear (0.32774) | cosDayOfYear (0.67497) | sinQuarter (0.54472) |
+| cosQuarter (0.60419) | — | — |
+
+Table 6. Numeric feature exclusions from the training-to-inner-validation KS check.
+
 Example loan: 2020-12-01, event status 0, observed 576.465 days, label 0.
 
 #### Step 3 · Train baseline and proposed models
@@ -99,15 +120,16 @@ The B prefix identifies baseline variants and O identifies proposed variants. LR
 | Runs | 2026-11-19. XGB seeds 11/22/33. LR seed 11 and 1,000 bootstrap draws. |
 | Correctness check | Check model/seed coverage and paired test AUC. |
 | Errors & edge cases | Replace nonfinite features with zero. Paper reproduction tolerance ±0.02 AUC. |
-| Est. run time | Measured mean fit times below. |
+| Est. run time | Mean XGBoost fit times were 3.61 s baseline, 3.10 s proposed and 2.66 s without PCA. |
 | Improvement | I2 isolates the proposed feature pipeline. I4 checks Taiwan. |
 
 ```text
-fit scaling and PCA for baseline using train_core
-fit LR on train_core
-early-stop XGB on inner validation
-score frozen models on evaluation folds
-compare paired XGB seeds and bootstrap LR test AUC
+select eligible features and apply the drift list for proposed variants
+replace nonfinite values with zero and apply signed log1p for LR
+fit required scaling and baseline PCA on train_core only
+fit LR on train_core or early-stop XGBoost on inner validation
+freeze the model and score validation and test
+record fit time, AUC, paired seed differences and LR bootstrap intervals
 ```
 
 | Model | Seeds | Mean inner validation AUC | Mean val AUC | Mean test AUC | Mean fit (s) |
@@ -127,25 +149,26 @@ Paper deviations were −0.1085 (LR) and −0.0300 (XGB), both outside ±0.02 [1
 | --- | --- |
 | Purpose | Calibrate risk and explain model output. |
 | Input | Frozen XGB artifact and validation/test score parquet. |
-| Processing | Fit isotonic on val. Compare raw and frozen mapped scores on test. Rank TreeSHAP. |
+| Processing | Fit isotonic and Platt on calibration validation. Compare frozen maps and raw probabilities on test. Rank TreeSHAP. |
 | Parameters | Ten reliability bins, 2,000 test loans, seed 11. |
 | Libraries / tools | scikit-learn, XGBoost TreeSHAP, pandas. |
 | Output | Calibrated score parquet (example: calibrated_test.parquet), Brier, reliability bins and SHAP top ten. |
-| Runs | 2026-11-19, seed 11. Multi-seed H2 planned, not yet run. |
+| Runs | 2026-11-20, seed 11. Multi-seed H2 planned, not yet run. |
 | Correctness check | Verify matching pools and validation-only fit. |
 | Errors & edge cases | Empty quarters have undefined Brier. TreeSHAP describes raw output. |
-| Est. run time | 2.1 s pilot. |
+| Est. run time | 40.81 s measured including isotonic, Platt, reliability and SHAP. |
 | Improvement | I1 and D4 add calibration, interpretation and quarterly checks. |
 
 ```text
-fit isotonic(raw_val, label_val)
-apply frozen mapping to validation and test scores
+fit isotonic on raw validation probabilities
+fit Platt on validation logits and outcomes
+apply frozen maps to validation and test scores
 compare raw and calibrated Brier by quarter
 sample 2,000 test loans at seed 11
 rank mean absolute TreeSHAP contributions
 ```
 
-Overall Brier changed from 0.06409 to 0.01636. The SHAP ranking is `userLiquidationCount`, `userDepositAvgAmountUSD`, `cosDayOfQuarter`, `userBorrowCount`, `userDepositAvgAmountETH`, `priceInUSD`, `userActiveDaysYearly`, `userActiveDaysWeekly`, `dayOfMonth`, `userBorrowAvgAmountETH`.
+Overall test Brier was 0.06409 raw, 0.01636 isotonic and 0.01549 Platt. The SHAP ranking is `userLiquidationCount`, `userDepositAvgAmountUSD`, `cosDayOfQuarter`, `userBorrowCount`, `userDepositAvgAmountETH`, `priceInUSD`, `userActiveDaysYearly`, `userActiveDaysWeekly`, `dayOfMonth`, `userBorrowAvgAmountETH`.
 
 | Quarter | Loans | Raw Brier | Calibrated Brier |
 | --- | ---: | ---: | ---: |
@@ -174,7 +197,7 @@ Table 7. FinSurvival test Brier by quarter.
 | Runs | 2026-11-20, seed 11. |
 | Correctness check | Verify cutoff order, hash and partition totals. |
 | Errors & edge cases | Pilot uses cohort wallets because open-loan status is unavailable. |
-| Est. run time | Measure export latency during integration. |
+| Est. run time | 0.36 s measured for cutoff search, test summaries and export. |
 | Improvement | I1 adds fixed-risk tier rules. |
 
 ```text
@@ -233,7 +256,7 @@ Table 9. Uniform and fixed-tier D3a on the same loans. USD totals use 95,596 loa
 | Runs | 2026-11-19. Ten batches each for 1, 10 and 100 synthetic wallets. |
 | Correctness check | Check version, hash, reads and guard messages. |
 | Errors & edge cases | Missing/stale tiers fall back to B. Check receipt before retry. |
-| Est. run time | Sepolia timing planned, not yet run. |
+| Est. run time | Expected seconds = (1 registration + batches) × seconds per receipt, plus upload and reconciliation. Use the Sepolia median planning range in Section 2.5 for serial receipts. |
 | Improvement | I3 stores tier and model identifiers. |
 
 ```text
@@ -257,7 +280,7 @@ reconcile receipts and effective tier lookups
 | Runs | T3/T4 plus 200 generated boundary cases. |
 | Correctness check | Match balances, snapshots and guard messages. |
 | Errors & edge cases | Reject unsafe amounts and transitions. Bad-debt settlement planned. |
-| Est. run time | Record local gas and future Sepolia latency separately. |
+| Est. run time | Expected seconds = serial transactions × seconds per receipt, plus scenario setup. Measure local and Sepolia receipts separately. |
 | Improvement | I3 enforces policy on-chain. |
 
 ```text
@@ -282,7 +305,7 @@ reconcile balances and emit the position event
 | Runs | Local pilots measured. Three full runs planned, not yet run. |
 | Correctness check | Match counts, digest, price, health and events. |
 | Errors & edge cases | Keep synthetic and percentile inputs labelled. Fixed export unavailable. |
-| Est. run time | Log wall time and future testnet median/p95. |
+| Est. run time | Expected seconds = deployment + score upload + loan and price receipts + dashboard checks. Sum these durations across fresh runs. |
 | Improvement | I3 links model outputs to contract evidence. |
 
 ```text

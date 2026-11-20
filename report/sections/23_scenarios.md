@@ -43,7 +43,7 @@
 
 ##### T2-03 · Calibration ablation
 
-**Objective** Compare calibration maps. **Preconditions** Freeze raw model. **Input data** Validation and test scores and outcomes. **Steps** Fit both maps on calibration validation. Evaluate raw, isotonic and Platt probabilities on the same frozen test rows. **Expected result** Lower Brier indicates improvement. **Pass criterion** Report paired Brier, intervals and reliability. Apply H2 to isotonic. **Runs & environment** Python. Five seeds per setting. **Evidence** Pilot calibration JSON covers raw and isotonic.
+**Objective** Compare calibration maps. **Preconditions** Freeze raw model. **Input data** Validation and test scores and outcomes. **Steps** Fit both maps on calibration validation. Evaluate raw, isotonic and Platt probabilities on the same frozen test rows. **Expected result** Lower Brier indicates improvement. **Pass criterion** Report paired Brier, intervals and reliability. Apply H2 to isotonic. **Runs & environment** Python. Five seeds per setting. **Evidence** Pilot calibration JSON covers all three settings.
 
 ##### T2-04 · KS threshold sensitivity
 
