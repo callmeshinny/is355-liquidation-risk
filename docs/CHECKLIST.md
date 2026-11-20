@@ -3,8 +3,8 @@ Legend: `[ ]` todo · `[x]` done → evidence · `[⚠]` failed/skipped + reason
 Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "planned, not yet run", move on.
 
 ## STATUS (agent updates after every item)
-- Next item: R7–R12 final gate
-- Last gate: R4–R6 PASS (0 FAIL, 1 source-length WARN). Word shows 16 main-body pages and 44 pages total.
+- Next item: P5.6 (human submission)
+- Last gate: R7–R12 PASS (0 FAIL, 1 source-length WARN). Word shows 18 main-body pages (2–19) and 21 pages total.
 - Blockers: Historical open-loan membership unavailable. 2024Q3 has no test rows. [⚠] Word verified pagination. Page-by-page rendering was unavailable.
 
 ---
@@ -68,7 +68,7 @@ Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "plann
 - [x] P5.3 `30_next.md`, `90_refs.md` (CONTEXT §12), `95_appendix.md` (pilot table). → Next steps, six IEEE references and Appendix A; full checker has 0 FAIL
 - [x] P5.4 `bash tools/build_docx.sh` → `out/6_BC_IS355_Week4_Project.docx`. → Pandoc built and ZIP integrity verified for out/6_BC_IS355_Week4_Project.docx
 - [x] P5.5 Full check + self-review: `.venv/bin/python tools/check_report.py` → 0 FAIL. Then write `results/rubric_review.md`: per rubric row (CONTEXT §7) score 0–100% with the weakest point; fix the 2 weakest; rebuild. → results/rubric_review.md; two weakest rubric rows revised, DOCX rebuilt and 18 body pages verified in Word
-- [ ] 👤 P5.6 Open docx in Word: fill members' tasks/shares, check 12–18 pages, figures readable, export PDF if wanted, submit on Moodle (Exercise 4). Confirm lecturer access to the repository.
+- [ ] 👤 P5.6 Review figures and layout in Word, export PDF if wanted, and submit on Moodle (Exercise 4). Confirm lecturer access to the repository.
 - **Gate P5:** `.venv/bin/python tools/check_report.py && test -f out/6_BC_IS355_Week4_Project.docx`
 
 ## P6 · Review fixes
@@ -88,3 +88,4 @@ Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "plann
 - [x] R10 Cap tier C and rerun tiers and policy → validation C share 16.21%, strict constraint feasible, cutoffs 0.005 and 0.065.
 - [x] R11 Normalize shock outcomes → priced accepted denominators and corrected USD 64.56 m in section 2.5.
 - [x] R12 Explain calibration, Taiwan results and wallet proxy → seed-11 H7 rejected; Taiwan seeds 11, 22 and 33 recorded.
+- **R7–R12 final gate:** Full checker 0 FAIL; DOCX opened in Word, References start on page 20. Main body has 9,717 words by DOCX text extraction. [⚠] LibreOffice unavailable for page-by-page rendering.

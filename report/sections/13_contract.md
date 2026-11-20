@@ -41,7 +41,7 @@ Table 11. Fresh-wallet batch gas using deterministic synthetic inputs on 2026-11
 
 #### State machine
 
-![Loan state machine](figures/state_machine.png)
+![Loan state machine](figures/state_machine.png){width=78%}
 
 Figure 2. Loan state transitions at the current collateral price.
 

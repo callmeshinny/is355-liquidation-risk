@@ -32,17 +32,22 @@ def size(run, half_points):
 def style_xml(content):
     xml = minidom.parseString(content)
     defaults = xml.getElementsByTagName("w:docDefaults")[0]
-    size(child(child(defaults, "rPrDefault"), "rPr"), 22)
+    size(child(child(defaults, "rPrDefault"), "rPr"), 21)
     normal = child(child(defaults, "pPrDefault"), "pPr")
-    apply(child(normal, "spacing"), after=28, line=240, lineRule="auto")
+    apply(child(normal, "spacing"), after=12, line=240, lineRule="auto")
     styles = {style.getAttribute("w:styleId"): style for style in xml.getElementsByTagName("w:style")}
-    for level, before, after in [(1, 160, 70), (2, 125, 55), (3, 100, 45), (4, 80, 30)]:
-        paragraph = child(styles[f"Heading{level}"], "pPr")
+    for level, before, after, points in [(1, 100, 50, 30), (2, 80, 40, 26), (3, 70, 35, 24),
+                                         (4, 65, 25, 22), (5, 50, 20, 21)]:
+        heading = styles.get(f"Heading{level}")
+        if heading is None:
+            continue
+        size(child(heading, "rPr"), points)
+        paragraph = child(heading, "pPr")
         child(paragraph, "keepNext", first=True)
         apply(child(paragraph, "spacing"), before=before, after=after)
     code = styles["SourceCode"]
     ppr = child(code, "pPr")
-    apply(child(ppr, "spacing"), before=20, after=30, line=240, lineRule="auto")
+    apply(child(ppr, "spacing"), before=20, after=18, line=240, lineRule="auto")
     size(child(code, "rPr"), 20)
     return xml.toxml(encoding="UTF-8")
 
@@ -50,7 +55,7 @@ def style_xml(content):
 def document_xml(content):
     xml = minidom.parseString(content)
     for section in xml.getElementsByTagName("w:sectPr"):
-        apply(child(section, "pgMar"), top=1008, right=1008, bottom=1008, left=1008)
+        apply(child(section, "pgMar"), top=792, right=792, bottom=792, left=792)
     for paragraph in xml.getElementsByTagName("w:p"):
         entries = paragraph.getElementsByTagName("w:t")
         title = "".join(entry.firstChild.data for entry in entries if entry.firstChild)

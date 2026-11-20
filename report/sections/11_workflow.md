@@ -4,7 +4,7 @@
 
 ### 1.1. Updated workflow diagram
 
-![Eight-step project workflow](figures/workflow.png)
+![Eight-step project workflow](figures/workflow.png){width=93%}
 
 Figure 1. Frozen scores cross the on-chain boundary as wallet tiers and model identifiers. Raw features, probabilities and Shapley additive explanations (SHAP) stay off-chain.
 

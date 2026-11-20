@@ -17,6 +17,6 @@ Table 20. Week 5–9 schedule by owner.
 
 M1 means all T3 checks pass on Anvil. M2 freezes the configuration and leaves test for evaluation. M3 closes execution with raw results and explicit records of unavailable scenarios. M4 is the final analyzed draft. The plan allocates 40 working hours plus 10 buffer hours, so buffer is 10/50 = 20% of total capacity.
 
-![Week 5 to Week 9 Gantt chart](figures/gantt.png)
+![Week 5 to Week 9 Gantt chart](figures/gantt.png){width=88%}
 
 Figure 3. Work windows, milestone deadlines and reserved time.

@@ -45,7 +45,7 @@ flag numeric features with train_core versus inner validation KS D at or above t
 transform all folds with frozen rules
 ```
 
-D5 replaces the Week 3 moving cutoff with two purged gaps. The inner validation fold ends 2022-03-14, calibration val ends 2022-06-30 and test starts 2022-07-01. The actual test ends 2024-05-07. Taiwan drops SEX and MARRIAGE before stratified splitting.
+D5 purges two gaps. Calibration eligibility ends 2022-06-30. Taiwan excludes sex and marital status before stratification.
 
 | FinSurvival fold | Rows | Positive rate | Observed UTC dates |
 | --- | ---: | ---: | --- |
@@ -118,7 +118,7 @@ record fit time, AUC, paired seed differences and LR bootstrap intervals
 
 Table 6. FinSurvival fits from 2026-11-19 and 2026-11-20. B_XGB is the PCA reproduction. B_XGB_noPCA is the H1 baseline.
 
-Paper deviations were −0.1085 (LR) and −0.0300 (XGB), both outside ±0.02 [1]. Taiwan test AUC was 0.7834 at seed 11. Across seeds 11, 22 and 33, proposed minus all-feature no-PCA test AUC was -0.00583 (paired 95% t interval -0.04285 to 0.03118). Mean validation minus test AUC was 0.00807 proposed and 0.02567 baseline. The gap narrowed, but the interval crosses the −0.02 non-inferiority margin.
+PCA reproduction missed the [1] tolerance for LR and XGBoost. For the primary H1 comparison and both validation-to-test gaps, see Section 2.5.
 
 #### Step 4 · Calibrate and explain probabilities
 
@@ -129,12 +129,9 @@ Paper deviations were −0.1085 (LR) and −0.0300 (XGB), both outside ±0.02 [1
 **Correctness check** Verify matching pools and validation-only fit. **Errors & edge cases** Empty quarters have undefined Brier. TreeSHAP describes raw output. **Est. run time** 34.82 s measured including isotonic, Platt, reliability and SHAP. **Improvement** I1 and D4 add calibration, interpretation and quarterly checks.
 
 ```text
-fit isotonic on raw validation probabilities
-fit Platt on validation logits and outcomes
-apply frozen maps to validation and test scores
-compare raw and calibrated Brier by quarter
-sample 2,000 test loans at seed 11
-rank mean absolute TreeSHAP contributions
+fit isotonic and Platt on validation and freeze both maps
+score test quarters and record Brier and reliability
+rank TreeSHAP on the seeded sample
 ```
 
 Overall test Brier was 0.06409 raw, 0.01636 isotonic and 0.01549 Platt. The SHAP ranking is `userLiquidationCount`, `userDepositAvgAmountUSD`, `cosDayOfQuarter`, `userBorrowCount`, `userDepositAvgAmountETH`, `priceInUSD`, `userActiveDaysYearly`, `userActiveDaysWeekly`, `dayOfMonth`, `userBorrowAvgAmountETH`.
@@ -161,14 +158,7 @@ Table 7. FinSurvival test Brier by quarter.
 
 **Correctness check** Verify cutoff order, hash and partition totals. **Errors & edge cases** The wallet cohort proxy takes the maximum score across a wallet’s observed loans in each cohort because historical open-loan membership is unavailable. **Est. run time** 0.36 s measured for cutoff search, test summaries and export. **Improvement** I1 adds fixed-risk tier rules.
 
-```text
-search ordered validation grid for the maximum C/A rate ratio
-calculate comparison quantiles on validation
-freeze feasible rules and score test cohorts
-take wallet maximum across available input loans
-compute shares, outcome rates and Wilson intervals
-hash model artifact and export wallet tiers
-```
+**Procedure** search ordered validation grid for the maximum C/A rate ratio → calculate comparison quantiles on validation → freeze feasible rules and score test cohorts → take wallet maximum across available input loans → compute shares, outcome rates and Wilson intervals → hash model artifact and export wallet tiers.
 
 Validation prevalence was 4.33%. Ordered cutoffs 0.005 and 0.065 met the strict rule. On validation, C was 16.21% of loans with 541 positives and a 17.28% liquidation rate. The search maximizes C/A, treating zero A rate as infinite. Ties favor combined tail coverage, then smaller cutoffs. Percentile cutoffs were 0.020427 and 0.106122.
 
@@ -208,19 +198,13 @@ The cap reduced good-loan rejections from 33,267 to 16,327. Labelled liquidation
 
 #### Step 6 · Register model and write scores
 
-**Purpose** Attach tiers to a registered model. **Input** Wallet tiers, model SHA-256 and version. Fixed-rule export remains blocked. **Processing** Register digest as owner. Write tiers as approved signer. Reconcile receipts. **Parameters** Tiers 1–3, batch ≤100, age ≤30 days.
+**Purpose** Attach tiers to a registered model. **Input** Wallet tiers, model SHA-256 and version. **Processing** Register digest as owner. Write tiers as approved signer. Reconcile receipts. **Parameters** Tiers 1–3, batch ≤100, age ≤30 days.
 
 **Libraries / tools** Vyper, Ape, Anvil and planned oracle keystore. **Output** Registered digest, version, effective tier lookup and ScoreUpdated receipts. **Runs** 2026-11-19. Ten batches each for 1, 10 and 100 synthetic wallets.
 
 **Correctness check** Check version, hash, reads and guard messages. **Errors & edge cases** Missing/stale tiers fall back to B. Check receipt before retry. **Est. run time** Expected seconds = (1 registration + batches) × seconds per receipt, plus upload and reconciliation. Use the Sepolia median planning range in Section 2.5 for serial receipts. **Improvement** I3 stores tier and model identifiers.
 
-```text
-verify digest and proposed model version
-register with owner on the selected local network
-validate wallet and tier inputs
-submit each approved writer batch
-reconcile receipts and effective tier lookups
-```
+**Procedure** verify digest and proposed model version → register with owner on the selected local network → validate wallet and tier inputs → submit each approved writer batch → reconcile receipts and effective tier lookups.
 
 #### Step 7 · Execute the lending policy
 
@@ -230,14 +214,7 @@ reconcile receipts and effective tier lookups
 
 **Correctness check** Match balances, snapshots and guard messages. **Errors & edge cases** Reject unsafe amounts and transitions. Bad-debt settlement planned. **Est. run time** Expected seconds = serial transactions × seconds per receipt, plus scenario setup. Measure local and Sepolia receipts separately. **Improvement** I3 enforces policy on-chain.
 
-```text
-read effective tier and scaled collateral value
-apply origination collateral requirement
-store tier at first borrow
-check current health using stored tier at liquidation
-apply close factor and bonus
-reconcile balances and emit the position event
-```
+**Procedure** read effective tier and scaled collateral value → apply origination collateral requirement → store tier at first borrow → check current health using stored tier at liquidation → apply close factor and bonus → reconcile balances and emit the position event.
 
 #### Step 8 · Demonstrate and evaluate
 
@@ -245,12 +222,6 @@ reconcile balances and emit the position event
 
 **Libraries / tools** Ape, Anvil, pytest, Streamlit. **Output** Scenario evidence package. Example: local gas JSON plus deployment and dashboard logs for T6. **Runs** Local pilots measured. Three full runs planned, not yet run.
 
-**Correctness check** Match counts, digest, price, health and events. **Errors & edge cases** Keep synthetic and percentile inputs labelled. Fixed export unavailable. **Est. run time** Expected seconds = deployment + score upload + loan and price receipts + dashboard checks. Sum these durations across fresh runs. **Improvement** I3 links model outputs to contract evidence.
+**Correctness check** Match counts, digest, price, health and events. **Errors & edge cases** Keep synthetic and percentile inputs labelled. **Est. run time** Expected seconds = deployment + score upload + loan and price receipts + dashboard checks. Sum these durations across fresh runs. **Improvement** I3 links model outputs to contract evidence.
 
-```text
-start a fresh local deployment
-compare model version, digest and wallet counts
-apply the planned local price change
-reconcile dashboard values against loan receipts
-attach metrics and logs to the scenario run
-```
+**Procedure** start a fresh local deployment → compare model version, digest and wallet counts → apply the planned local price change → reconcile dashboard values against loan receipts → attach metrics and logs to the scenario run.

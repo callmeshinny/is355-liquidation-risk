@@ -24,4 +24,4 @@ The seed-11 fixed pilot has disjoint overall tier intervals. Test 2024Q3 is empt
 
 H5 uses the 2026-11-19 Anvil pilot. Take the greater of estimate and measurement, add a 5% allowance and round up to 5,000 gas. The single calculation uses 94,739 versus 93,000. The batch calculation uses 69,252 versus 69,034 gas per wallet. See `results/pilot_gas.json`.
 
-H6 uses mean ± two sample seed SDs from `results/pilot_taiwan.json` as a planning range. Reject H7 in the seed-11 pilot because from 2022Q3 to 2024Q2 prevalence rose from 1.48% to 3.69% and the positive calibration gap shrank from 2.51 to 0.78 percentage points.
+H6 uses mean ± two sample seed SDs from `results/pilot_taiwan.json` as a planning range.

@@ -21,6 +21,4 @@ Run from the repository root with Python 3.11 active and Anvil on PATH for Ape. 
 
 Table 22. Pilot configurations, commands and evidence.
 
-Across seeds 11, 22 and 33, proposed minus all-feature no-PCA test AUC was -0.00583 (paired 95% t interval -0.04285 to 0.03118). Mean validation minus test AUC was 0.00807 proposed and 0.02567 baseline. The gap narrowed, but the interval crosses the −0.02 non-inferiority margin. The PCA reproduction remains a separate comparison with [1].
-
 For the supplementary Ape gas profile, run `ape test tests/test_t3_functions.py --gas -q -k 'not test_get_tier'`. View gas uses an estimate query. Revert assertions are verified with the ordinary test runner.
