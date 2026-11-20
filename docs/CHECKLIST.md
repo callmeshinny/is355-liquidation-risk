@@ -3,7 +3,7 @@ Legend: `[ ]` todo · `[x]` done → evidence · `[⚠]` failed/skipped + reason
 Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "planned, not yet run", move on.
 
 ## STATUS (agent updates after every item)
-- Next item: P5.6 (human submission)
+- Next item: R1
 - Last gate: P5 checker PASS (0 FAIL, 0 WARN). Concise template revision verified in Word at 15 A4 body pages.
 - Blockers: D1 validation extrema overlap. Historical open-loan membership unavailable. 2024Q3 has no test rows.
 
@@ -70,3 +70,11 @@ Time boxes are hard limits (deadline 20/11/2026). If exceeded: ⚠, write "plann
 - [x] P5.5 Full check + self-review: `.venv/bin/python tools/check_report.py` → 0 FAIL. Then write `results/rubric_review.md`: per rubric row (CONTEXT §7) score 0–100% with the weakest point; fix the 2 weakest; rebuild. → results/rubric_review.md; two weakest rubric rows revised, DOCX rebuilt and 18 body pages verified in Word
 - [ ] 👤 P5.6 Open docx in Word: fill members' tasks/shares, check 12–18 pages, figures readable, export PDF if wanted, submit on Moodle (Exercise 4). Push repo; make it visible to the lecturer.
 - **Gate P5:** `.venv/bin/python tools/check_report.py && test -f out/6_BC_IS355_Week4_Project.docx`
+
+## P6 · Review fixes
+
+- [x] R0 Sync manual edits → out/submitted_v1.docx absent. No edits copied.
+- [ ] R1 Audit the H1 baseline, PCA preprocessing and feature availability.
+- [ ] R2 Fit feasible validation-only D1 thresholds and rerun tiers and policy.
+- [ ] R3 Redefine H4 and compare observed outcomes and simulated shocks.
+- **Gate P6:** `python tools/check_report.py --only 1.2,2 && bash tools/build_docx.sh`
