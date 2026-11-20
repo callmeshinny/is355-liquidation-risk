@@ -10,7 +10,7 @@ Run from the repository root with the Python 3.11 environment active. Use Anvil 
 | Model fits | B_LR and O_LR seed 11. B_XGB and O_XGB seeds 11, 22, 33 | `python src/step3_train.py --model MODEL --seed SEED`, once per listed pair | `results/pilot_model.json` |
 | Baseline and leakage audit | All eligible features without PCA, seeds 11, 22, 33. Validation TreeSHAP, seed 11 | `python src/step3_train.py --model B_XGB_noPCA --seed SEED`, then `python src/audit_pilot.py` | `results/pilot_audit.json` |
 | Calibration and explanation | Isotonic fit on validation, XGBoost TreeSHAP with 2,000 test rows, seed 11 | `python src/step4_calibrate.py --seed 11` | `results/pilot_calib.json`, `results/pilot_reliability.csv` |
-| Tier evaluation | D1 feasibility and percentile comparator, seed 11 | `python src/step5_tiers.py --seed 11` | `results/pilot_tiers.json`, `results/pilot_tiers_sample_percentile.csv` |
+| Tier evaluation | Revised D1 grid and percentile comparator, seed 11 | `python src/step5_tiers.py --seed 11` | `results/pilot_tiers.json`, `results/pilot_tiers_sample.csv` |
 | Repetition planning | Paired XGB seeds 11, 22, 33 and LR bootstrap SD | `python src/power.py` | `results/pilot_power.json` |
 | Taiwan AUC | O_XGB, stratified inner validation, seed 11 | `python src/train_taiwan.py --seed 11` | `results/pilot_taiwan.json` |
 | Real-label policy sensitivity | Uniform versus percentile tiers, seed 11 | `python src/sim_policy.py` | `results/pilot_policy.json` |

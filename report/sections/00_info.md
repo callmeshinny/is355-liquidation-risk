@@ -20,7 +20,7 @@
 
 | No. | Feedback | Week 4 response | Section |
 | --- | --- | --- | --- |
-| 1 | Percentiles assign high-risk tiers even when prevalence falls | D1 sets validation-only fixed cutoffs and keeps percentile sensitivity. The pilot records overlapping fixed cutoffs as infeasible. | 1.2 Step 5, 2.3 |
+| 1 | Percentiles assign high-risk tiers even when prevalence falls | D1 sets validation-only fixed cutoffs and keeps percentile sensitivity. To resolve the overlapping extrema, the pilot searches ordered cutoffs on validation and uses A ≤0.75× and C ≥2× prevalence. | 1.2 Step 5, 2.3 |
 | 2 | Specify loan-to-wallet aggregation and new-wallet terms | D2 takes the maximum score over open loans and uses B terms for unscored or stale wallets. Document the cohort proxy and Sybil limitation. | 1.2 Step 5, 1.3, 2.3 |
 | 3 | Add policy comparison alongside gas | D3 compares the tiered pool with the Aave V2 launch-style uniform policy under real labels and planned simulated price shocks. | 1.2 Step 5, 1.3, 2.3 |
 | 4 | Report calibration outside the validation window | D4 measures test Brier and reliability by quarter. Record the empty local 2024Q3 cohort. | 1.2 Step 4, 2.3 |

@@ -35,7 +35,7 @@
 
 **Steps** Calculate D1 extrema and 70th/90th percentiles on validation. Freeze rules. Tabulate test shares and Wilson intervals. **Expected result** Fixed rates rise A to C. C share tracks prevalence.
 
-**Pass criterion** Apply H3. Leave fixed outputs missing for unordered cutoffs. **Runs & environment** Python. Five seeds per rule. Fixed pilot planned, not yet run.
+**Pass criterion** Apply H3. Leave fixed outputs missing for unordered cutoffs. **Runs & environment** Python. Five seeds per rule. The seed-11 pilot measured both rules.
 
 
 ##### T1-05 · Compare lending policies using realized labels
@@ -44,7 +44,7 @@
 
 **Steps** Apply tiered 120%/150% and reject C. Apply uniform 125%. Tabulate acceptance, avoided liquidations, rejected good loans and collateral. **Expected result** Tier A requires less collateral per USD.
 
-**Pass criterion** Apply H4. Report counts and capital for undefined ratios. **Runs & environment** Python. Five paired seeds. Percentile sensitivity measured. Fixed policy planned, not yet run.
+**Pass criterion** Apply H4. Report counts and capital for undefined ratios. **Runs & environment** Python. Five paired seeds. The seed-11 fixed-policy pilot is measured.
 
 
 ##### T1-06 · Evaluate Taiwan test AUC

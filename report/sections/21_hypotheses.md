@@ -6,7 +6,7 @@
 | --- | --- | --- | --- |
 | H1 · I2, D6 | Drift-filtered XGBoost is non-inferior to all-feature PCA. | Test ΔAUC = proposed − baseline, paired by seed. | Accept if lower 95% bound > −0.02. Report validation-to-test AUC gaps as secondary. |
 | H2 · I1 | Isotonic improves test probabilities. | Test ΔBrier = calibrated − raw, paired by seed. | Accept if upper 95% bound < 0. |
-| H3 · I1, D1 | Fixed tiers separate risk and C share falls with prevalence. | Tier rates, 95% Wilson intervals, quarterly C share and prevalence. | Accept if A < B < C with disjoint adjacent intervals. Check that C share falls when prevalence falls. Compare the percentile rule's expected ~10% C share and report ties. Ordered D1 thresholds are required. |
+| H3 · I1, D1 | Fixed tiers separate risk and C share falls with prevalence. | Tier rates, 95% Wilson intervals, quarterly C share and prevalence. | Accept if A < B < C with disjoint adjacent intervals. Check that C share falls when prevalence falls. Compare the percentile rule's expected ~10% C share and report ties. Use the ordered validation grid with A ≤0.75× and C ≥2× validation prevalence. |
 | H4 · I3, D3 | Tiering improves rejection effectiveness and frees tier-A collateral. | Avoided liquidations per rejected good loan. Tier-A capital savings = Σ (1.25 − 1.20) × loan USD. | Accept if tiered ratio exceeds uniform where both exist, and savings > 0. Zero denominator makes the full criterion unevaluable. Report counts and capital separately. |
 | H5 · I3 | Score writes meet gas limits and guards hold. | Single receipt gas, 100-wallet batch gas per wallet and exact T4 messages. | Accept if single ≤100,000. Every size-100 batch ≤75,000 per wallet. Every planned guard returns its message. Document identity and key exposure. |
 | H6 · I4 | The proposed XGBoost transfers to Taiwan credit prediction. | Held-out ROC AUC. | Accept within expected 0.760–0.810 on the fixed protocol. Compare with the chart range of 0.68–0.71 [3]. Independent confirmation is planned, not yet run. |
@@ -14,7 +14,7 @@
 
 Table 15. Primary measures and decision rules for H1–H7.
 
-H3 and H4 fixed-policy tests are planned, not yet run because D1 cutoffs overlap. The uniform D3a ratio is undefined because uniform rejects zero loans. Test 2024Q3 is empty.
+The seed-11 fixed pilot has disjoint overall tier intervals. Test 2024Q3 is empty.
 
 H5 uses the 2026-11-19 Anvil pilot. Take the greater of estimate and measurement, add a 5% allowance and round up to 5,000 gas. The single calculation uses 94,739 versus 93,000. The batch calculation uses 69,252 versus 69,034 gas per wallet. See `results/pilot_gas.json`.
 

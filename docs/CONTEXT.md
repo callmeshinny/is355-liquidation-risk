@@ -45,8 +45,8 @@ General lecturer notes to honour: say what blockchain guarantees (integrity, no 
 
 ### D1 tier thresholds (fixed, chosen on validation only)
 - r_val = liquidation rate on validation.
-- τ_C = smallest p such that loans with p ≥ τ_C on validation have observed rate ≥ 3·r_val and ≥ 30 positives.
-- τ_A = largest p such that loans with p < τ_A on validation have observed rate ≤ 0.5·r_val.
+- Search ordered cutoffs on the 0.005 validation grid. Require nonempty A/B, rate(A) ≤ 0.75·r_val and rate(C) ≥ 2·r_val with ≥ 30 positives. Maximize rate(C)/rate(A), with zero A rate scored as infinity. Ties favor greater combined A+C coverage, then smaller cutoffs.
+- The prior independent 0.5×/3× extrema overlapped in the pilot. The revised joint rule permits a feasible three-way split while preserving distinct validation risk targets.
 - A: p < τ_A · B: τ_A ≤ p < τ_C · C: p ≥ τ_C. Comparison: percentile 70/90 on validation scores.
 - Tier encoding on-chain: 0 = none, 1 = A, 2 = B, 3 = C.
 

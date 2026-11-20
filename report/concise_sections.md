@@ -9,7 +9,7 @@ Appendix B records input and output examples, pseudocode, parameters and checks 
 | 2. Labelling and feature preparation | Label liquidations within 17.43 days. Drop repeated IDs and short censored records. Purge the two D5 gaps. Learn the encoder on training and flag drift at KS D ≥ 0.15. Write split parquet and feature rules. |
 | 3. Train baseline and proposed models | Compare LR and XGBoost on all eligible PCA features versus drift-filtered inputs without PCA. Early-stop XGBoost on inner validation. Save frozen models and scores. Mean pilot XGBoost test AUC was 0.7020 for baseline and 0.8033 for proposed. |
 | 4. Calibrate and explain probabilities | Fit isotonic on validation. Evaluate Brier and reliability on test, and rank TreeSHAP on a seeded sample. Seed-11 test Brier moved from 0.06409 to 0.01636. |
-| 5. Assign risk tiers | Freeze feasible validation cutoffs, then aggregate maximum risk per wallet. D1 cutoffs overlapped, so the pilot exported percentile comparison tiers and model SHA-256. Historical open-loan membership is unavailable. |
+| 5. Assign risk tiers | Freeze feasible validation cutoffs, then aggregate maximum risk per wallet. The validation grid selected 0.005 and 0.015 and the pilot exported fixed tiers and model SHA-256. Historical open-loan membership is unavailable. |
 | 6. Register model and write scores | Register the hash and version and write wallet tiers through the authorized oracle. Match receipt events to input. |
 | 7. Execute the lending policy | Apply borrowing and maintenance limits using the effective tier and collateral price. Record debt, collateral and loan events. |
 | 8. Demonstrate and evaluate | Reconcile registered hash, wallet counts, receipts and dashboard state. Local checks and gas are measured. Full integration is planned, not yet run. |
@@ -55,7 +55,7 @@ Appendix C maps all 37 scenario IDs to hypotheses, environments and run counts.
 - **T5 and T6.** Profile score writes at 1, 10 and 100 wallets. Measure confirmation time only on Sepolia. Reconcile the hash, score events and wallet count on fresh Anvil deployments, then compare dashboard state with liquidation receipts.
 - **T7.** Report Brier, prevalence and reliability by populated quarter. Reuse Taiwan fits for stability. Simulate shared price shocks of −10%, −20%, −30% and −40% and report liquidations, collateral seized and residual unsecured debt. Test 2024Q3 is empty.
 
-Appendix C supplies inputs, prerequisites, procedures, expected outcomes and pass criteria. Fixed-tier policy outcomes remain unavailable because the pilot D1 cutoffs overlap.
+Appendix C supplies inputs, prerequisites, procedures, expected outcomes and pass criteria. The seed-11 pilot measured the fixed-tier policy on the held-out cohort.
 
 <!-- 25_expected -->
 ### 2.5. Expected results and reasoning
@@ -64,7 +64,7 @@ Appendix C supplies inputs, prerequisites, procedures, expected outcomes and pas
 | --- | --- | --- |
 | H1 | Paired lower AUC bound > −0.02. Pilot means 0.8033 proposed, 0.7020 with PCA, and 0.8091 without PCA on all eligible features. | At or below −0.02, inspect matched feature and PCA ablations. |
 | H2 | Lower calibrated Brier. Seed 11 measured 0.01636 versus 0.06409 raw. | If the upper difference bound is nonnegative, compare quarterly calibration maps. |
-| H3 | Ordered tier liquidation rates and disjoint intervals. D1 pilot extrema overlap. | If feasible cutoffs fail separation, report results. For infeasible cutoffs, mark the test unevaluable. |
+| H3 | Ordered tier liquidation rates and disjoint intervals. Fixed pilot rates were 0.02%, 0.48% and 2.88%, with disjoint overall intervals. | If feasible cutoffs fail separation, report results. For infeasible cutoffs, mark the test unevaluable. |
 | H4 | Tier A requires five percentage points less collateral than uniform. | If savings fail or rejection efficiency is undefined, report counts and collateral separately. |
 | H5 | Single gas ≤100,000 and 100-wallet gas ≤75,000 per wallet. Pilot measured 94,739 and 69,252 respectively. | Investigate any exceeded limit or guard failure. Sepolia latency remains planned. |
 | H6 | AUC 0.760–0.810 around the 0.7834 Taiwan pilot. | If outside range, review exclusions, split and seed variation. |

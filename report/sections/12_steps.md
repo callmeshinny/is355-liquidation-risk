@@ -166,42 +166,57 @@ Table 7. FinSurvival test Brier by quarter.
 | Purpose | Convert scores to A/B/C. |
 | Input | Calibrated score parquet, outcomes and frozen XGB artifact. |
 | Processing | Fit D1 and percentile rules on validation. Apply feasible rules to test. Aggregate wallet maximum. |
-| Parameters | A tail ≤0.5× prevalence. C tail ≥3× and ≥30 positives. Compare p70/p90. |
+| Parameters | Validation grid step 0.005. A ≤0.75× prevalence, C ≥2× and ≥30 positives. Require all tiers. Compare p70/p90. |
 | Libraries / tools | pandas, NumPy, hashlib. |
-| Output | Wallet tiers and model SHA-256/version. The pilot emits tiers_percentile.csv as a labelled comparator. |
-| Runs | 2026-11-19, seed 11. |
+| Output | Wallet tiers and model SHA-256/version. The pilot exports fixed tiers.csv and reports the percentile comparator. |
+| Runs | 2026-11-20, seed 11. |
 | Correctness check | Verify cutoff order, hash and partition totals. |
 | Errors & edge cases | Pilot uses cohort wallets because open-loan status is unavailable. |
 | Est. run time | Measure export latency during integration. |
 | Improvement | I1 adds fixed-risk tier rules. |
 
 ```text
-calculate D1 extrema and comparison quantiles on validation
-check fixed cutoffs are ordered
+search ordered validation grid for the maximum C/A rate ratio
+calculate comparison quantiles on validation
 freeze feasible rules and score test cohorts
 take wallet maximum across available input loans
 compute shares, outcome rates and Wilson intervals
 hash model artifact and export wallet tiers
 ```
 
-Validation prevalence was 4.33%. D1 extrema τ_A = 0.106122 and τ_C = 0.043348 overlap. Fixed tiers are planned, not yet run. Percentile cutoffs were 0.020427 and 0.106122. The pilot covered 96,345 loans in 21,641 wallet groups.
+Validation prevalence was 4.33%. The former independent A ≤0.5× and C ≥3× extrema overlapped (0.106122 and 0.043348). The revised joint search uses A ≤0.75× and C ≥2× to preserve a low-risk and an elevated-risk tail while requiring ordered cutoffs and a nonempty B. It found τ_A = 0.005 and τ_C = 0.015. Validation A had 0 positives in 289 loans, B had 12,445 loans and C had 666 positives in 6,571 loans (10.14%). A zero observed rate gives an infinite objective. Ties favor greater combined tail coverage, then smaller cutoffs. Percentile cutoffs were 0.020427 and 0.106122.
 
-| Rule | Tier | Test loans | Share | Liquidation rate | 95% Wilson CI |
-| --- | --- | ---: | ---: | ---: | --- |
-| percentile | A | 62,092 | 64.45% | 0.45% | 0.40%–0.51% |
-| percentile | B | 19,203 | 19.93% | 1.58% | 1.41%–1.76% |
-| percentile | C | 15,050 | 15.62% | 4.54% | 4.22%–4.88% |
+| Test cohort | Rule | Tier A | Tier B | Tier C |
+| --- | --- | --- | --- | --- |
+| overall | Fixed | 4.58% / 0.02% [0.00%, 0.13%] | 59.87% / 0.48% [0.43%, 0.54%] | 35.55% / 2.88% [2.71%, 3.06%] |
+| overall | Percentile | 64.45% / 0.45% [0.40%, 0.51%] | 19.93% / 1.58% [1.41%, 1.76%] | 15.62% / 4.54% [4.22%, 4.88%] |
+| 2022Q3 | Fixed | 2.52% / 0.00% [0.00%, 0.58%] | 65.85% / 0.46% [0.37%, 0.58%] | 31.63% / 3.72% [3.33%, 4.15%] |
+| 2022Q3 | Percentile | 68.37% / 0.45% [0.36%, 0.55%] | 18.19% / 1.59% [1.27%, 1.99%] | 13.43% / 6.60% [5.82%, 7.47%] |
+| 2022Q4 | Fixed | 3.70% / 0.11% [0.02%, 0.64%] | 59.55% / 0.94% [0.79%, 1.11%] | 36.75% / 3.73% [3.35%, 4.15%] |
+| 2022Q4 | Percentile | 63.25% / 0.89% [0.75%, 1.05%] | 19.88% / 3.64% [3.14%, 4.21%] | 16.87% / 3.84% [3.29%, 4.48%] |
+| 2023Q1 | Fixed | 6.10% / 0.00% [0.00%, 0.35%] | 57.49% / 0.26% [0.18%, 0.38%] | 36.42% / 0.91% [0.70%, 1.17%] |
+| 2023Q1 | Percentile | 63.58% / 0.24% [0.16%, 0.34%] | 20.38% / 0.25% [0.13%, 0.47%] | 16.03% / 1.74% [1.32%, 2.29%] |
+| 2023Q2 | Fixed | 6.48% / 0.00% [0.00%, 0.63%] | 58.96% / 0.31% [0.19%, 0.50%] | 34.56% / 1.90% [1.48%, 2.43%] |
+| 2023Q2 | Percentile | 65.44% / 0.28% [0.17%, 0.45%] | 20.24% / 0.69% [0.40%, 1.18%] | 14.31% / 3.61% [2.73%, 4.75%] |
+| 2023Q3 | Fixed | 8.56% / 0.00% [0.00%, 0.70%] | 57.18% / 0.14% [0.06%, 0.32%] | 34.26% / 2.99% [2.35%, 3.79%] |
+| 2023Q3 | Percentile | 65.74% / 0.12% [0.05%, 0.28%] | 18.04% / 0.70% [0.35%, 1.37%] | 16.23% / 5.53% [4.29%, 7.10%] |
+| 2023Q4 | Fixed | 6.77% / 0.00% [0.00%, 0.83%] | 54.08% / 0.08% [0.03%, 0.24%] | 39.15% / 0.98% [0.67%, 1.43%] |
+| 2023Q4 | Percentile | 60.85% / 0.07% [0.02%, 0.21%] | 24.69% / 0.48% [0.24%, 0.94%] | 14.45% / 1.83% [1.16%, 2.87%] |
+| 2024Q1 | Fixed | 2.66% / 0.00% [0.00%, 2.81%] | 51.99% / 0.35% [0.18%, 0.66%] | 45.35% / 4.54% [3.76%, 5.47%] |
+| 2024Q1 | Percentile | 54.65% / 0.33% [0.17%, 0.62%] | 22.04% / 0.73% [0.37%, 1.42%] | 23.32% / 8.14% [6.71%, 9.85%] |
+| 2024Q2 | Fixed | 3.61% / 0.00% [0.00%, 7.87%] | 59.34% / 0.68% [0.29%, 1.57%] | 37.05% / 8.87% [6.61%, 11.82%] |
+| 2024Q2 | Percentile | 62.95% / 0.64% [0.27%, 1.48%] | 23.50% / 3.41% [1.86%, 6.17%] | 13.55% / 18.34% [13.23%, 24.86%] |
+| 2024Q3 | Fixed | — | — | — |
+| 2024Q3 | Percentile | — | — | — |
 
-Table 8. Percentile tiers on the held-out loan cohort.
+Table 8. Held-out loan tier share / liquidation rate [95% Wilson interval]. The JSON includes Wilson intervals for shares and results for the wallet cohort proxy. 2024Q3 has no test loans.
 
-D3a percentile sensitivity used origination scores on 2026-11-19. Rejected loans that later liquidated count as the avoidance proxy. Capital uses 95,596 positively priced loans. Uniform minus tiered capital is USD 1,941,823,554.74, including USD 1,665,763,650.49 for tier A. Fixed D3a and price shocks are planned, not yet run.
+| Policy | Accepted | Liquidations avoided | Good loans rejected | Collateral locked (USD) |
+| --- | ---: | ---: | ---: | ---: |
+| uniform | 96,345 | 0 | 0 | 44,218,089,861.50 |
+| tiered | 62,092 | 986 | 33,267 | 47,128,047,527.86 |
 
-| Policy | Accepted | Rejected | Liquidations avoided | Good loans rejected | Capital locked (USD) |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| uniform | 96,345 | 0 | 0 | 0 | 44,218,089,861.50 |
-| tiered | 81,295 | 15,050 | 683 | 14,367 | 42,276,266,306.76 |
-
-Table 9. D3a percentile sensitivity and uniform policy on the same test loans.
+Table 9. Uniform and fixed-tier D3a on the same loans. USD totals use 95,596 loans with valid origination USD.
 
 #### Step 6 · Register model and write scores
 

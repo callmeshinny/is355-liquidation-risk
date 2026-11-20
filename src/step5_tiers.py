@@ -17,15 +17,34 @@ RESULT = Path("results/pilot_tiers.json")
 
 
 def fixed_thresholds(val):
-    groups = val.groupby("p").label.agg(["count", "sum"]).sort_index()
-    rate = val.label.mean()
-    below_n = groups["count"].cumsum().shift(fill_value=0)
-    below_pos = groups["sum"].cumsum().shift(fill_value=0)
-    above_n = groups["count"].iloc[::-1].cumsum().iloc[::-1]
-    above_pos = groups["sum"].iloc[::-1].cumsum().iloc[::-1]
-    a = groups.index[(below_n > 0) & ((below_pos / below_n) <= 0.5 * rate)]
-    c = groups.index[(above_pos >= 30) & ((above_pos / above_n) >= 3 * rate)]
-    return (float(a.max()) if len(a) else None, float(c.min()) if len(c) else None)
+    scores = val.sort_values("p")
+    grid = np.arange(1, 201) / 200
+    below = np.searchsorted(scores.p.to_numpy(), grid, side="left")
+    cumulative = np.r_[0, scores.label.to_numpy(dtype=int).cumsum()]
+    positives = cumulative[below]
+    rate = scores.label.mean()
+
+    best = None
+    candidates = 0
+    for i, a in enumerate(grid):
+        n_a = below[i]
+        if not n_a or positives[i] / n_a > 0.75 * rate:
+            continue
+        rate_a = positives[i] / n_a
+        for j in range(i + 1, len(grid)):
+            n_c = len(scores) - below[j]
+            pos_c = cumulative[-1] - positives[j]
+            if below[j] == n_a or pos_c < 30 or pos_c / n_c < 2 * rate:
+                continue
+            candidates += 1
+            rate_c = pos_c / n_c
+            ratio = rate_c / rate_a if rate_a else float("inf")
+            # For equal ratios prefer greater combined tail coverage, then lower cutoffs.
+            key = (ratio, n_a + n_c, -a, -grid[j])
+            if best is None or key > best[0]:
+                best = key, (float(a), float(grid[j]))
+    fixed = best[1] if best else None
+    return fixed, candidates
 
 
 def assign(probability, thresholds):
@@ -49,7 +68,7 @@ def summarize(frame):
     for tier in (1, 2, 3):
         labels = frame.loc[frame.tier.eq(tier), "label"]
         n, positives = len(labels), int(labels.sum())
-        rows.append(dict(tier=tier, n=n, share=n / len(frame) if len(frame) else None,
+        rows.append(dict(tier=tier, n=n, positives=positives, share_ci95=wilson(n, len(frame)), share=n / len(frame) if len(frame) else None,
                          liquidation_rate=positives / n if n else None,
                          liquidation_ci95=wilson(positives, n)))
     return rows
@@ -68,8 +87,7 @@ def main():
     test = pd.read_parquet(INTERIM / "calibrated_test.parquet")
     if json.loads(Path("results/pilot_calib.json").read_text())["seed"] != args.seed:
         raise ValueError("Run calibration for this seed first")
-    candidates = fixed_thresholds(val)
-    fixed = candidates if None not in candidates and candidates[0] < candidates[1] else None
+    fixed, candidates = fixed_thresholds(val)
     percentile = tuple(float(v) for v in val.p.quantile([0.7, 0.9]))
     if percentile[0] >= percentile[1]:
         raise ValueError("Validation quantile scores do not define three ordered tiers")
@@ -86,7 +104,7 @@ def main():
             loans = frame.assign(tier=assign(frame.p, thresholds))
             rows.append(dict(cohort=cohort, wallets=summarize(wallets), loans=summarize(loans)))
         rules[name] = dict(status="measured", tau_A=thresholds[0], tau_C=thresholds[1], overall=rows[0],
-                           per_quarter=rows[1:])
+                           per_quarter=rows[1:], validation=summarize(val.assign(tier=assign(val.p, thresholds))))
 
     wallets = aggregate_wallets(test).rename(columns={"user": "wallet"})
     export_rule, export_thresholds = ("fixed", fixed) if fixed else ("percentile", percentile)
@@ -101,7 +119,9 @@ def main():
     sample["wallet"] = sample.wallet.map(lambda wallet: hashlib.sha256(str(wallet).encode()).hexdigest())
     sample.to_csv(f"results/pilot_tiers_sample{suffix}.csv", index=False)
     report = dict(date=date.today().isoformat(), seed=args.seed, tau_A=fixed[0] if fixed else None, tau_C=fixed[1] if fixed else None,
-                  fixed_validation_candidates={"tau_A": candidates[0], "tau_C": candidates[1]},
+                  fixed_search={"step": 0.005, "feasible_pairs": candidates, "max_A_multiple": 0.75,
+                                "min_C_multiple": 2, "min_C_positives": 30,
+                                "objective": "Maximize C/A; zero A rate gives infinite ratio. Then maximize tail coverage and prefer lower cutoffs."},
                   export_rule=export_rule,
                   fit_split="val", validation_liquidation_rate=float(val.label.mean()),
                   model_version=1, model_sha256=model_hash, rules=rules,

@@ -17,7 +17,7 @@
 #### H3 · Tier separation
 
 - **Expected** Rates increase from A to C with disjoint adjacent 95% Wilson intervals. C share falls when risk falls.
-- **Basis** D1 selects risk tails on validation. The observed independent pilot cutoffs were 0.106122 and 0.043348, with A above C. Only the percentile comparator has measured tier outcomes.
+- **Basis** The ordered validation grid yields 0.005 and 0.015. Fixed test rates are 0.02%, 0.48% and 2.88%, with disjoint overall 95% Wilson intervals. Step 5 reports quarterly comparisons and the empty 2024Q3 cohort.
 - **Reject if** With a feasible fixed rule, any adjacent ordering or interval condition fails. Treat infeasible thresholds as an unevaluable hypothesis.
 - **If rejected** Report the observed tiers or infeasibility and retain the comparator as labelled evidence. Any future threshold revision requires approval and validation-only selection.
 
