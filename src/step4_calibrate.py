@@ -28,7 +28,10 @@ def scored_split(split, seed):
 
 def brier(frame):
     n = len(frame)
-    return dict(n=n,
+    prevalence = float(frame.label.mean()) if n else None
+    mean_calibrated = float(frame.p.mean()) if n else None
+    return dict(n=n, prevalence=prevalence, mean_calibrated=mean_calibrated,
+                calibration_gap=mean_calibrated - prevalence if n else None,
                 brier_uncal=float(brier_score_loss(frame.label, frame.p_raw)) if n else None,
                 brier_cal=float(brier_score_loss(frame.label, frame.p)) if n else None,
                 brier_platt=float(brier_score_loss(frame.label, frame.p_platt)) if n else None)

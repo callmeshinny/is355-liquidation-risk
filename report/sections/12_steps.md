@@ -126,7 +126,7 @@ Paper deviations were −0.1085 (LR) and −0.0300 (XGB), both outside ±0.02 [1
 
 **Libraries / tools** scikit-learn, XGBoost TreeSHAP, pandas. **Output** Calibrated score parquet (example: calibrated_test.parquet), Brier, reliability bins and SHAP top ten. **Runs** 2026-11-20, seed 11. Multi-seed H2 planned, not yet run.
 
-**Correctness check** Verify matching pools and validation-only fit. **Errors & edge cases** Empty quarters have undefined Brier. TreeSHAP describes raw output. **Est. run time** 40.81 s measured including isotonic, Platt, reliability and SHAP. **Improvement** I1 and D4 add calibration, interpretation and quarterly checks.
+**Correctness check** Verify matching pools and validation-only fit. **Errors & edge cases** Empty quarters have undefined Brier. TreeSHAP describes raw output. **Est. run time** 34.82 s measured including isotonic, Platt, reliability and SHAP. **Improvement** I1 and D4 add calibration, interpretation and quarterly checks.
 
 ```text
 fit isotonic on raw validation probabilities
@@ -159,7 +159,7 @@ Table 7. FinSurvival test Brier by quarter.
 
 **Libraries / tools** pandas, NumPy, hashlib. **Output** Wallet tiers and model SHA-256/version. The pilot exports fixed tiers.csv and reports the percentile comparator. **Runs** 2026-11-20, seed 11.
 
-**Correctness check** Verify cutoff order, hash and partition totals. **Errors & edge cases** Pilot uses cohort wallets because open-loan status is unavailable. **Est. run time** 0.36 s measured for cutoff search, test summaries and export. **Improvement** I1 adds fixed-risk tier rules.
+**Correctness check** Verify cutoff order, hash and partition totals. **Errors & edge cases** The wallet cohort proxy takes the maximum score across a wallet’s observed loans in each cohort because historical open-loan membership is unavailable. **Est. run time** 0.36 s measured for cutoff search, test summaries and export. **Improvement** I1 adds fixed-risk tier rules.
 
 ```text
 search ordered validation grid for the maximum C/A rate ratio

@@ -5,6 +5,7 @@ import json
 from datetime import date
 from pathlib import Path
 from time import perf_counter
+from statistics import mean, stdev
 
 import pandas as pd
 from sklearn.metrics import roc_auc_score
@@ -30,7 +31,18 @@ def main():
                   n_fit=len(train), n_inner_val=len(inner), n_test=len(test), n_features=len(cols),
                   fit_seconds=round(perf_counter() - start, 3), best_iteration=model.best_iteration,
                   config=dict(XGB_PARAMS, scale_pos_weight=model.scale_pos_weight))
-    Path("results/pilot_taiwan.json").write_text(json.dumps(result, indent=2) + "\n")
+    path = Path("results/pilot_taiwan.json")
+    prior = json.loads(path.read_text()) if path.exists() else result
+    runs = prior.get("runs", {str(prior["seed"]): prior.copy()})
+    runs[str(args.seed)] = result
+    ordered = dict(sorted(runs.items(), key=lambda row: int(row[0])))
+    values = [run["test_auc"] for run in ordered.values()]
+    summary = dict(ordered.get("11", next(iter(ordered.values()))), runs=ordered,
+                   mean_test_auc=mean(values))
+    if len(values) >= 2:
+        sd = stdev(values)
+        summary.update(sample_sd=sd, planning_range=[mean(values) - 2 * sd, mean(values) + 2 * sd])
+    path.write_text(json.dumps(summary, indent=2) + "\n")
     print("Taiwan test AUC:", result["test_auc"])
 
 

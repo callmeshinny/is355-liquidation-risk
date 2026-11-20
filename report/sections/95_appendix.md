@@ -15,7 +15,7 @@ Run from the repository root with Python 3.11 active and Anvil on PATH for Ape. 
 | Calibration, Platt and TreeSHAP | 2026-11-20 | 11 | `python src/step4_calibrate.py --seed 11` | `results/pilot_calib.json` |
 | Fixed and percentile tiers | 2026-11-20 | 11 | `python src/step5_tiers.py --seed 11` | `results/pilot_tiers.json` |
 | Paired no-PCA precision | 2026-11-20 | 11, 22, 33 | `python src/power.py` | `results/pilot_power.json` |
-| Taiwan XGBoost | 2026-11-19 | 11 | `python src/train_taiwan.py --seed 11` | `results/pilot_taiwan.json` |
+| Taiwan XGBoost | 2026-11-19 and 2026-11-20 | 11, 22, 33 | `python src/train_taiwan.py --seed SEED` | `results/pilot_taiwan.json` |
 | Fixed policy and simulated shocks | 2026-11-20 | 11 | `python src/sim_policy.py` | `results/pilot_policy_v2.json` |
 | Anvil gas | 2026-11-19 | None | `ape run gas_batch --network ethereum:local:foundry` | `results/pilot_gas.json` |
 

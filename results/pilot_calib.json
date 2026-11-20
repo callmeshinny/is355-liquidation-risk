@@ -5,6 +5,9 @@
   "fit_split": "val",
   "platt_method": "Unpenalized logistic regression on clipped raw logits",
   "n": 96345,
+  "prevalence": 0.013129897763246665,
+  "mean_calibrated": 0.04404940456151962,
+  "calibration_gap": 0.030919506798272958,
   "brier_uncal": 0.06409133970737457,
   "brier_cal": 0.016363417729735374,
   "brier_platt": 0.015494591556489468,
@@ -12,6 +15,9 @@
     {
       "quarter": "2022Q3",
       "n": 25953,
+      "prevalence": 0.014795977343659693,
+      "mean_calibrated": 0.039924051612615585,
+      "calibration_gap": 0.025128074268955893,
       "brier_uncal": 0.0569646954536438,
       "brier_cal": 0.015483839437365532,
       "brier_platt": 0.015083453617990017
@@ -19,6 +25,9 @@
     {
       "quarter": "2022Q4",
       "n": 23787,
+      "prevalence": 0.01933829402614874,
+      "mean_calibrated": 0.04447207227349281,
+      "calibration_gap": 0.025133778247344075,
       "brier_uncal": 0.0713864415884018,
       "brier_cal": 0.02294854074716568,
       "brier_platt": 0.022163918241858482
@@ -26,6 +35,9 @@
     {
       "quarter": "2023Q1",
       "n": 17899,
+      "prevalence": 0.004804737694843287,
+      "mean_calibrated": 0.04509519785642624,
+      "calibration_gap": 0.040290460161582956,
       "brier_uncal": 0.06409510970115662,
       "brier_cal": 0.011617619544267654,
       "brier_platt": 0.010469499044120312
@@ -33,6 +45,9 @@
     {
       "quarter": "2023Q2",
       "n": 9292,
+      "prevalence": 0.008394317692638828,
+      "mean_calibrated": 0.03976879268884659,
+      "calibration_gap": 0.03137447499620776,
       "brier_uncal": 0.056575387716293335,
       "brier_cal": 0.011609785258769989,
       "brier_platt": 0.010905327275395393
@@ -40,6 +55,9 @@
     {
       "quarter": "2023Q3",
       "n": 6354,
+      "prevalence": 0.011016682404784388,
+      "mean_calibrated": 0.04343818128108978,
+      "calibration_gap": 0.032421498876305396,
       "brier_uncal": 0.059104230254888535,
       "brier_cal": 0.013456197455525398,
       "brier_platt": 0.01238190196454525
@@ -47,6 +65,9 @@
     {
       "quarter": "2023Q4",
       "n": 6808,
+      "prevalence": 0.004259694477085781,
+      "mean_calibrated": 0.04302981495857239,
+      "calibration_gap": 0.038770120481486606,
       "brier_uncal": 0.06095514073967934,
       "brier_cal": 0.00959385558962822,
       "brier_platt": 0.008604640141129494
@@ -54,6 +75,9 @@
     {
       "quarter": "2024Q1",
       "n": 5005,
+      "prevalence": 0.022377622377622378,
+      "mean_calibrated": 0.06963850557804108,
+      "calibration_gap": 0.0472608832004187,
       "brier_uncal": 0.09185104072093964,
       "brier_cal": 0.02531619928777218,
       "brier_platt": 0.022534240037202835
@@ -61,6 +85,9 @@
     {
       "quarter": "2024Q2",
       "n": 1247,
+      "prevalence": 0.03688853247794707,
+      "mean_calibrated": 0.044706981629133224,
+      "calibration_gap": 0.007818449151186152,
       "brier_uncal": 0.06032378226518631,
       "brier_cal": 0.028435630723834038,
       "brier_platt": 0.02837817557156086
@@ -68,6 +95,9 @@
     {
       "quarter": "2024Q3",
       "n": 0,
+      "prevalence": null,
+      "mean_calibrated": null,
+      "calibration_gap": null,
       "brier_uncal": null,
       "brier_cal": null,
       "brier_platt": null
@@ -87,5 +117,5 @@
     "dayOfMonth": 0.14644549787044525,
     "userBorrowAvgAmountETH": 0.1401490867137909
   },
-  "elapsed_seconds": 40.814
+  "elapsed_seconds": 34.818
 }

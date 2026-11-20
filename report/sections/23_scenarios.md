@@ -29,7 +29,7 @@
 
 ##### T1-06 · Evaluate Taiwan test AUC
 
-**Objective** Test H6. **Preconditions** Frozen 60/10/30 split. **Input data** Taiwan UCI 350, excluding SEX and MARRIAGE. **Steps** Exclude sex and marital status, including coded duplicates. Early-stop XGBoost on the stratified inner training fold. Score test and summarize AUC across seeds. **Expected result** AUC 0.760–0.810. **Pass criterion** Compare with the expected range and [3]. **Runs & environment** Python. Five seeds. Seed 11 measured. **Evidence** Pilot Taiwan JSON.
+**Objective** Test H6. **Preconditions** Frozen 60/10/30 split. **Input data** Taiwan UCI 350, excluding SEX and MARRIAGE. **Steps** Exclude sex and marital status, including coded duplicates. Early-stop XGBoost on the stratified inner training fold. Score test and summarize AUC across seeds. **Expected result** AUC 0.7828–0.7847. **Pass criterion** Compare with the expected range and [3]. **Runs & environment** Python. Five seeds planned. Three measured. **Evidence** Pilot Taiwan JSON.
 
 #### T2 · Ablations
 

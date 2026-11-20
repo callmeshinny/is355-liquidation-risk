@@ -9,7 +9,7 @@
 | H3 · I1, D1 | Fixed tiers separate risk and C share falls with prevalence. | Tier rates, 95% Wilson intervals, quarterly C share and prevalence. | Accept if A < B < C with disjoint adjacent intervals. Check that C share falls when prevalence falls. Compare the percentile rule's expected ~10% C share and report ties. Use the ordered validation grid with A ≤0.75× and C ≥2× validation prevalence and C share ≤20%. |
 | H4 · I3, D3 | Tiering reduces liquidation losses while conserving collateral. | Accepted loans, avoided liquidations, rejected good loans and collateral locked. Under shocks, liquidated loans, seized collateral and bad debt. | See the H4 decision rule below. |
 | H5 · I3 | Score writes meet gas limits and guards hold. | Single receipt gas, 100-wallet batch gas per wallet and exact T4 messages. | Accept if single ≤100,000. Every size-100 batch ≤75,000 per wallet. Every planned guard returns its message. Document identity and key exposure. |
-| H6 · I4 | The proposed XGBoost transfers to Taiwan credit prediction. | Held-out ROC AUC. | Accept within expected 0.760–0.810 on the fixed protocol. Compare with the chart range of 0.68–0.71 [3]. Independent confirmation is planned, not yet run. |
+| H6 · I4 | The proposed XGBoost transfers to Taiwan credit prediction. | Held-out ROC AUC. | Accept within expected 0.7828–0.7847 on the fixed protocol. Compare with the chart range of 0.68–0.71 [3]. Independent confirmation is planned, not yet run. |
 | H7 · D4 | Calibration overpredicts as test prevalence falls. | Quarterly gap = mean calibrated score − observed rate, plus Brier and reliability. | Accept if the last populated quarter has lower prevalence and a positive gap larger than in the first populated quarter. Report intermediate quarters and empty cohorts. |
 
 Table 15. Primary measures and decision rules for H1–H7.
@@ -24,4 +24,4 @@ The seed-11 fixed pilot has disjoint overall tier intervals. Test 2024Q3 is empt
 
 H5 uses the 2026-11-19 Anvil pilot. Take the greater of estimate and measurement, add a 5% allowance and round up to 5,000 gas. The single calculation uses 94,739 versus 93,000. The batch calculation uses 69,252 versus 69,034 gas per wallet. See `results/pilot_gas.json`.
 
-H6 uses the seed-11 pilot of 0.7834 from `results/pilot_taiwan.json`. The planning range adds and subtracts 0.025 AUC and rounds each endpoint to the nearest 0.005.
+H6 uses mean ± two sample seed SDs from `results/pilot_taiwan.json` as a planning range. Reject H7 in the seed-11 pilot because from 2022Q3 to 2024Q2 prevalence rose from 1.48% to 3.69% and the positive calibration gap shrank from 2.51 to 0.78 percentage points.

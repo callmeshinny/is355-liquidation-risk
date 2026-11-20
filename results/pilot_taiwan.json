@@ -20,5 +20,85 @@
     "early_stopping_rounds": 50,
     "n_jobs": 4,
     "scale_pos_weight": 3.521350823332403
-  }
+  },
+  "runs": {
+    "11": {
+      "date": "2026-11-19",
+      "seed": 11,
+      "model": "O_XGB",
+      "test_auc": 0.7834438881372223,
+      "n_fit": 16200,
+      "n_inner_val": 1800,
+      "n_test": 9000,
+      "n_features": 21,
+      "fit_seconds": 0.303,
+      "best_iteration": 87,
+      "config": {
+        "n_estimators": 1000,
+        "learning_rate": 0.05,
+        "max_depth": 6,
+        "min_child_weight": 5,
+        "subsample": 0.8,
+        "colsample_bytree": 0.8,
+        "eval_metric": "auc",
+        "early_stopping_rounds": 50,
+        "n_jobs": 4,
+        "scale_pos_weight": 3.521350823332403
+      }
+    },
+    "22": {
+      "date": "2026-11-20",
+      "seed": 22,
+      "model": "O_XGB",
+      "test_auc": 0.7835255797615164,
+      "n_fit": 16200,
+      "n_inner_val": 1800,
+      "n_test": 9000,
+      "n_features": 21,
+      "fit_seconds": 0.204,
+      "best_iteration": 66,
+      "config": {
+        "n_estimators": 1000,
+        "learning_rate": 0.05,
+        "max_depth": 6,
+        "min_child_weight": 5,
+        "subsample": 0.8,
+        "colsample_bytree": 0.8,
+        "eval_metric": "auc",
+        "early_stopping_rounds": 50,
+        "n_jobs": 4,
+        "scale_pos_weight": 3.521350823332403
+      }
+    },
+    "33": {
+      "date": "2026-11-20",
+      "seed": 33,
+      "model": "O_XGB",
+      "test_auc": 0.7843121841122833,
+      "n_fit": 16200,
+      "n_inner_val": 1800,
+      "n_test": 9000,
+      "n_features": 21,
+      "fit_seconds": 0.244,
+      "best_iteration": 69,
+      "config": {
+        "n_estimators": 1000,
+        "learning_rate": 0.05,
+        "max_depth": 6,
+        "min_child_weight": 5,
+        "subsample": 0.8,
+        "colsample_bytree": 0.8,
+        "eval_metric": "auc",
+        "early_stopping_rounds": 50,
+        "n_jobs": 4,
+        "scale_pos_weight": 3.521350823332403
+      }
+    }
+  },
+  "mean_test_auc": 0.7837605506703407,
+  "sample_sd": 0.0004794715539759031,
+  "planning_range": [
+    0.7828016075623888,
+    0.7847194937782925
+  ]
 }

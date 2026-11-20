@@ -10,7 +10,7 @@
 #### H2 · Calibration
 
 - **Expected** Calibrated test Brier is smaller than raw Brier.
-- **Basis** Seed 11 test Brier was 0.06409 raw, 0.01636 isotonic and 0.01549 Platt. Class weighting emphasizes positives during training, which pushes raw probabilities upward relative to the observed event prevalence and inflates raw Brier. Both maps were fitted on validation.
+- **Basis** Seed 11 test Brier was 0.06409 raw, 0.01636 isotonic and 0.01549 Platt. Class weighting emphasizes positives during training, which pushes raw probabilities upward relative to the observed event prevalence and inflates raw Brier. Both maps used validation. Keep the prespecified isotonic map for the tier policy and retain Platt as a comparator. Switching on the lower test Brier would select the map on test.
 - **Reject if** The upper bound of the paired 95% interval for calibrated minus raw Brier is zero or positive.
 - **If rejected** Report raw, isotonic and Platt results by quarter and examine validation-to-test prevalence shift.
 
@@ -54,14 +54,14 @@ Tiering reduced the share liquidated at −10% and −20%, but at −30% and −
 
 #### H6 · Taiwan transfer
 
-- **Expected** ROC AUC is in the 0.760–0.810 planning range.
-- **Basis** The seed-11 pilot measured 0.7834 on the local stratified Taiwan split with sex and marital status excluded, class-weighted XGBoost and early stopping within training. These choices can change the fitted ranking and evaluated cases relative to the random-forest AutoML pipeline reported in [3]. A matched replication would be needed to attribute the gap.
+- **Expected** ROC AUC is in the 0.7828–0.7847 planning range.
+- **Basis** Seeds 11, 22 and 33 averaged 0.78376 AUC with sample SD 0.00048; the planning range is mean ± two seed SDs on the same test split. The higher AUC than [3] may reflect the class-weighted XGBoost model and local evaluation split versus the paper's random-forest AutoML protocol.
 - **Reject if** The full estimate falls outside the expected range on the frozen evaluation protocol.
 - **If rejected** Audit the split, feature exclusions and training variance. Document differences from the paper protocol.
 
 #### H7 · Quarterly drift
 
 - **Expected** The later populated quarter has lower prevalence and a positive calibration gap greater than the earlier quarter.
-- **Basis** The validation map remains fixed as test prevalence can change. Brier and reliability by quarter will show where the discrepancy occurs. The final planned quarter, 2024Q3, is empty in this snapshot.
+- **Basis** Reject H7 in the seed-11 pilot because from 2022Q3 to 2024Q2 prevalence rose from 1.48% to 3.69% and the positive calibration gap shrank from 2.51 to 0.78 percentage points.
 - **Reject if** The directional conditions in Section 2.1 are unmet across the first and last populated quarters.
 - **If rejected** Report the quarterly trajectory and bin counts. Assess score mix and base-rate shifts before proposing a prospective calibration update.
