@@ -29,6 +29,15 @@
 
 Table 1. Response to Week 3 feedback.
 
+### Protocol decisions
+
+- **D1** Choose ordered fixed cutoffs on calibration validation and compare with validation percentiles.
+- **D2** Use the highest open-loan score per wallet and tier B for unscored or stale wallets.
+- **D3** Compare tiered and uniform collateral using observed labels and paired simulated price shocks.
+- **D4** Evaluate calibration by test quarter.
+- **D5** Freeze chronological folds and purge gaps before early-stopping and calibration validation.
+- **D6** Test paired AUC non-inferiority with a 0.02 margin.
+
 ### Changes since the Week 3 report
 
 - Use 2021-12-15 through 2022-03-14 for early stopping and begin calibration validation on 2022-04-02. The last observed calibration loan was on 2022-06-28.

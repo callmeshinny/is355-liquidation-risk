@@ -2,19 +2,11 @@
 
 #### Step 1 · Data collection
 
-| Field | Specification |
-| --- | --- |
-| Purpose | Load standardized loan and credit records. |
-| Input | RDS features and liquidation labels [1]. UCI 350 [5]. |
-| Processing | Concatenate X parts. Drop empty columns and external covariates. Inner join y by ID. Align schemas. |
-| Parameters | Borrow → Account Liquidated. UCI dataset 350. |
-| Libraries / tools | pandas, pyreadr, pyarrow, ucimlrepo. |
-| Output | Interim parquet. Example: finsurvival_train.parquet and taiwan.parquet. |
-| Runs | One load, 2026-11-19. |
-| Correctness check | Check IDs, source row counts and schema. |
-| Errors & edge cases | Missing parts stop loading. Record unmatched and duplicate IDs. |
-| Est. run time | 26.4 s pilot including UCI and writes. |
-| Improvement | I4 adds Taiwan. |
+**Purpose** Load standardized loan and credit records. **Input** RDS features and liquidation labels [1]. UCI 350 [5]. **Processing** Concatenate X parts. Drop empty columns and external covariates. Inner join y by ID. Align schemas. **Parameters** Borrow → Account Liquidated. UCI dataset 350.
+
+**Libraries / tools** pandas, pyreadr, pyarrow, ucimlrepo. **Output** Interim parquet. Example: finsurvival_train.parquet and taiwan.parquet. **Runs** One load, 2026-11-19.
+
+**Correctness check** Check IDs, source row counts and schema. **Errors & edge cases** Missing parts stop loading. Record unmatched and duplicate IDs. **Est. run time** 26.4 s pilot including UCI and writes. **Improvement** I4 adds Taiwan.
 
 ```text
 concat FinSurvival X parts by benchmark split
@@ -37,19 +29,11 @@ After loader checks, 116 features remain. Taiwan loaded 30,000 clients, 23 featu
 
 #### Step 2 · Labelling and feature preparation
 
-| Field | Specification |
-| --- | --- |
-| Purpose | Prepare leak-resistant inputs. |
-| Input | Interim parquet and D5 calendar. |
-| Processing | Deduplicate transactions, label, purge and encode. Record proposed-model drops using the Kolmogorov–Smirnov (KS) statistic. |
-| Parameters | 17.43 days, D5 windows, D ≥ 0.15, Taiwan seed 11. |
-| Libraries / tools | pandas, SciPy, scikit-learn, pyarrow. |
-| Output | Split parquet (example: fin_train_core.parquet) and feature-rule manifest. |
-| Runs | One split per dataset, 2026-11-19. |
-| Correctness check | Test date boundaries, ID disjointness and train-only vocabularies. |
-| Errors & edge cases | Keep observed early liquidations. Drop insufficient follow-up. |
-| Est. run time | 9.7 s pilot including writes. |
-| Improvement | I2 freezes chronological feature preparation. |
+**Purpose** Prepare leak-resistant inputs. **Input** Interim parquet and D5 calendar. **Processing** Deduplicate transactions, label, purge and encode. Record proposed-model drops using the Kolmogorov–Smirnov (KS) statistic. **Parameters** 17.43 days, D5 windows, D ≥ 0.15, Taiwan seed 11.
+
+**Libraries / tools** pandas, SciPy, scikit-learn, pyarrow. **Output** Split parquet (example: fin_train_core.parquet) and feature-rule manifest. **Runs** One split per dataset, 2026-11-19.
+
+**Correctness check** Test date boundaries, ID disjointness and train-only vocabularies. **Errors & edge cases** Keep observed early liquidations. Drop insufficient follow-up. **Est. run time** 9.7 s pilot including writes. **Improvement** I2 freezes chronological feature preparation.
 
 ```text
 drop repeated IDs
@@ -109,19 +93,11 @@ Example loan: 2020-12-01, event status 0, observed 576.465 days, label 0.
 
 The B prefix identifies baseline variants and O identifies proposed variants. LR denotes logistic regression and XGB denotes XGBoost.
 
-| Field | Specification |
-| --- | --- |
-| Purpose | Compare baseline and proposed models. |
-| Input | Split parquet and feature-rule manifest. |
-| Processing | Fit LR or XGB. Scale as needed. Fit baseline PCA in training. Early-stop XGB on inner validation. |
-| Parameters | 95% PCA assumption, LR C=0.1, XGB learning rate 0.05, depth 6, patience 50. |
-| Libraries / tools | scikit-learn, XGBoost. |
-| Output | Frozen XGBoost model artifact, validation and test score parquet, AUC and fit time. |
-| Runs | 2026-11-19. XGB seeds 11/22/33. LR seed 11 and 1,000 bootstrap draws. |
-| Correctness check | Check model/seed coverage and paired test AUC. |
-| Errors & edge cases | Replace nonfinite features with zero. Paper reproduction tolerance ±0.02 AUC. |
-| Est. run time | Mean XGBoost fit times were 3.61 s baseline, 3.10 s proposed and 2.66 s without PCA. |
-| Improvement | I2 isolates the proposed feature pipeline. I4 checks Taiwan. |
+**Purpose** Compare baseline and proposed models. **Input** Split parquet and feature-rule manifest. **Processing** Fit LR or XGB. Scale as needed. Fit baseline PCA in training. Early-stop XGB on inner validation. **Parameters** 95% PCA assumption, LR C=0.1, XGB learning rate 0.05, depth 6, patience 50.
+
+**Libraries / tools** scikit-learn, XGBoost. **Output** Frozen XGBoost model artifact, validation and test score parquet, AUC and fit time. **Runs** 2026-11-19. XGB seeds 11/22/33. LR seed 11 and 1,000 bootstrap draws.
+
+**Correctness check** Check model/seed coverage and paired test AUC. **Errors & edge cases** Replace nonfinite features with zero. Paper reproduction tolerance ±0.02 AUC. **Est. run time** Mean XGBoost fit times were 3.61 s baseline, 3.10 s proposed and 2.66 s without PCA. **Improvement** I2 isolates the proposed feature pipeline. I4 checks Taiwan.
 
 ```text
 select eligible features and apply the drift list for proposed variants
@@ -145,19 +121,11 @@ Paper deviations were −0.1085 (LR) and −0.0300 (XGB), both outside ±0.02 [1
 
 #### Step 4 · Calibrate and explain probabilities
 
-| Field | Specification |
-| --- | --- |
-| Purpose | Calibrate risk and explain model output. |
-| Input | Frozen XGB artifact and validation/test score parquet. |
-| Processing | Fit isotonic and Platt on calibration validation. Compare frozen maps and raw probabilities on test. Rank TreeSHAP. |
-| Parameters | Ten reliability bins, 2,000 test loans, seed 11. |
-| Libraries / tools | scikit-learn, XGBoost TreeSHAP, pandas. |
-| Output | Calibrated score parquet (example: calibrated_test.parquet), Brier, reliability bins and SHAP top ten. |
-| Runs | 2026-11-20, seed 11. Multi-seed H2 planned, not yet run. |
-| Correctness check | Verify matching pools and validation-only fit. |
-| Errors & edge cases | Empty quarters have undefined Brier. TreeSHAP describes raw output. |
-| Est. run time | 40.81 s measured including isotonic, Platt, reliability and SHAP. |
-| Improvement | I1 and D4 add calibration, interpretation and quarterly checks. |
+**Purpose** Calibrate risk and explain model output. **Input** Frozen XGB artifact and validation/test score parquet. **Processing** Fit isotonic and Platt on calibration validation. Compare frozen maps and raw probabilities on test. Rank TreeSHAP. **Parameters** Ten reliability bins, 2,000 test loans, seed 11.
+
+**Libraries / tools** scikit-learn, XGBoost TreeSHAP, pandas. **Output** Calibrated score parquet (example: calibrated_test.parquet), Brier, reliability bins and SHAP top ten. **Runs** 2026-11-20, seed 11. Multi-seed H2 planned, not yet run.
+
+**Correctness check** Verify matching pools and validation-only fit. **Errors & edge cases** Empty quarters have undefined Brier. TreeSHAP describes raw output. **Est. run time** 40.81 s measured including isotonic, Platt, reliability and SHAP. **Improvement** I1 and D4 add calibration, interpretation and quarterly checks.
 
 ```text
 fit isotonic on raw validation probabilities
@@ -186,19 +154,11 @@ Table 7. FinSurvival test Brier by quarter.
 
 #### Step 5 · Assign risk tiers
 
-| Field | Specification |
-| --- | --- |
-| Purpose | Convert scores to A/B/C. |
-| Input | Calibrated score parquet, outcomes and frozen XGB artifact. |
-| Processing | Fit D1 and percentile rules on validation. Apply feasible rules to test. Aggregate wallet maximum. |
-| Parameters | Validation grid step 0.005. A ≤0.75× prevalence, C ≥2× and ≥30 positives. Require all tiers. Compare p70/p90. |
-| Libraries / tools | pandas, NumPy, hashlib. |
-| Output | Wallet tiers and model SHA-256/version. The pilot exports fixed tiers.csv and reports the percentile comparator. |
-| Runs | 2026-11-20, seed 11. |
-| Correctness check | Verify cutoff order, hash and partition totals. |
-| Errors & edge cases | Pilot uses cohort wallets because open-loan status is unavailable. |
-| Est. run time | 0.36 s measured for cutoff search, test summaries and export. |
-| Improvement | I1 adds fixed-risk tier rules. |
+**Purpose** Convert scores to A/B/C. **Input** Calibrated score parquet, outcomes and frozen XGB artifact. **Processing** Fit D1 and percentile rules on validation. Apply feasible rules to test. Aggregate wallet maximum. **Parameters** Validation grid step 0.005. A ≤0.75× prevalence, C ≥2× and ≥30 positives. Require all tiers. Compare p70/p90.
+
+**Libraries / tools** pandas, NumPy, hashlib. **Output** Wallet tiers and model SHA-256/version. The pilot exports fixed tiers.csv and reports the percentile comparator. **Runs** 2026-11-20, seed 11.
+
+**Correctness check** Verify cutoff order, hash and partition totals. **Errors & edge cases** Pilot uses cohort wallets because open-loan status is unavailable. **Est. run time** 0.36 s measured for cutoff search, test summaries and export. **Improvement** I1 adds fixed-risk tier rules.
 
 ```text
 search ordered validation grid for the maximum C/A rate ratio
@@ -245,19 +205,11 @@ Table 9. Uniform and fixed-tier D3a on the same loans. USD totals use 95,596 loa
 
 #### Step 6 · Register model and write scores
 
-| Field | Specification |
-| --- | --- |
-| Purpose | Attach tiers to a registered model. |
-| Input | Wallet tiers, model SHA-256 and version. Fixed-rule export remains blocked. |
-| Processing | Register digest as owner. Write tiers as approved signer. Reconcile receipts. |
-| Parameters | Tiers 1–3, batch ≤100, age ≤30 days. |
-| Libraries / tools | Vyper, Ape, Anvil and planned oracle keystore. |
-| Output | Registered digest, version, effective tier lookup and ScoreUpdated receipts. |
-| Runs | 2026-11-19. Ten batches each for 1, 10 and 100 synthetic wallets. |
-| Correctness check | Check version, hash, reads and guard messages. |
-| Errors & edge cases | Missing/stale tiers fall back to B. Check receipt before retry. |
-| Est. run time | Expected seconds = (1 registration + batches) × seconds per receipt, plus upload and reconciliation. Use the Sepolia median planning range in Section 2.5 for serial receipts. |
-| Improvement | I3 stores tier and model identifiers. |
+**Purpose** Attach tiers to a registered model. **Input** Wallet tiers, model SHA-256 and version. Fixed-rule export remains blocked. **Processing** Register digest as owner. Write tiers as approved signer. Reconcile receipts. **Parameters** Tiers 1–3, batch ≤100, age ≤30 days.
+
+**Libraries / tools** Vyper, Ape, Anvil and planned oracle keystore. **Output** Registered digest, version, effective tier lookup and ScoreUpdated receipts. **Runs** 2026-11-19. Ten batches each for 1, 10 and 100 synthetic wallets.
+
+**Correctness check** Check version, hash, reads and guard messages. **Errors & edge cases** Missing/stale tiers fall back to B. Check receipt before retry. **Est. run time** Expected seconds = (1 registration + batches) × seconds per receipt, plus upload and reconciliation. Use the Sepolia median planning range in Section 2.5 for serial receipts. **Improvement** I3 stores tier and model identifiers.
 
 ```text
 verify digest and proposed model version
@@ -269,19 +221,11 @@ reconcile receipts and effective tier lookups
 
 #### Step 7 · Execute the lending policy
 
-| Field | Specification |
-| --- | --- |
-| Purpose | Enforce collateral policy. |
-| Input | Effective tier lookup, collateral balance, debt request and scaled oracle price. |
-| Processing | Check debt limits, freeze original tier and evaluate health at current price. |
-| Parameters | A 120%/110%, B 150%/130%, C ineligible. Uniform 125%/121.2%. Close 50%, bonus 5%. |
-| Libraries / tools | Vyper, Ape, Anvil, MockERC20, Hypothesis. |
-| Output | Position balances and loan receipts, such as Liquidated(wallet, liquidator, repaid, seized). |
-| Runs | T3/T4 plus 200 generated boundary cases. |
-| Correctness check | Match balances, snapshots and guard messages. |
-| Errors & edge cases | Reject unsafe amounts and transitions. Bad-debt settlement planned. |
-| Est. run time | Expected seconds = serial transactions × seconds per receipt, plus scenario setup. Measure local and Sepolia receipts separately. |
-| Improvement | I3 enforces policy on-chain. |
+**Purpose** Enforce collateral policy. **Input** Effective tier lookup, collateral balance, debt request and scaled oracle price. **Processing** Check debt limits, freeze original tier and evaluate health at current price. **Parameters** A 120%/110%, B 150%/130%, C ineligible. Uniform 125%/121.2%. Close 50%, bonus 5%.
+
+**Libraries / tools** Vyper, Ape, Anvil, MockERC20, Hypothesis. **Output** Position balances and loan receipts, such as Liquidated(wallet, liquidator, repaid, seized). **Runs** T3/T4 plus 200 generated boundary cases.
+
+**Correctness check** Match balances, snapshots and guard messages. **Errors & edge cases** Reject unsafe amounts and transitions. Bad-debt settlement planned. **Est. run time** Expected seconds = serial transactions × seconds per receipt, plus scenario setup. Measure local and Sepolia receipts separately. **Improvement** I3 enforces policy on-chain.
 
 ```text
 read effective tier and scaled collateral value
@@ -294,19 +238,11 @@ reconcile balances and emit the position event
 
 #### Step 8 · Demonstrate and evaluate
 
-| Field | Specification |
-| --- | --- |
-| Purpose | Verify end-to-end evidence. |
-| Input | Position balances, loan receipts, score receipts and committed pilot metrics. |
-| Processing | Reconcile export, hash and receipts. Show local price change and liquidation in Streamlit. |
-| Parameters | Seed 11 model. Fresh local deployment per run. |
-| Libraries / tools | Ape, Anvil, pytest, Streamlit. |
-| Output | Scenario evidence package. Example: local gas JSON plus deployment and dashboard logs for T6. |
-| Runs | Local pilots measured. Three full runs planned, not yet run. |
-| Correctness check | Match counts, digest, price, health and events. |
-| Errors & edge cases | Keep synthetic and percentile inputs labelled. Fixed export unavailable. |
-| Est. run time | Expected seconds = deployment + score upload + loan and price receipts + dashboard checks. Sum these durations across fresh runs. |
-| Improvement | I3 links model outputs to contract evidence. |
+**Purpose** Verify end-to-end evidence. **Input** Position balances, loan receipts, score receipts and committed pilot metrics. **Processing** Reconcile export, hash and receipts. Show local price change and liquidation in Streamlit. **Parameters** Seed 11 model. Fresh local deployment per run.
+
+**Libraries / tools** Ape, Anvil, pytest, Streamlit. **Output** Scenario evidence package. Example: local gas JSON plus deployment and dashboard logs for T6. **Runs** Local pilots measured. Three full runs planned, not yet run.
+
+**Correctness check** Match counts, digest, price, health and events. **Errors & edge cases** Keep synthetic and percentile inputs labelled. Fixed export unavailable. **Est. run time** Expected seconds = deployment + score upload + loan and price receipts + dashboard checks. Sum these durations across fresh runs. **Improvement** I3 links model outputs to contract evidence.
 
 ```text
 start a fresh local deployment
