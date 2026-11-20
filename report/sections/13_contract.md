@@ -56,6 +56,17 @@ Figure 2. Loan state transitions at the current collateral price.
 
 Table 12. Loan transitions and forbidden transitions. The health state is computed from debt, collateral and oracle price. Debt dust and positions where permitted seizure exceeds remaining collateral need a future bad-debt settlement design.
 
+| Forbidden transition | Revert message |
+| --- | --- |
+| Empty position to liquidation | `no debt` |
+| Tier C to borrowing under tiered terms | `tier cannot borrow` |
+| Healthy debt to liquidation | `healthy loan` |
+| Debt position to overpayment | `exceeds debt` |
+| Liquidation above the close factor | `exceeds close factor` |
+| Debt position to an unsafe withdrawal | `unsafe withdrawal` |
+
+Table 13. Forbidden transitions and exact revert messages.
+
 #### Events
 
 | Events | Fields | Reader |
@@ -72,4 +83,4 @@ Table 13. Event consumers and reconciliation fields.
 
 The planned Ape writer signs with keystore account `oracle`. Keep the private key outside source and results. Verify hash, version and wallet counts before sending. For a stuck transaction after three blocks, check the receipt and resend with the same nonce and 20% higher fee. Stop after three retries and log nonce, hashes and receipt status. Retry behavior is planned, not yet run. The gas pilot uses synthetic accounts.
 
-Chain guarantees include role enforcement, monotonic versioning, atomic batches and auditable updates. Model accuracy, input quality and submitted tiers depend on the off-chain process. A leaked writer key enables updates until rotation. New wallets get B. The trusted price owner supplies local prices. Repeated score submissions update existing records.
+The chain enforces authorization and atomic updates to protect recorded state integrity. Account nonces prevent a transaction from executing twice, and the contract rejects reused model versions while permitting later score updates to the same wallet. Events provide an audit trail of accepted writes. The designated Ape oracle account submits scores, and the owner registers models, appoints the score writer and supplies the local price. The chain cannot verify the inputs or model, so a lying or compromised oracle can publish false tiers or prices that change eligibility or cause wrongful liquidations.

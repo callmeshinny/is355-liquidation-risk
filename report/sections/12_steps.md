@@ -6,7 +6,7 @@
 | --- | --- |
 | Purpose | Load standardized loan and credit records. |
 | Input | RDS features and liquidation labels [1]. UCI 350 [5]. |
-| Processing | Concatenate X parts. Drop empty/exo columns. Inner join y by ID. Align schemas. |
+| Processing | Concatenate X parts. Drop empty columns and external covariates. Inner join y by ID. Align schemas. |
 | Parameters | Borrow → Account Liquidated. UCI dataset 350. |
 | Libraries / tools | pandas, pyreadr, pyarrow, ucimlrepo. |
 | Output | Interim parquet. Example: finsurvival_train.parquet and taiwan.parquet. |
@@ -18,7 +18,7 @@
 
 ```text
 concat FinSurvival X parts by benchmark split
-drop all-null and exogenous columns
+drop all-null and external covariates
 join X and y by loan id
 align train and test feature columns
 fetch UCI 350 and write interim parquet and schema counts
@@ -57,7 +57,7 @@ label observed events within 17.43 days as positive
 label later observations as negative and discard short censored records
 split by UTC start date and purge D5 gaps
 fit categories on train_core
-compare train_core and inner-val with KS
+compare train_core and inner validation with KS
 transform all folds with frozen rules
 ```
 
@@ -86,14 +86,16 @@ Example loan: 2020-12-01, event status 0, observed 576.465 days, label 0.
 
 #### Step 3 · Train baseline and proposed models
 
+The B prefix identifies baseline variants and O identifies proposed variants. LR denotes logistic regression and XGB denotes XGBoost.
+
 | Field | Specification |
 | --- | --- |
 | Purpose | Compare baseline and proposed models. |
 | Input | Split parquet and feature-rule manifest. |
-| Processing | Fit LR or XGB. Scale as needed. Fit baseline PCA in training. Early-stop XGB on inner-val. |
+| Processing | Fit LR or XGB. Scale as needed. Fit baseline PCA in training. Early-stop XGB on inner validation. |
 | Parameters | 95% PCA assumption, LR C=0.1, XGB learning rate 0.05, depth 6, patience 50. |
 | Libraries / tools | scikit-learn, XGBoost. |
-| Output | Frozen XGB artifact (example: O_XGB_11.ubj), validation and test score parquet, AUC and fit time. |
+| Output | Frozen XGBoost model artifact, validation and test score parquet, AUC and fit time. |
 | Runs | 2026-11-19. XGB seeds 11/22/33. LR seed 11 and 1,000 bootstrap draws. |
 | Correctness check | Check model/seed coverage and paired test AUC. |
 | Errors & edge cases | Replace nonfinite features with zero. Paper reproduction tolerance ±0.02 AUC. |
@@ -103,12 +105,12 @@ Example loan: 2020-12-01, event status 0, observed 576.465 days, label 0.
 ```text
 fit scaling and PCA for baseline using train_core
 fit LR on train_core
-early-stop XGB on inner-val
+early-stop XGB on inner validation
 score frozen models on evaluation folds
 compare paired XGB seeds and bootstrap LR test AUC
 ```
 
-| Model | Seeds | Mean inner-val AUC | Mean val AUC | Mean test AUC | Mean fit (s) |
+| Model | Seeds | Mean inner validation AUC | Mean val AUC | Mean test AUC | Mean fit (s) |
 | --- | --- | ---: | ---: | ---: | ---: |
 | B_XGB | 11, 22, 33 | 0.7885 | 0.6870 | 0.7020 | 3.61 |
 | O_XGB | 11, 22, 33 | 0.8089 | 0.8113 | 0.8033 | 3.10 |

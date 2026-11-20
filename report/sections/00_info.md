@@ -20,15 +20,19 @@
 
 | No. | Feedback | Week 4 response | Section |
 | --- | --- | --- | --- |
-| 1 | Percentiles assign high-risk tiers even when prevalence falls | D1 sets validation-only fixed cutoffs and keeps percentile sensitivity. To resolve the overlapping extrema, the pilot searches ordered cutoffs on validation and uses A ≤0.75× and C ≥2× prevalence. | 1.2 Step 5, 2.3 |
-| 2 | Specify loan-to-wallet aggregation and new-wallet terms | D2 takes the maximum score over open loans and uses B terms for unscored or stale wallets. Document the cohort proxy and Sybil limitation. | 1.2 Step 5, 1.3, 2.3 |
-| 3 | Add policy comparison alongside gas | D3 compares the tiered pool with the Aave V2 launch-style uniform policy under real labels and planned simulated price shocks. | 1.2 Step 5, 1.3, 2.3 |
-| 4 | Report calibration outside the validation window | D4 measures test Brier and reliability by quarter. Record the empty local 2024Q3 cohort. | 1.2 Step 4, 2.3 |
-| 5 | Resolve conflicting validation descriptions | D5 supplies calendar cutoffs, purges and distinct inner validation and calibration roles. | 1.2 Step 2, 1.4 |
-| 6 | Avoid an absolute AUC claim for filtered models | D6 uses paired non-inferiority with a 0.02 margin. | 2.1, 2.5 |
+| 1 | Percentiles assign high-risk tiers even when prevalence falls | Fixed cutoffs are selected on validation and compared with percentile tiers. To resolve the overlapping extrema, the pilot searches ordered cutoffs on validation and uses A ≤0.75× and C ≥2× prevalence. | 1.2 Step 5, 2.3 |
+| 2 | Specify loan-to-wallet aggregation and new-wallet terms | The wallet uses its highest open-loan score, with B terms for an unscored or stale wallet. Document the cohort proxy and Sybil limitation. | 1.2 Step 5, 1.3, 2.3 |
+| 3 | Add policy comparison alongside gas | The tiered pool is compared with an Aave V2 launch-style uniform policy using actual outcomes and simulated price shocks. | 1.2 Step 5, 1.3, 2.3 |
+| 4 | Report calibration outside the validation window | Test Brier scores and reliability are measured by quarter. Record the empty local 2024Q3 cohort. | 1.2 Step 4, 2.3 |
+| 5 | Resolve conflicting validation descriptions | Calendar gaps separate training, early-stopping validation and calibration validation. | 1.2 Step 2, 1.4 |
+| 6 | Avoid an absolute discrimination claim for filtered models | The paired test uses a non-inferiority margin of 0.02 AUC (area under the receiver operating characteristic curve). | 2.1, 2.5 |
 
 Table 1. Response to Week 3 feedback.
 
 ### Changes since the Week 3 report
 
-Week 4 fixes the split and tuning protocol, measures local model and contract pilots, and specifies robustness and integration tests. The planned policy evaluation now includes collateral and realized outcome trade-offs. The protocol records fixed-rule infeasibility, data coverage and trusted on-chain roles.
+- Use 2021-12-15 through 2022-03-14 for early stopping and begin calibration validation on 2022-04-02. The last observed calibration loan was on 2022-06-28.
+- Select ordered fixed risk cutoffs on calibration validation and compare them with validation percentiles.
+- Take the maximum score across open loans for each wallet. Use tier B for missing or stale scores.
+- Compare tiered collateral with a uniform 125% requirement using observed labels and paired simulated price shocks.
+- Test H1 with a paired non-inferiority margin of 0.02 AUC.

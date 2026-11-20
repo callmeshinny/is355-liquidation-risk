@@ -6,8 +6,8 @@ Appendix B records input and output examples, pseudocode, parameters and checks 
 | Step | Procedure and handoff |
 | --- | --- |
 | 1. Data collection | Join FinSurvival features and labels by ID and load Taiwan UCI 350. Write interim parquet. The pilot matched 259,886 FinSurvival labels and loaded 30,000 Taiwan records. |
-| 2. Labelling and feature preparation | Label liquidations within 17.43 days. Drop repeated IDs and short censored records. Purge the two D5 gaps. Learn the encoder on training and flag drift at KS D ≥ 0.15. Write split parquet and feature rules. |
-| 3. Train baseline and proposed models | Compare LR and XGBoost on all eligible PCA features versus drift-filtered inputs without PCA. Early-stop XGBoost on inner validation. Save frozen models and scores. Mean pilot XGBoost test AUC was 0.7020 for baseline and 0.8033 for proposed. |
+| 2. Labelling and feature preparation | Label liquidations within 17.43 days. Drop repeated IDs and short censored records. Purge the two D5 gaps. Learn the encoder on training and flag drift at Kolmogorov–Smirnov (KS) statistic D ≥ 0.15. Write split parquet and feature rules. |
+| 3. Train baseline and proposed models | Compare logistic regression (LR) and eXtreme Gradient Boosting (XGBoost) on all eligible PCA features versus drift-filtered inputs without PCA. Early-stop XGBoost on the inner validation fold (inner-val). Save frozen models and scores. B identifies baseline variants and O identifies proposed variants. Mean pilot XGBoost test AUC was 0.7020 for baseline and 0.8033 for proposed. |
 | 4. Calibrate and explain probabilities | Fit isotonic on validation. Evaluate Brier and reliability on test, and rank TreeSHAP on a seeded sample. Seed-11 test Brier moved from 0.06409 to 0.01636. |
 | 5. Assign risk tiers | Freeze feasible validation cutoffs, then aggregate maximum risk per wallet. The validation grid selected 0.005 and 0.015 and the pilot exported fixed tiers and model SHA-256. Historical open-loan membership is unavailable. |
 | 6. Register model and write scores | Register the hash and version and write wallet tiers through the authorized oracle. Match receipt events to input. |
@@ -24,13 +24,13 @@ ScoreOracle stores the writer, model version and digest, and each wallet's tier,
 | Tiered | A 120%, B 150%, C ineligible | A 110%, B 130% |
 | Uniform | 125% | Approximately 121.2% [6] |
 
-The close factor is 50% and the seizure bonus is 5% [4]. Liquidation requires health below maintenance. Full repayment clears the tier snapshot. Appendix B lists function roles, exact guards, events and gas.
+The close factor is 50% and the seizure bonus is 5% [4]. Liquidation requires health below maintenance. Full repayment clears the tier snapshot. Appendix B lists function roles, forbidden transitions and their revert messages, events and gas.
 
 ![Loan state machine](figures/state_machine.png)
 
 Figure 2. Loan state transitions at the current collateral price.
 
-The planned writer signs with the Ape keystore account `oracle`. Check the receipt after three pending blocks. If needed, resend using the same nonce and a 20% higher fee, up to three retries. Keep the private key out of source and results. The chain enforces roles and atomic writes and records accepted changes. Score quality and oracle inputs depend on trusted off-chain actors.
+The planned writer signs with the Ape keystore account `oracle`. Check the receipt after three pending blocks. If needed, resend using the same nonce and a 20% higher fee, up to three retries. Keep the private key out of source and results. The chain enforces authorization and atomic updates to protect recorded state integrity. Account nonces prevent a transaction from executing twice, and the contract rejects reused model versions while permitting later score updates to the same wallet. Events provide an audit trail of accepted writes. The designated Ape oracle account submits scores, and the owner registers models, appoints the score writer and supplies the local price. The chain cannot verify the inputs or model, so a lying or compromised oracle can publish false tiers or prices that change eligibility or cause wrongful liquidations.
 
 <!-- 22_overview -->
 ### 2.2. Test scenario overview
